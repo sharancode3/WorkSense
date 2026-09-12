@@ -31,7 +31,7 @@ This document provides the definitive operational blueprint for deploying, secur
   * Local edge AI hosting: Local **Ollama daemon** running `qwen3:4b-instruct-2507-q4_K_M` on the hackathon laptop GPU, shielded behind an in-process **Local AI Gateway**.
   * Secure ingress tunneling connecting Render to the local laptop via an authenticated HTTPS tunnel (Cloudflare Tunnel or ngrok).
   * Enterprise workflow orchestration and deployment integration with **EnterPro**.
-  * Network flow definitions, CORS configurations, trust boundaries, and HMAC webhook authentication.
+  * Network flow definitions, CORS configurations, trust boundaries, and EnterPro adapter webhook authentication.
   * Operational runbooks: demo startup, graceful shutdown, health/readiness checks, degraded fallback modes (Level 0 through Level 4), and disaster recovery.
 * **What This Document Explicitly Delegates:**
   * Application business logic and domain service implementations belong to `docs/06-System-Architecture.md`.
@@ -50,7 +50,7 @@ This document provides the definitive operational blueprint for deploying, secur
 | **WorkSense TRD** | `docs/02-TRD.md` | Approved | Technical Baseline | Vercel (Next.js), Render (FastAPI), Supabase (PostgreSQL 15+), local Ollama (RTX 3050 4GB). | None. Technical boundaries locked to TRD modular monolith. |
 | **Workflow & Roles** | `docs/03-Workflow-Roles.md` | Approved | Operational Baseline | EnterPro 10-state machine; cross-role handoffs; human approval gates for consequential actions. | Addressed: Render backend manages signed webhook sync with EnterPro. |
 | **UI/UX & Design** | `docs/04-UI-UX-Design.md` | Approved | Experience Baseline | WHAT-WHY-EVIDENCE-WHAT NEXT UI paradigm; client status vocabulary; offline state banners. | Addressed: Frontend surfaces distinct offline pill indicators when AI is degraded. |
-| **Database & API** | `docs/05-Database-API.md` | Approved | Data & API Baseline | 16 data domains (131 tables); 109 REST endpoints; pgvector 384d schema; RLS access boundaries. | Addressed: Supabase service-role key restricted strictly to Render backend. |
+| **Database & API** | `docs/05-Database-API.md` | Approved | Data & API Baseline | 16 core data domains (36 proposed prototype tables); 54 proposed REST endpoints; pgvector 384d schema; RLS access boundaries. | Addressed: Supabase service-role key restricted strictly to Render backend. |
 | **System Architecture** | `docs/06-System-Architecture.md` | Approved | Structural Baseline | Modular monolith; AI Document Firewall; trust boundaries; synchronous/asynchronous flows. | Addressed: Infrastructure topology directly mirrors C4 deployment model. |
 | **AI + ML Architecture**| `docs/07-AI-ML-Architecture.md` | Approved | AI/ML Baseline | Local Qwen3-4B-Instruct; LightGBM ranker; Cox survival model; OR-Tools CP-SAT; TreeSHAP. | Addressed: Local AI Gateway isolates Ollama; non-AI math remains cloud-hosted. |
 
@@ -200,7 +200,7 @@ flowchart TD
     BE -->|S3 REST / Signed URLs| STOR
     BE -->|JWT Verification| AUTH
     
-    BE -->|HTTPS / HMAC Signed Webhooks| ENTERPRO
+    BE -->|HTTPS / Adapter Workflow Requests| ENTERPRO
     ENTERPRO -->|HTTPS / Callback Signature| BE
 
     BE -->|HTTPS / X-WorkSense-Tunnel-Auth| TUN_CLOUD
@@ -282,7 +282,7 @@ ENTERPRO_WEBHOOK_SECRET="ep_whsec_<SECRET>"
 
 * **Database Engine:** PostgreSQL 15.6 with `pgvector v0.6.0+` enabled.
 * **Connection Pooling:** Connected via Supabase Transaction Pooler (port 5432) using PgBouncer for efficient connection recycling under concurrent FastAPI async requests.
-* **Row-Level Security (RLS) Mandate:** RLS is enabled across all 131 application tables. Tables containing employee retention scores (`attrition_predictions`) are locked strictly to the `hr_bp` role.
+* **Row-Level Security (RLS) Mandate:** RLS is enabled across all 36 core relational tables. Tables containing employee retention scores (`attrition_predictions`) are locked strictly to the `hr_bp` role.
 * **Storage Buckets:**
   * `resumes`: Private bucket; signed download URLs expire after 900 seconds.
   * `policies`: Private bucket; readable by authenticated employees.
@@ -381,8 +381,8 @@ sequenceDiagram
 | **NET-06** | Render Backend | Secure Tunnel Edge | HTTPS / 443 | `X-WorkSense-Tunnel-Auth` | Masked Context Prompts | 15.0s | 0 Retries |
 | **NET-07** | Tunnel Client | Local AI Gateway | HTTP / 8001 | Pre-shared Bearer Secret | Masked Context Prompts | 15.0s | 0 Retries |
 | **NET-08** | Local AI Gateway | Local Ollama Daemon | HTTP / 11434 | Localhost Only (Bound 127.0.0.1)| Raw Token Stream | 15.0s | 0 Retries |
-| **NET-09** | Render Backend | EnterPro API Gateway | HTTPS / 443 | HMAC SHA-256 Client Secret | Governed Workflow Request | 10.0s | 2 Retries |
-| **NET-10** | EnterPro Webhook Signer| Render Callback Route | HTTPS / 443 | `X-EnterPro-Signature` | Approval State Updates | 10.0s | Upstream Retry|
+| **NET-09** | Render Backend | EnterPro API Gateway | HTTPS / 443 | Configurable Adapter Auth | Governed Workflow Request | 10.0s | 2 Retries |
+| **NET-10** | EnterPro Webhook Signer| Render Callback Route | HTTPS / 443 | Configurable Adapter Header (TBD) | Approval State Updates | 10.0s | Upstream Retry|
 
 ---
 
@@ -429,8 +429,8 @@ flowchart TD
     API -->|Pre-Shared Auth Header| TUNNEL
     TUNNEL -->|Localhost Auth Token| GW
     GW -->|Unauthenticated Localhost Socket| OLLAMA
-    API -->|HMAC Signed Outbound Calls| ENTERPRO
-    ENTERPRO -->|HMAC Signed Webhooks| API
+    API -->|Adapter Outbound Requests| ENTERPRO
+    ENTERPRO -->|Adapter Signed Webhooks| API
 ```
 
 ---
@@ -470,7 +470,7 @@ All production and demo traffic utilizes TLS 1.3 HTTPS. No cleartext HTTP endpoi
 1. **User to Frontend/Backend:** Handled via Supabase Auth issuing RS256-signed JWTs containing user UUID, email, and role claim (`recruiter`, `interviewer`, `manager`, `employee`, `hr_bp`, `leadership`, `admin`).
 2. **Backend to Supabase PostgreSQL:** Authenticated via TLS connection string using the PostgreSQL credentials. Backend injects `auth.uid()` and `auth.role()` into session settings to enforce Row-Level Security.
 3. **Backend to Local AI Gateway:** Authenticated using the `X-WorkSense-Tunnel-Auth` HTTP header carrying a high-entropy pre-shared key.
-4. **Backend to EnterPro & Return Webhook:** Outbound requests signed with Bearer tokens; incoming EnterPro callbacks verified using HMAC SHA-256 signatures (`X-EnterPro-Signature`).
+4. **Backend to EnterPro & Return Webhook:** Outbound requests dispatched via EnterProAdapter; incoming callbacks validated using configurable authentication headers (exact scheme TBD pending official documentation).
 
 ---
 
@@ -550,8 +550,8 @@ WorkSense enforces a lightweight, hackathon-safe continuous deployment pipeline:
 
 To guarantee an impactful live demonstration, the database is pre-seeded with the curated **90-Day Golden Demo Dataset**:
 * **Target Scenario:** Staffing the 8-person AI Fraud Detection Team in 90 days.
-* **Candidate Persona:** Sarah Lin (Staff ML Candidate, 94% match, PR #402 citation).
-* **Retention Persona:** Marcus Chen (L5 Senior Infra Lead, 6-Month Hazard = 72%, Tenure Stagnation = +34%).
+* **Candidate Persona:** Sarah Lin (Staff ML Candidate, 94% match, PR #402 citation - Fictional Demo Seed Data).
+* **Retention Persona:** Marcus Chen (L5 Senior Infra Lead, 6-Month Hazard = 72%, Tenure Stagnation = +34% - Fictional Demo Seed Data).
 * **Policy Documents:** Global Remote Work Policy v4.1 and Probation Guidelines Addendum.
 * **Reseed Script:** An idempotent Python script (`backend/scripts/seed_demo_data.py`) enables the operator to wipe and re-seed the entire demo state within 15 seconds.
 
@@ -691,9 +691,9 @@ sequenceDiagram
     participant API as Render Backend (/api/v1/workflows/callbacks)
     participant DB as Supabase PostgreSQL
 
-    EP->>API: POST /callbacks (Payload, X-EnterPro-Signature, X-Timestamp)
+    EP->>API: POST /callbacks (Payload, Adapter Auth Headers)
     API->>API: 1. Verify Timestamp (< 300s window)
-    API->>API: 2. Compute HMAC SHA-256 with ENTERPRO_WEBHOOK_SECRET
+    API->>API: 2. Validate adapter authentication credentials
     alt Signature Mismatch
         API-->>EP: HTTP 401 Unauthorized
     else Signature Valid
@@ -898,10 +898,10 @@ flowchart TD
 * `DEP-CORE-001`: The system MUST operate as a modular monolith deployed across Vercel, Render, and Supabase.
 * `DEP-VCL-001`: The frontend MUST be deployed on Vercel with zero server-side secrets exposed to the browser.
 * `DEP-RND-001`: The backend MUST deploy on Render running Python 3.11 with 1 uvicorn worker.
-* `DEP-SUP-001`: Supabase PostgreSQL MUST enforce Row-Level Security across all 131 application tables.
+* `DEP-SUP-001`: Supabase PostgreSQL MUST enforce Row-Level Security across all 36 core relational tables.
 * `DEP-QWN-001`: Qwen inference MUST run locally via Ollama; cloud LLM hosting is strictly prohibited for prototype.
 * `DEP-TUN-001`: Tunnel connections to the local laptop MUST require pre-shared `X-WorkSense-Tunnel-Auth`.
-* `DEP-ENT-001`: EnterPro callbacks MUST verify HMAC SHA-256 signatures before updating state.
+* `DEP-ENT-001`: EnterPro adapter callbacks MUST verify authentication credentials according to official specifications before updating state.
 * `DEP-SEC-001`: Supabase service-role keys MUST NOT be included in frontend environment configurations.
 * `DEP-CICD-001`: Deployments to production demo endpoints MUST require manual promotion from `demo-freeze`.
 * `DEP-OBS-001`: Every HTTP request MUST propagate an `X-Correlation-ID` across all backend services.
@@ -919,7 +919,7 @@ flowchart TD
 | **Supabase DB** | Supabase Cloud | `DATABASE_URL` (Pooler) | RLS Policies, DB Passwords | Read-Only Cache |
 | **Local AI Gateway** | Operator Laptop | `LOCAL_PORT=8001` | Pre-Shared Secret Header | Return AI-Degraded DTO |
 | **Ollama Service** | Operator Laptop | `127.0.0.1:11434` | Bound to Localhost Only | Fail-Fast to Gateway |
-| **EnterPro Webhooks**| Render Endpoint | `ENTERPRO_WEBHOOK_SECRET` | HMAC SHA-256 Verification | Queue in PENDING state |
+| **EnterPro Webhooks**| Render Endpoint | Configurable Secret Header | Adapter Verification (TBD) | Queue in PENDING state |
 
 ---
 

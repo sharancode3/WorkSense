@@ -1,58 +1,23 @@
-# WorkSense: Role-Aware Workforce Decision and Action Platform
+# WorkSense: AI-Assisted Workforce Intelligence and Decision-Support Platform
 
-**Hackathon:** HackDriven *Build Bengaluru* Hackathon — Track 1: Human Resources (HR)  
+**Hackathon Track:** Track 1: Human Resources (HR) — Build Bengaluru Hackathon  
 **Primary Repository:** [github.com/sharancode3/WorkSense](https://github.com/sharancode3/WorkSense)  
-**Documentation Suite:** [`docs/`](./docs/) (Specifications 01 through 09)  
-**Status:** Architecture Baseline Approved | Implementation Ready  
-
----
-
-## Table of Contents
-
-- [1. Executive Overview](#1-executive-overview)
-- [2. The Architectural Imperative: Beyond Monolithic LLMs](#2-the-architectural-imperative-beyond-monolithic-llms)
-- [3. Core Conceptual Foundation](#3-core-conceptual-foundation)
-  - [3.1 The Living Workforce Digital Twin](#31-the-living-workforce-digital-twin)
-  - [3.2 The Temporal Organizational Capability Graph](#32-the-temporal-organizational-capability-graph)
-  - [3.3 The Cryptographic Evidence Ledger](#33-the-cryptographic-evidence-ledger)
-- [4. The Five Connected Intelligence Systems](#4-the-five-connected-intelligence-systems)
-  - [4.1 Talent Intelligence Engine](#41-talent-intelligence-engine)
-  - [4.2 Workforce Twin and Skill Graph Engine](#42-workforce-twin-and-skill-graph-engine)
-  - [4.3 Growth and Retention Intelligence Engine](#43-growth-and-retention-intelligence-engine)
-  - [4.4 Policy-to-Action Intelligence Engine](#44-policy-to-action-intelligence-engine)
-  - [4.5 Workforce Decision Simulator](#45-workforce-decision-simulator)
-- [5. Heterogeneous Intelligence Division of Labor](#5-heterogeneous-intelligence-division-of-labor)
-- [6. Hybrid Cloud-Edge Deployment Topology](#6-hybrid-cloud-edge-deployment-topology)
-  - [6.1 Presentation Tier (Vercel)](#61-presentation-tier-vercel)
-  - [6.2 Orchestration and Application Tier (Render)](#62-orchestration-and-application-tier-render)
-  - [6.3 Data Platform Tier (Supabase)](#63-data-platform-tier-supabase)
-  - [6.4 Local Edge AI Inference Tier (Hackathon Laptop)](#64-local-edge-ai-inference-tier-hackathon-laptop)
-  - [6.5 Ingress Tunnel and Gateway Shield](#65-ingress-tunnel-and-gateway-shield)
-  - [6.6 Enterprise Governance (EnterPro)](#66-enterprise-governance-enterpro)
-- [7. Operational Robustness and Degraded Fallback Modes](#7-operational-robustness-and-degraded-fallback-modes)
-- [8. Security, Privacy, and Ethical AI Governance](#8-security-privacy-and-ethical-ai-governance)
-- [9. Canonical Specification Suite](#9-canonical-specification-suite)
-- [10. UI/UX Design System and Screen Contracts](#10-uiux-design-system-and-screen-contracts)
-- [11. Flagship Presentation Narrative: The 90-Day AI Fraud Team](#11-flagship-presentation-narrative-the-90-day-ai-fraud-team)
-- [12. Local Development and Operational Runbook](#12-local-development-and-operational-runbook)
-  - [12.1 Environment Prerequisites](#121-environment-prerequisites)
-  - [12.2 Startup Sequence](#122-startup-sequence)
-  - [12.3 Pre-Demo Verification Commands](#123-pre-demo-verification-commands)
-- [13. Repository Layout](#13-repository-layout)
-- [14. Governance and Compliance Mandates](#14-governance-and-compliance-mandates)
+**Documentation Suite:** [`docs/`](./docs/) (Canonical Specifications 01 through 09)  
+**Current Repository Status:** Authoritative Architectural Specification Suite Complete | Application Implementation Pending (Stage 1+)
 
 ---
 
 ## 1. Executive Overview
 
-WorkSense is an enterprise workforce decision intelligence and action platform designed to connect talent acquisition, structured interviewing, personalized onboarding, internal talent mobility, longitudinal retention modeling, source-grounded policy reasoning, and strategic workforce optimization into a unified operational continuum.
+WorkSense is an enterprise AI-assisted workforce intelligence and decision-support platform designed to connect fragmented employee-lifecycle data into an evidence-backed workforce intelligence layer.
 
-Historically, enterprise human resources technology has been fractured into disconnected silos: keyword-matching applicant tracking systems (ATS), static human resource information systems (HRIS), ungrounded conversational chatbots, and disconnected spreadsheet models. WorkSense resolves this fragmentation by anchoring the entire employee lifecycle to two persistent, mathematically grounded constructs:
+Historically, enterprise human resources technology has operated in disconnected silos: keyword-matching applicant tracking systems (ATS), static human resource information systems (HRIS), ungrounded conversational chatbots, and disjointed spreadsheet models. WorkSense resolves this fragmentation by establishing an operational continuum anchored to five core innovations:
 
-1. **The Continuous Workforce Digital Twin:** Every applicant enters as a Candidate Twin. Upon hire, this entity seamlessly evolves into an Employee Twin, retaining verified screening evidence, interview transcripts, and rubric evaluations rather than discarding them.
-2. **The Temporal Organizational Capability Graph:** A directed relational capability graph that tracks competencies, prerequisite relationships, skill adjacencies, and dynamic temporal confidence decay based on verified real-world demonstration.
-
-Natural language understanding, explanation synthesis, and bounded tool orchestration are powered by a locally hosted **Qwen3-4B-Instruct** model. Formal enterprise actions (such as offer issuance, policy exception approvals, and internal mobility transfers) are governed by **EnterPro** signed workflows with strict human-in-the-loop authorization.
+1. **Temporal Workforce Digital Twin:** Candidate evidence seamlessly transitions into an Employee Twin upon hiring, preserving interview notes, rubric assessments, and verified artifacts rather than discarding them at the hiring boundary.
+2. **Organizational Skill and Capability Graph:** A directed relational capability graph modeling competencies, prerequisite dependencies, adjacent skill transferability, and time-decaying confidence based on validated real-world practice.
+3. **Candidate Twin to Employee Twin Continuity:** Continuous progression from candidate application, structured interview, and hiring decision through adaptive onboarding, performance goals, attendance aggregates, and retention interventions.
+4. **Evidence-Backed Decision History:** An append-oriented audit and evidence history capturing actor, timestamp, source, decision, approval, and outcome references across the full lifecycle.
+5. **Cross-Module Recommendations and Governed Workflows:** Coordinated decision-support across talent acquisition, onboarding, policy reasoning, retention, and workforce planning, with consequential actions routed through human approvals and enterprise orchestration.
 
 ```text
 =============================================================================================
@@ -66,425 +31,407 @@ recommendations into auditable enterprise workflows.
 =============================================================================================
 ```
 
+> **Important Product Identity:**  
+> WorkSense is an AI-assisted workforce intelligence and decision-support platform. It is **not** an HR chatbot and must never be presented as one. WorkSense augments human decision-making; it does not replace accountable human decision-makers.
+
 ---
 
-## 2. The Architectural Imperative: Beyond Monolithic LLMs
+## 2. Official Problem Statement Alignment
 
-Modern enterprise software frequently succumbs to the anti-pattern of treating a single Large Language Model (LLM) as an omniscient black box tasked with calculation, ranking, prediction, optimization, and policy enforcement. In consequential human resources environments, this results in non-deterministic hallucinations, uncalibrated risk projections, algorithmic bias, and legal liability.
+WorkSense is purpose-built to address the official hackathon challenge for **Track 1: Human Resources (HR)**:
 
-WorkSense operates on a strict foundational principle:
+### Official Track 1 Problem Statement
+> **Problem Statement:**  
+> Build an AI-driven intelligent workforce management platform that can understand employee data, automate HR workflows, identify workforce risks, and assist HR teams in making data-driven decisions across the employee lifecycle.
+>
+> **What participants can build:**  
+> * **AI Recruitment Intelligence Engine** that ranks candidates using resumes, job requirements, and skill relevance.  
+> * **Adaptive Onboarding Agent** that creates personalized onboarding journeys based on role, department, and employee profile.  
+> * **HR Policy Reasoning Agent** that answers complex policy queries with contextual and source-backed responses.  
+> * **Employee Attrition Prediction System** that identifies employees at risk of leaving using workforce patterns and engagement signals.  
+> * **AI Performance Intelligence** that analyzes goals, feedback, and performance history to identify strengths and improvement areas.  
+> * **Workforce Skill Graph** that maps employee skills against current and future organizational requirements.  
+> * **Intelligent Interview Agent** that generates role-specific questions, evaluates responses, and creates structured interview insights.  
+> * **HR Decision Dashboard** that combines recruitment, attendance, performance, and workforce data into actionable insights.  
+>
+> **Challenge:**  
+> Teams should focus on creating a system that can reason over multiple HR data sources and recommend actions, rather than building a simple HR chatbot.  
+>
+> **Mandatory track technologies:**  
+> * **Qwen** must be used as the AI engine for reasoning, content generation, and decision support.  
+> * **EnterPro** must be represented as the enterprise workflow, orchestration, approval, and application-deployment component.
+
+### Distinction Between Challenge and WorkSense Solution
+The official challenge specifies the eight functional areas and mandatory technologies. WorkSense addresses this challenge by organizing these capabilities into a unified architecture centered on the **Temporal Workforce Digital Twin**, the **Organizational Skill Graph**, and **Candidate-to-Employee Continuity**, rather than eight disconnected point solutions.
+
+---
+
+## 3. Honest Current Repository Status
+
+The current repository state is documented transparently in accordance with the project truth-status system:
+
+| Domain | Current Repository Reality | Truth Status |
+| :--- | :--- | :--- |
+| **Documentation & Specifications** | Complete 9-document canonical specification suite under `docs/` covering PRD, TRD, Workflows, UI/UX, Database/API, System Architecture, AI/ML Architecture, Deployment, and Project Memory. | **Verified in repository** |
+| **Application Code (Frontend)** | Next.js and TypeScript frontend application structure is designed in specifications; source code files are pending development. | **Prototype proposal** |
+| **Application Code (Backend)** | FastAPI modular monolith backend is architecturally specified; Python source code files are pending development. | **Prototype proposal** |
+| **Database Migrations** | Proposed 36 core relational tables across 16 domains specified in `docs/05-Database-API.md`; physical SQL migration scripts pending creation. | **Prototype proposal** |
+| **Local AI Gateway** | Architectural specification and security requirements defined; implementation script pending creation. | **Prototype proposal** |
+| **EnterPro Integration** | Adapter-interface design specified; physical integration endpoints and credentials marked TBD pending official hackathon documentation. | **TBD / Prototype proposal** |
+| **Automated Test Suites** | Test plans and acceptance criteria documented; executable test files pending implementation. | **Prototype proposal** |
+
+> **Repository Note:**  
+> This repository currently contains the authoritative architectural specifications and design documentation. No application source code has been fabricated. Installation, seeding, migration, and run commands described below represent the **target engineering runbook** to be executed as codebase files are implemented in Stage 1+.
+
+---
+
+## 4. Core Conceptual Foundation
+
+### 4.1 The Continuous Candidate-to-Employee Twin
+Traditional enterprise tooling treats recruitment and employee management as disconnected systems. WorkSense models human capital as an evolving, stateful continuum:
 
 ```text
-Qwen is not the entire AI system.
+Candidate Evidence (Resume, Portfolio, GitHub PRs)
+   │
+   ▼
+Candidate Skill Profile (Extracted skills, normalized proficiencies)
+   │
+   ▼
+Recruitment Ranking & Interview Insights (Structured rubrics, adaptive probes)
+   │
+   ▼
+Hiring Decision (Human Recruiter / Hiring Manager sign-off via EnterPro)
+   │
+   ▼
+Employee Profile & Living Twin (Continuous retention of pre-hire evidence)
+   │
+   ▼
+Adaptive Onboarding Journey (Pre-verified skills automatically waive redundant modules)
+   │
+   ▼
+Operational Evidence Stream (Goals, feedback, attendance aggregates, project deliverables)
+   │
+   ▼
+Workforce Risk & Growth Recommendations (Retention risk, upskilling, internal mobility)
+   │
+   ▼
+Human-Approved Enterprise Action (Role-authorized human approval)
+   │
+   ▼
+EnterPro Governed Workflow Execution & Recorded Outcome (Append-oriented audit trail)
 ```
 
-The platform establishes an uncompromising division of labor across specialized computational engines:
-
-* **Natural-Language Reasoning and Synthesis:** Governed by local **Qwen3-4B-Instruct** (`qwen3:4b-instruct-2507-q4_K_M`) via Ollama. Qwen parses user intent, synthesizes explanations citing concrete evidence, structures adaptive interview probes, and compares workforce plans. Qwen is strictly prohibited from inventing numerical scores, computing attrition probabilities, or solving optimization matrices.
-* **Candidate Match Scoring:** Governed by **LightGBM Multi-Feature Learning-to-Rank** (with an auditable deterministic weighted formula fallback for prototype data scarcity) evaluating 12 objective features including adjacent skill credits and verified production artifacts.
-* **Longitudinal Retention Hazard Modeling:** Governed by **Continuous Time-to-Event Survival Analysis** (Cox Proportional Hazards and Random Survival Forests), modeling voluntary attrition across 3-month, 6-month, and 12-month horizons while handling right-censored employee records.
-* **Predictive Explainability:** Governed by **TreeSHAP** (SHapley Additive exPlanations), quantifying exact contributing risk drivers and protective organizational factors without asserting unverified causal claims.
-* **Strategic Workforce Allocation:** Governed by **Google OR-Tools CP-SAT**, executing mixed-integer linear programming to optimize internal transfers, upskilling paths, and external hiring against hard budget ceilings, deadlines, and operational disruption limits.
-* **Policy Reasoning:** Governed by a dual-engine architecture: **`pgvector`** executes 384-dimensional cosine semantic retrieval, while an in-process **Deterministic Python Rules Engine** validates jurisdictional eligibility and probation constraints before Qwen formats the explanation.
-* **Enterprise Execution:** Governed by **EnterPro**, managing an auditable 10-state lifecycle with HMAC SHA-256 signed REST callbacks.
-* **Human Primacy:** Consequential employment decisions (offers, terminations, transfers, formal performance ratings) remain strictly reserved for authorized human operators.
-
----
-
-## 3. Core Conceptual Foundation
-
-### 3.1 The Living Workforce Digital Twin
-
-Rather than treating employee data as static table rows, WorkSense maintains an evolving, stateful digital model of individual human capital:
-* **Continuous Candidate-to-Employee Transition:** When a candidate is hired, their Candidate Twin (consisting of parsed resume artifacts, extracted skills, verified GitHub pull requests, and interview transcripts) automatically converts into an Employee Twin. No historical competency evidence is discarded.
-* **Evidence-Anchored Attributes:** Competency levels are backed by verifiable references in the Evidence Ledger rather than self-asserted text resumes.
-* **Role and Aspiration Privacy:** An employee's aspirational roles and internal gig interests remain private to the employee until they formally apply, preventing managerial retaliation or premature career pigeonholing.
-
-### 3.2 The Temporal Organizational Capability Graph
-
-Capabilities are modeled within a directed relational graph in PostgreSQL:
+### 4.2 The Temporal Organizational Capability Graph
+Capabilities are modeled as a directed relational graph in PostgreSQL:
 * **Ontological Edges:** Relationships include `PREREQUISITE_OF`, `ADJACENT_TO`, `TRANSFERABLE_TO`, and `EVIDENCED_BY`.
-* **Adjacent Capability Crediting:** A candidate demonstrating mastery in an adjacent technology (e.g., Triton) receives proportional partial credit toward a target requirement (e.g., CUDA) based on validated graph distance weights.
-* **Dynamic Temporal Confidence Decay:** Skills decay over time if unpracticed in verified production work:
+* **Adjacent Capability Crediting:** Candidates demonstrating mastery in an adjacent technology (e.g., Triton) receive proportional partial credit toward a target requirement (e.g., CUDA) based on graph relationship weights.
+* **Temporal Confidence Decay:** Skill confidence decays over time without verified operational practice:
+  $$\text{Confidence}(t) = \text{Proficiency} \times e^{-\lambda \cdot \Delta t} \times \text{Validation Multiplier}$$
+  *(Decay parameter $\lambda$ and half-life intervals are configurable prototype assumptions).*
 
-$$	ext{Skill Confidence}(t) = 	ext{Base Proficiency} 	imes e^{-\lambda \cdot \Delta t} 	imes 	ext{Validation Multiplier}$$
-
-Where $\lambda = 0.00385$ (half-life of approximately 180 days) and $\Delta t$ represents days elapsed since the last verified evidence artifact. If $\Delta t > 180$, the capability transitions to `stale` status, prompting a capability refresh alert without deleting historical demonstration.
-
-### 3.3 The Cryptographic Evidence Ledger
-
-Every claim of proficiency, milestone delivery, or performance excellence is backed by an immutable ledger entry in `evidence_items`:
-* **Artifact Provenance:** Pull request merges, closed Jira tickets, customer commendations, and assessment transcripts are fingerprinted with SHA-256 hashes upon ingestion.
-* **Zero Score Fabrication:** Any Qwen explanation that cites an artifact must reference a validated `evidence_id` present in the database.
+### 4.3 Append-Oriented Evidence and Audit History
+Every proficiency inference, milestone delivery, and human decision links to verified evidence references:
+* **Artifact Provenance:** Pull request references, project milestones, peer feedback, and assessment transcripts record source type, external reference, validator ID, and timestamp.
+* **Zero Score Fabrication:** Explanations citing artifacts reference specific database records.
+* **Auditability:** State changes, approvals, and model prompts log actor, timestamp, delta, and source references. *(Advanced features such as cryptographic hash chaining or legal non-repudiation represent future roadmap enhancements).*
 
 ---
 
-## 4. The Five Connected Intelligence Systems
+## 5. Connected Capability Groups
+
+The WorkSense platform organizes the hackathon problem statement into five connected capability groups:
 
 ```mermaid
 flowchart LR
-    subgraph System1["1. Talent Intelligence"]
-        CAND["Candidate Twin Ingestion"]
-        RANK["LightGBM Ranker (12 Feat)"]
-        PROBE["Adaptive Interview Prober"]
+    subgraph G1["1. Talent Intelligence"]
+        direction TB
+        CAND["Candidate Twin & Evidence"]
+        RANK["Transparent Prototype Scoring"]
+        INT["Intelligent Interview Agent"]
     end
 
-    subgraph System2["2. Workforce Twin & Skill Graph"]
-        TWIN["Continuous Twin Lifecycle"]
-        GRAPH["Relational Graph Traversal"]
-        DECAY["Temporal Skill Decay (180d)"]
+    subgraph G2["2. Workforce Twin & Skill Graph"]
+        direction TB
+        TWIN["Candidate-to-Employee Continuity"]
+        GRAPH["Relational Capability Graph"]
+        DECAY["Temporal Skill Confidence"]
     end
 
-    subgraph System3["3. Growth & Retention Intel"]
-        MOBILITY["Internal Gig Recommender"]
-        SURVIVAL["Cox Survival Hazard (3/6/12mo)"]
-        SHAP["TreeSHAP Factor Attribution"]
+    subgraph G3["3. Growth & Retention Intelligence"]
+        direction TB
+        ONB["Adaptive Onboarding Agent"]
+        PERF["AI Performance Intelligence"]
+        RET["Retention & Mobility Support"]
     end
 
-    subgraph System4["4. Policy-to-Action Intel"]
-        PGV["pgvector 384d Cosine Search"]
-        RULES["Deterministic Rules Engine"]
-        EXCEPT["EnterPro Exception Dispatch"]
+    subgraph G4["4. Policy-to-Action"]
+        direction TB
+        RAG["HR Policy Reasoning (RAG)"]
+        RULES["Deterministic Eligibility Rules"]
+        ACT["Action Recommendation"]
     end
 
-    subgraph System5["5. Decision Simulator"]
-        OR_TOOLS["Google OR-Tools CP-SAT Solver"]
-        SCENARIO["Headcount Strategy Evaluation"]
-        TRADEOFF["Cost / Time / Disruption Matrix"]
+    subgraph G5["5. Decision Dashboard & Simulator"]
+        direction TB
+        DASH["HR Decision Dashboard"]
+        SIM["Workforce Planning Simulator"]
+        WF["EnterPro Workflow Handoff"]
     end
 
-    System1 --> System2
-    System2 --> System3
-    System2 --> System4
-    System2 & System3 --> System5
+    G1 --> G2
+    G2 --> G3
+    G2 --> G4
+    G3 & G4 --> G5
 ```
 
-### 4.1 Talent Intelligence Engine
+### 5.1 Talent Intelligence
+* **Resume & Evidence Ingestion:** Extracts structured biographical, skill, and project evidence from candidate resumes.
+* **Transparent Candidate Scoring:** The prototype calculates candidate fit using transparent weighted matching across required skills, adjacent capability graph credits, verified evidence count, and experience recency. A full Learning-to-Rank ML pipeline is designated as a production roadmap upgrade when labeled historical hiring data becomes available.
+* **Intelligent Interview Agent:** Formulates role-specific questions and evidence-based evaluation rubrics. Identifies competency evidence gaps to generate bounded adaptive follow-up probes for human interviewer review.
 
-* **Automated Screening & Feature Extraction:** Resumes undergo programmatic text extraction (`pypdf`/`pdfplumber`) and XML-boundary sanitization via the AI Document Firewall.
-* **Objective Candidate Ranking:** Evaluates 12 demographic-blind features: mandatory skill coverage, adjacent skill graph credits, relevant engineering experience years (capped at 10 to eliminate age-proxy bias), verified production evidence count, recency decay weighting, and semantic requisition alignment.
-* **Structured Core + Adaptive Probing Interviewing:** Every candidate receives an identical set of core competency questions to guarantee baseline fairness. Qwen assesses responses against an objective rubric and executes a bounded information-gain heuristic to formulate at most **two adaptive follow-up probes** targeting unresolved evidence gaps.
+### 5.2 Workforce Twin and Skill Graph
+* **Living Workforce Twin:** Retains verified pre-hire evidence and continuously incorporates post-hire deliverables, peer endorsements, and completed milestones.
+* **Relational Skill Graph:** Maps organizational capabilities, prerequisites, and transferability pathways using PostgreSQL relational tables.
+* **Dynamic Temporal Confidence:** Reflects competency currency by adjusting confidence scores based on elapsed time since last verified demonstration.
 
-### 4.2 Workforce Twin and Skill Graph Engine
+### 5.3 Growth and Retention Intelligence
+* **Adaptive Onboarding Agent:** Formulates personalized 30/60/90-day onboarding journeys by checking profile, role, department, and pre-verified candidate evidence, waiving modules where competency has already been demonstrated.
+* **AI Performance Intelligence:** Analyzes objective goals, structured peer feedback, and historical reviews to summarize strengths and development areas without invasive monitoring.
+* **Retention Intelligence:** For the prototype, voluntary departure risk is evaluated via transparent risk-factor scoring or precomputed demonstration data. Advanced longitudinal survival analysis (e.g., Cox Proportional Hazards or Random Survival Forests) is specified as a proposed post-hackathon capability. All retention signals are advisory decision-support for HR Business Partners, never deterministic classifications.
 
-* **Continuous Graph Topology:** Maintains 60 core technical and behavioral skills mapped across 15 enterprise engineering roles.
-* **Automated Gap Identification:** Computes exact graph distance between current verified capabilities and target role requirements, instantly deriving individual upskilling curriculums.
+### 5.4 Policy-to-Action Intelligence
+* **Grounded Policy Reasoning (RAG):** Retrieves authoritative policy chunks using vector similarity search pre-filtered by organization ID, and provides grounded answers with source citations (document, section, freshness).
+* **Deterministic Eligibility Rules:** Python rules evaluate service tenure, probation status, and threshold limits before suggesting actions.
+* **Escalation & Exception Handling:** When evidence is conflicting, absent, or policy limits are exceeded, the system abstains and generates an approval exception request.
 
-### 4.3 Growth and Retention Intelligence Engine
-
-* **Longitudinal Survival Formulation:** Voluntary attrition is formulated as a continuous hazard rate over time rather than an uncalibrated binary classifier. Evaluates 3-month, 6-month, and 12-month hazard probabilities handling right-censored data.
-* **TreeSHAP Risk Factor Decomposition:** Explains hazard predictions by isolating contributing factors (e.g., tenure stagnation in band L5: $+34\%$) and protective organizational factors (e.g., high peer collaboration: $-18\%$).
-* **Proactive Mobility Matching:** High-risk employees are automatically matched with open internal strategic initiatives matching their capabilities, creating an auditable retention intervention path.
-
-### 4.4 Policy-to-Action Intelligence Engine
-
-* **Contextual Clause Retrieval:** Policy queries are converted into 384-dimensional dense vectors and queried against active clauses using `pgvector` with mandatory `WHERE organization_id = ...` SQL pre-filtering.
-* **Deterministic Rule Verification:** Evaluates tenure and probation constraints in Python. If an employee requests an action exceeding policy limits, the rules engine flags `requires_exception = true` and identifies the necessary approver role.
-* **Automated Contradiction Detection:** Cross-compares active policy clauses to flag conflicting deontic requirements across published documents before employees encounter them.
-
-### 4.5 Workforce Decision Simulator
-
-* **Combinatorial Headcount Optimization:** Solves multi-variable workforce planning problems using Google OR-Tools CP-SAT:
-
-$$\min \quad Z = w_1 \cdot 	ext{Cost}_{	ext{total}} + w_2 \cdot 	ext{Time}_{	ext{ready}} + w_3 \cdot 	ext{Disruption}_{	ext{org}} - w_4 \cdot 	ext{Capability}_{	ext{match}}$$
-
-* **Scenario Strategy Comparison:** Evaluates Strategy A (Internal Transfers Heavy), Strategy B (Balanced Hybrid), and Strategy C (External Hiring Heavy), providing leadership with concrete tradeoffs across cost, time-to-readiness, and organizational disruption.
+### 5.5 HR Decision Dashboard and Workforce Simulator
+* **HR Decision Dashboard:** Consolidates recruitment velocity, onboarding progression, skill distribution, attendance aggregates, and retention signals into role-specific views. Attendance remains a limited operational input, not a full payroll/timekeeping system.
+* **Workforce Planning Simulator:** Models headcount staffing scenarios (internal transfers, upskilling, external hiring) under budget and timeline constraints. (Google OR-Tools CP-SAT optimization is proposed for constrained mathematical allocation).
+* **EnterPro Workflow Handoff:** Translates approved recommendations into enterprise workflow requests for formal organizational orchestration.
 
 ---
 
-## 5. Heterogeneous Intelligence Division of Labor
+## 6. Heterogeneous Intelligence Division of Labor
 
-The following matrix formally defines component ownership across the platform. No component is permitted to act outside its designated architectural boundary:
+WorkSense adheres to a strict division of computational responsibility. Qwen is not the entire AI system and is never used as an uncalibrated calculator:
 
-| Operational Capability | Algorithmic / Computational Mechanism | Qwen Language Model Role | Human Decision Authority | Governed Enterprise Action |
+| Functional Area | Computational Mechanism | Qwen Language Model Responsibility | Human Decision Authority | Governed Enterprise Action |
 | :--- | :--- | :--- | :--- | :--- |
-| **Candidate Match Scoring** | LightGBM Learning-to-Rank (12 Feat) | Strictly Prohibited | Lead Recruiter | None |
-| **Match Comparative Brief** | Grounded Feature Delta Synthesis | Explains Citing PRs | Lead Recruiter | None |
-| **Adaptive Interview Probe**| Bounded Info-Gain Gap Heuristic | Formulates Probe Text | Technical Interviewer | None |
-| **Hiring Offer Issuance** | None (Human Employment Decision) | Strictly Prohibited | Department Lead | EnterPro Offer Issuance |
-| **Skill Confidence Decay** | Exponential Decay Function ($e^{-\lambda t}$) | Strictly Prohibited | Direct Manager | None |
-| **Capability Gap Extraction**| Relational Graph Distance Query | Strictly Prohibited | Direct Manager | EnterPro Curricula |
-| **Policy Clause Retrieval** | pgvector 384d Cosine Search | Explains Retrieved Text | None | None |
-| **Policy Eligibility Check** | Deterministic Python Rules Engine | Strictly Prohibited | Department Director | EnterPro Exception Sign-off|
-| **Attrition Hazard Curve** | Cox Proportional Hazards Model | Strictly Prohibited | HR Business Partner Only | None |
-| **Retention Attribution** | TreeSHAP Local Feature Attribution | Formulates Case Brief | HR Business Partner Only | EnterPro Internal Mobility |
-| **Headcount Optimization** | Google OR-Tools CP-SAT Solver | Compares Plan Tradeoffs | Executive Leadership | EnterPro Plan Provisioning |
+| **Candidate Scoring** | Transparent weighted scoring / Graph matching (Proposed: Learning-to-Rank) | Synthesizes grounded comparison citing verified resume facts | Lead Recruiter | None (Advisory only) |
+| **Interview Probing** | Competency gap identification heuristic | Formulates role-specific probe question text | Technical Interviewer | Rubric sign-off |
+| **Hiring Offer** | None (Human employment decision) | Strictly Prohibited | Hiring Manager / Dept Lead | EnterPro Offer Issuance |
+| **Skill Confidence** | Deterministic temporal decay function | Strictly Prohibited | Direct Manager | Capability validation |
+| **Policy Retrieval** | pgvector cosine similarity search + deterministic rules | Formulates grounded explanation citing section references | Department Lead | EnterPro Policy Exception |
+| **Retention Risk** | Deterministic risk factor scoring / Precomputed demo data (Proposed: Survival Analysis) | Summarizes contributing factors and internal mobility options | HR Business Partner Only | EnterPro Mobility Transfer |
+| **Workforce Allocation**| Constrained headcount solver (Proposed: OR-Tools CP-SAT) | Synthesizes narrative tradeoff comparison across scenarios | Executive Leadership | EnterPro Plan Provisioning |
 
 ---
 
-## 6. Hybrid Cloud-Edge Deployment Topology
+## 7. Hybrid Cloud-Edge Deployment Architecture
 
-WorkSense utilizes an engineered **Hybrid Cloud-Edge Architecture** tailored for hackathon demonstration: public cloud handles scalable user interfaces, data persistence, and workflow callbacks, while natural language reasoning executes locally on the operator's consumer GPU.
+The WorkSense demonstration architecture is engineered for realistic hackathon constraints:
 
 ```mermaid
 flowchart TD
     subgraph ClientTier["1. Public Client Tier"]
-        BROWSER["User Web Browser (Desktop / Mobile)"]
+        BROWSER["Web Browser (Candidate / Employee / Manager / HRBP / Admin)"]
     end
 
-    subgraph VercelEdge["2. Presentation Tier (Vercel Global Edge)"]
-        FE["Next.js 14+ Frontend (SSR, Edge Caching, Tailwind)"]
+    subgraph VercelEdge["2. Presentation Tier (Vercel)"]
+        FE["Next.js & TypeScript Frontend"]
     end
 
-    subgraph RenderCloud["3. Application Tier (Render Managed Cloud)"]
-        API["FastAPI Application Core (Python 3.11)"]
-        FW["AI Document Firewall (Macro Stripper & Sanitizer)"]
-        SOLVERS["Specialized Python Solvers (OR-Tools, Lifelines, LightGBM)"]
+    subgraph RenderCloud["3. Application Tier (Render)"]
+        API["FastAPI Modular Monolith Backend"]
+        FIREWALL["AI Document Firewall & Sanitizer"]
+        RULES["Deterministic Domain Services & Solvers"]
+        EP_ADAPTER["EnterPro Adapter Interface"]
     end
 
-    subgraph SupabasePlatform["4. Data Platform Tier (Supabase Managed Cloud)"]
+    subgraph SupabasePlatform["4. Data Platform Tier (Supabase Cloud)"]
         AUTH["Supabase Auth (JWT Engine)"]
-        DB["PostgreSQL 15+ (Authoritative Data & RLS)"]
-        PGV["pgvector Extension (384d Embeddings)"]
-        STORAGE["Encrypted Storage Buckets (Resumes & Policies)"]
+        DB["PostgreSQL (36 Proposed Tables, RLS Enabled)"]
+        PGV["pgvector Extension (Vector Embeddings)"]
+        STORAGE["Private Document Storage (Resumes & Policies)"]
     end
 
-    subgraph SecureTunnel["5. Encrypted Ingress Tunnel"]
-        TUN_EDGE["Cloudflare Tunnel / ngrok Edge Proxy"]
+    subgraph SecureTunnel["5. Secured Ingress Tunnel"]
+        TUNNEL["Cloudflare Tunnel / ngrok (Narrow Ingress)"]
     end
 
-    subgraph OperatorHost["6. Local Operator Host (Hackathon Laptop - RTX 3050 4GB)"]
-        TUN_CLIENT["Tunnel Client Daemon"]
-        GATEWAY["Local AI Gateway (Port 8001)
-        - Auth Token Verification
-        - Semaphore(1) Concurrency Guard
+    subgraph OperatorHost["6. Local AI Inference Tier (Operator Laptop)"]
+        GATEWAY["Local AI Gateway
+        - Pre-shared Token Authentication
+        - Concurrency Lock: Semaphore(1)
         - Strict Schema Validation"]
-        OLLAMA["Ollama Service (127.0.0.1:11434)
-        qwen3:4b-instruct-2507-q4_K_M"]
+        OLLAMA["Ollama Runtime (127.0.0.1:11434)
+        Model: Qwen3-4B-Instruct-2507"]
     end
 
-    subgraph EnterpriseCloud["7. Enterprise Governance Tier"]
-        ENTERPRO["EnterPro Workflow Engine (Signed Webhooks)"]
+    subgraph EnterpriseBoundary["7. Enterprise Workflow Boundary"]
+        ENTERPRO["EnterPro Workflow Engine (Orchestration & Approvals)"]
     end
 
     BROWSER -->|HTTPS / TLS 1.3| FE
-    BROWSER -->|Direct Auth Handshake| AUTH
+    BROWSER -->|Auth Handshake| AUTH
     FE -->|HTTPS / JWT Bearer| API
-    
-    API --> FW
-    API --> SOLVERS
-    API -->|TCP 5432 / RLS Context| DB
-    API -->|pgvector Cosine Queries| PGV
-    API -->|S3 Signed URLs| STORAGE
-    
-    API -->|HTTPS / HMAC Webhooks| ENTERPRO
-    ENTERPRO -->|HTTPS / Signed Callbacks| API
-    
-    API -->|HTTPS / X-WorkSense-Tunnel-Auth| TUN_EDGE
-    TUN_EDGE -->|Encrypted WebSocket Conduit| TUN_CLIENT
-    TUN_CLIENT -->|HTTP / Localhost:8001| GATEWAY
+
+    API --> FIREWALL
+    API --> RULES
+    API -->|PostgreSQL Connection / RLS| DB
+    API -->|Vector Cosine Search| PGV
+    API -->|Signed Document URLs| STORAGE
+
+    API -->|Adapter Requests| ENTERPRO
+    ENTERPRO -->|Workflow Callbacks| EP_ADAPTER
+
+    API -->|HTTPS / Authenticated Tunnel Request| TUNNEL
+    TUNNEL --> GATEWAY
     GATEWAY -->|HTTP / Localhost:11434| OLLAMA
 ```
 
-### 6.1 Presentation Tier (Vercel)
-* **Hosting:** Next.js 14.2+ deployed on Vercel's global edge network.
-* **Rendering Strategy:** Hybrid Server-Side Rendering (SSR) and React Server Components (RSC).
-* **Asset Optimization:** Fonts (Outfit and Inter) preloaded with zero Cumulative Layout Shift (CLS = 0).
-
-### 6.2 Orchestration and Application Tier (Render)
-* **Hosting:** FastAPI Web Service deployed on Render running Python 3.11.9.
-* **Worker Allocation:** Single Uvicorn worker process to eliminate multi-process concurrency race conditions during local in-process OR-Tools optimization.
-* **External Integration Boundary:** Serves as the single authorized gateway connecting cloud clients to Supabase, EnterPro, and the local AI tunnel.
-
-### 6.3 Data Platform Tier (Supabase)
-* **Relational Persistence:** PostgreSQL 15.6 with 131 application tables and Row-Level Security (RLS) active across all user-facing schemas.
-* **Vector Storage:** Native `pgvector` extension indexing 384-dimensional dense semantic embeddings.
-* **Encrypted File Vault:** S3-compatible private buckets for resumes and policy files with time-bounded signed URLs (900-second expiration).
-
-### 6.4 Local Edge AI Inference Tier (Hackathon Laptop)
-* **Hardware Profile:** Consumer laptop equipped with an NVIDIA GeForce RTX 3050 Laptop GPU (4 GB VRAM).
-* **Locked Model:** `qwen3:4b-instruct-2507-q4_K_M` (4-bit quantized GGUF format, occupying ~2.8 GB VRAM).
-* **Execution Daemon:** Ollama bound strictly to `127.0.0.1:11434`.
-
-### 6.5 Ingress Tunnel and Gateway Shield
-* **Direct Ollama Exposure Prohibited:** Exposing raw Ollama port 11434 directly to public networks is strictly forbidden.
-* **Local AI Gateway (`backend/gateway/local_ai_gateway.py`):** An in-process Python microservice listening on `localhost:8001` that validates pre-shared bearer tokens (`X-WorkSense-Tunnel-Auth`), queues requests via an `asyncio.Semaphore(1)` concurrency lock, enforces task allow-lists, and terminates hanging requests past 15.0 seconds.
-* **Reverse Ingress Conduit:** An outbound-only HTTPS tunnel (Cloudflare Tunnel or ngrok) maps the local gateway to a secure public hostname without opening incoming firewall ports.
-
-### 6.6 Enterprise Governance (EnterPro)
-* **State Machine Governance:** EnterPro manages a formal 10-state lifecycle: `DRAFT`, `SUBMITTED`, `PENDING_APPROVAL`, `APPROVED`, `EXECUTING`, `COMPLETED`, `REJECTED`, `CANCELLED`, `FAILED`, and `EXPIRED`.
-* **Cryptographic Callback Verification:** Webhook callbacks from EnterPro are validated using HMAC SHA-256 signatures (`X-EnterPro-Signature`) and timestamp replay protection (< 300 seconds).
+### Critical Architectural Distinctions
+* **Application Backend:** Deployed to **Render** as a cloud web service. It is **not** hosted on the local laptop.
+* **Database & Storage:** Hosted on **Supabase** (managed cloud). It is **not** an offline local database.
+* **Local Ingress Tunnel:** Exposes **only** the local AI Gateway running on the operator laptop to allow the Render backend to reach the local Qwen runtime during the live demonstration.
+* **EnterPro Boundary:** Represented via an adapter interface. Technical webhook contracts, headers, and signatures remain **TBD** pending official hackathon integration documentation.
 
 ---
 
-## 7. Operational Robustness and Degraded Fallback Modes
+## 8. Role-Based Access and Governance
 
-Because local Qwen execution is tethered to the physical hackathon laptop, WorkSense implements five structured operational fallback levels to ensure the application never crashes during live presentation:
+WorkSense implements seven coherent user roles with strict separation of duties and minimum necessary access:
 
-```text
-+------------------------------------------------------------------------------------+
-|                         WORKSENSE OPERATIONAL FALLBACK MODES                       |
-+------------------------------------------------------------------------------------+
-| LEVEL 0: FULL LIVE INTERACTION                                                     |
-| All services reachable; live Qwen natural language synthesis and EnterPro active. |
-|                                                                                    |
-| LEVEL 1: AI-DEGRADED MODE (Laptop Asleep / Wi-Fi Disconnected)                     |
-| Qwen offline; amber status badge visible on UI. Stored candidate rankings, skill   |
-| graphs, survival curves, and policy chunks operate seamlessly from Supabase data.  |
-|                                                                                    |
-| LEVEL 2: WORKFLOW-DEGRADED MODE (EnterPro Unreachable)                             |
-| Read-only operations and AI reasoning active; mutation actions queue locally in    |
-| PENDING_APPROVAL state without claiming false enterprise execution.                |
-|                                                                                    |
-| LEVEL 3: CONTROLLED SEEDED DEMO MODE                                               |
-| Bypasses dynamic calculations; showcases verified pre-calibrated Golden Demo       |
-| state for Sarah Lin and Marcus Chen with explicit demonstration provenance labels. |
-|                                                                                    |
-| LEVEL 4: STATIC BACKUP WALKTHROUGH                                                 |
-| High-resolution screenshot deck and pre-recorded video presentation fallback.      |
-+------------------------------------------------------------------------------------+
-```
+| Role | Primary Responsibilities | Data Access Boundaries |
+| :--- | :--- | :--- |
+| **Candidate** | Submit application, upload resume, complete structured interview. | Own application and profile only. Strictly no access to internal rubrics, candidate rankings, or employee records. |
+| **Employee** | View living Workforce Twin, complete onboarding tasks, query policy RAG, explore career growth. | Own profile, own evidence, own onboarding plan, public department policies. No access to peer retention scores or private feedback. |
+| **Manager** | Review team capabilities, endorse skill evidence, conduct interviews, approve standard requests. | Direct reports and assigned candidate interview rubrics only. No access to individual retention risk scores. |
+| **Recruiter** | Manage requisitions, review candidate ranking insights, schedule structured interviews. | Requisitions, applicant pipelines, interview evaluations. No access to full employee performance histories or attrition risk. |
+| **HR Professional (HRBP)** | Review retention risk alerts, manage mobility interventions, audit onboarding blockers, resolve policy exceptions. | Full employee workforce context, retention risk consoles, mobility workflows, cross-department policy exceptions. |
+| **HR / Org Leadership** | Strategic workforce simulation, scenario planning, macro headcount optimization, organization-wide analytics. | Aggregated organizational analytics, scenario models, budget allocations. Small-cohort suppression protects individual privacy. |
+| **Platform Administrator** | Manage tenant configurations, system roles, integration settings, inspect audit event logs. | Administrative consoles, audit logs, model execution traces. No arbitrary modification of historical evidence without audit events. |
 
 ---
 
-## 8. Security, Privacy, and Ethical AI Governance
+## 9. Security, Privacy, and Responsible AI Principles
 
-WorkSense establishes strict architectural safeguards to protect employee privacy and ensure equitable algorithmic assessment:
-
-1. **Human Primacy:** Algorithmic outputs are legally and operationally advisory. Consequential employment actions require authenticated human sign-off via EnterPro.
-2. **Zero Employee Surveillance:** Architecture strictly bans webcam video streaming, facial expression analysis, eye contact tracking, keystroke logging, vocal stress analysis, and private messaging surveillance.
-3. **AI Document Firewall:** Uploaded resumes and policies are stripped of macros, programmatically parsed to plain text, and enclosed in `<untrusted_data>` XML safety boundaries to neutralize indirect prompt injection attacks.
-4. **Demographic Blindness:** Candidate ranking models are strictly prohibited from evaluating candidate name, gender, age, race, ethnicity, disability, marital status, or photograph.
-5. **Calibrated Abstention:** If a user query lacks authoritative policy grounding or encounters contradictory clauses, the system outputs `abstained: true` with a plain-language explanation and a button to file an HR ticket.
-6. **Row-Level Security Enforcement:** Supabase RLS policies guarantee tenant isolation. Retention survival probabilities and TreeSHAP risk factors are restricted exclusively to the `hr_bp` role.
+1. **Human Primacy:** AI produces advisory decision-support. All consequential employment actions (hiring offers, promotions, role transfers, compensation adjustments, formal performance ratings) require authenticated human sign-off.
+2. **Zero Employee Surveillance:** The platform strictly prohibits webcam video monitoring, eye tracking, emotion recognition, facial analysis, vocal stress analysis, keystroke logging, or private chat scraping.
+3. **Layered Prompt Injection Risk Reduction:** Resumes and external documents are treated as untrusted data. External text is sanitized, stripped of instruction formatting, wrapped in boundary tags, parsed with strict Pydantic schemas, and restricted to allowlisted tool calls. Residual risk is mitigated by enforcing authorization and human approval outside the model.
+4. **Demographic Blindness:** Candidate scoring, interview evaluation, and workforce models exclude protected demographic attributes (race, gender, age, religion, marital status, disability status).
+5. **Calibrated Policy Abstention:** When policy documentation is ambiguous, contradictory, or absent, the system explicitly abstains (`abstained: true`), provides available sources, and routes the inquiry to an HR professional.
+6. **Data Minimization & Isolation:** Multi-tenant PostgreSQL Row-Level Security ensures strict organization-level isolation. Sensitive tables (such as retention risk assessments) are restricted to authorized HR Business Partners.
 
 ---
 
-## 9. Canonical Specification Suite
+## 10. Canonical Specification Suite
 
-The WorkSense engineering foundation is fully detailed across ten comprehensive specifications:
+The complete engineering foundation of WorkSense is defined across nine canonical documents:
 
-```text
-docs/
-|-- 01-PRD.md                      Product Requirements Document (1,268 lines, 126 KB)
-|-- 02-TRD.md                      Technical Requirements Document (1,034 lines, 94 KB)
-|-- 03-Workflow-Roles.md           Workflow & Roles Specification (1,415 lines, 112 KB)
-|-- 04-UI-UX-Design.md             UI/UX & Visual Design Specification (1,467 lines, 114 KB)
-|-- 05-Database-API.md             Database & API Specification (1,739 lines, 89 KB)
-|-- 06-System-Architecture.md      System Architecture Document (1,275 lines, 73 KB)
-|-- 07-AI-ML-Architecture.md       AI & Machine Learning Architecture (1,208 lines, 74 KB)
-|-- 08-Deployment-Architecture.md  Deployment Architecture & Runbook (989 lines, 57 KB)
-|-- 09-Project-Memory.md           Project Memory & Navigation Layer (680 lines, 53 KB)
-`-- 10-Implementation-Details.md   Implementation Details & Roadmap (544 lines, 34 KB)
-```
+| Document | Canonical Path | Primary Content & Scope |
+| :--- | :--- | :--- |
+| **01-PRD** | [`docs/01-PRD.md`](./docs/01-PRD.md) | Product Requirements Document: problem statement, personas, 5 capability groups, functional/non-functional requirements, non-goals, and prototype success criteria. |
+| **02-TRD** | [`docs/02-TRD.md`](./docs/02-TRD.md) | Technical Requirements Document: technical stack boundaries, architectural constraints, component interfaces, RFC 2119 requirements, and technical risk mitigations. |
+| **03-Workflow-Roles** | [`docs/03-Workflow-Roles.md`](./docs/03-Workflow-Roles.md) | Workflows & Roles: 7 user roles, RBAC/ABAC permissions matrix, end-to-end lifecycle workflows, human approval gates, and EnterPro handoff points. |
+| **04-UI-UX-Design** | [`docs/04-UI-UX-Design.md`](./docs/04-UI-UX-Design.md) | UI/UX & Visual Design: enterprise design tokens (deep blue, restrained lime), navigation, layout contracts, WHAT-WHY-EVIDENCE presentation, and accessible state handling. |
+| **05-Database-API** | [`docs/05-Database-API.md`](./docs/05-Database-API.md) | Database & API Specification: proposed 36 relational tables across 16 domains, 54 REST endpoint contracts, pgvector schema, and Supabase RLS expectations. |
+| **06-System-Architecture** | [`docs/06-System-Architecture.md`](./docs/06-System-Architecture.md) | System Architecture: logical modular monolith, runtime flows, trust boundaries, event handling, AI document firewall, and EnterPro adapter boundary. |
+| **07-AI-ML-Architecture** | [`docs/07-AI-ML-Architecture.md`](./docs/07-AI-ML-Architecture.md) | AI & ML Architecture: Qwen text-first role, prompt structures, RAG retrieval pipeline, transparent candidate scoring, retention modeling roadmap, and evaluation frameworks. |
+| **08-Deployment-Architecture** | [`docs/08-Deployment-Architecture.md`](./docs/08-Deployment-Architecture.md) | Deployment Architecture: hybrid Vercel/Render/Supabase/local-Qwen topology, secure tunnel setup, local development vs. demo rehearsal, and degraded fallback modes. |
+| **09-Project-Memory** | [`docs/09-Project-Memory.md`](./docs/09-Project-Memory.md) | Project Memory: master continuity document, locked decisions, open TBD decisions, truth-status rules, and operational guidelines for future agents. |
 
 ---
 
-## 10. UI/UX Design System and Screen Contracts
+## 11. Flagship Presentation Narrative (Demo Seed Data)
 
-The user experience is built upon a high-contrast *Electric Blue & Cyber Lime* design system adhering to strict readability and professional restraint:
-* **Dark Theme Palette:** Deep Slate base (`#0F172A`), Elevated Surface (`#1E293B`), Cool Border (`#334155`), White Text (`#F8FAFC`), and Cyber Lime Accent (`#84CC16`).
-* **Light Theme Palette:** Crisp Pure White base (`#FFFFFF`), Subdued Surface (`#F8FAFC`), Border (`#E2E8F0`), Deep Navy Text (`#0F172A`), and Dark Lime Accent (`#4D7C0F`).
-* **Universal Screen Contract:** Every insight surface across all ten flagship views strictly adheres to the four-part layout:
-  * **WHAT:** Clear, plain-language operational conclusion.
-  * **WHY:** Contextual rationale explaining the underlying drivers.
-  * **EVIDENCE:** Direct clickable citations to verified artifacts (e.g., `GitHub PR #402`, `Policy v4.1 §5.2`).
-  * **WHAT NEXT:** Concrete, role-authorized action button triggering an EnterPro workflow.
+For demonstration purposes, WorkSense showcases a coherent end-to-end operational journey: **The 90-Day AI Fraud Team Initiative**. 
 
----
+> **Truth Status Notice:**  
+> All candidate names, scores, hazard percentages, and metrics referenced below are **fictional demonstration seed data** created to validate prototype user flows during presentation. They do not represent real employee measurements or validated ML benchmarks.
 
-## 11. Flagship Presentation Narrative: The 90-Day AI Fraud Team
-
-The live demonstration presents a single, unbroken 15-minute operational journey:
-
-1. **Strategic Need:** Executive Leadership launches the *Strategic Workforce Simulator* (`SCR-10`) facing an urgent mandate: staff an **8-person AI Fraud Detection Team in 90 days** under a $180,000 budget ceiling.
-2. **Combinatorial Optimization:** Google OR-Tools CP-SAT evaluates candidate staffing strategies. Strategy B (Balanced Hybrid: 3 transfers, 3 upskills, 2 external hires) is selected, achieving full readiness in 70 days at $140,000 cost.
-3. **Retention Risk Discovery:** The simulation reveals an operational vulnerability: **Marcus Chen** (Senior Infrastructure Lead) is flagged in the *Retention Risk Console* (`SCR-08`) with an elevated 6-month attrition risk (72%).
-4. **TreeSHAP Attribution:** Local explainability reveals Marcus's risk is driven by tenure stagnation in band L5 (+34%) and below-market comp-ratio (+22%), while team collaboration acts as a strong protective factor (-18%).
-5. **Internal Mobility Intervention:** WorkSense matches Marcus's L5 infrastructure skills to lead the new AI Fraud Team infrastructure. The HRBP approves the transfer, dispatching an auditable workflow to **EnterPro**.
-6. **External Candidate Screening:** To fill the remaining Staff ML vacancy, the Recruiter opens `SCR-02`. LightGBM ranks **Sarah Lin** #1 (94% match), crediting Triton capability toward CUDA adjacency and citing verified production PR #402.
-7. **Structured Adaptive Interview:** In `SCR-03`, Sarah answers the core high-concurrency caching question. Qwen detects an evidence gap and issues an adaptive probe targeting Redis replica split-brain recovery. Sarah validates the rubric requirement.
-8. **Twin Continuity & Adaptive Onboarding:** Sarah is hired. Her Candidate Twin automatically converts into an Employee Twin in `SCR-04`. Pre-verified screening evidence automatically waives redundant technical onboarding modules.
+1. **Strategic Mandate:** Executive Leadership opens the Workforce Decision Dashboard facing a strategic priority: form an 8-person cross-functional AI Fraud Detection team within 90 days under budget constraints.
+2. **Staffing Scenario Evaluation:** The Workforce Simulator compares internal mobility, upskilling, and external hiring options, identifying a balanced strategy (3 internal transfers, 3 upskilled members, 2 external hires).
+3. **Retention Risk Discovery (Demo Seed):** The simulation surfaces a retention alert for **Marcus Chen** (Senior Infrastructure Engineer), flagged with an elevated 6-month departure risk due to role stagnation in his current band.
+4. **Internal Mobility Intervention:** Rather than risking turnover, WorkSense identifies that Marcus's distributed systems skills make him an ideal lead for the new AI Fraud Team infrastructure. The HRBP reviews the case and initiates an internal transfer request via EnterPro.
+5. **External Candidate Screening (Demo Seed):** To fill the external Staff ML Engineer opening, the recruiter reviews candidate rankings. **Sarah Lin** ranks #1 based on verified PyTorch and Triton experience, with Triton credited toward CUDA adjacency.
+6. **Structured Adaptive Interview:** Sarah completes a structured competency interview. Qwen detects an evidence gap in caching resiliency and formulates an adaptive follow-up probe for interviewer sign-off.
+7. **Twin Continuity & Adaptive Onboarding:** Upon offer acceptance, Sarah's Candidate Twin seamlessly transitions into an Employee Twin. Pre-verified technical proficiencies automatically waive introductory modules in her 30/60/90-day onboarding journey.
+8. **Policy-to-Action Exception:** An employee queries remote work eligibility under new jurisdiction guidelines. The Policy Reasoning agent retrieves relevant clauses, checks tenure rules, and prepares an exception request for manager approval.
+9. **Auditable Outcome:** Every step of the journey records an append-oriented audit record capturing the evidence, human approval, and workflow execution.
 
 ---
 
-## 12. Local Development and Operational Runbook
+## 12. Target Engineering Runbook (Implementation Blueprint)
 
-### 12.1 Environment Prerequisites
+The following procedures describe the target execution workflow once application code is implemented in subsequent stages.
+
+### 12.1 Target Prerequisites
 * **Operating System:** Windows 11 / Linux (Ubuntu 22.04 LTS) / macOS (Apple Silicon).
 * **Python Runtime:** Python 3.11.x (with `pip` and `virtualenv`).
 * **Node.js Runtime:** Node.js 20.x LTS (with `npm 10.x`).
-* **GPU Hardware:** NVIDIA GPU with $\ge 4$ GB VRAM (for local Ollama execution).
-* **CLI Tools:** Git 2.40+, Ollama CLI, and Cloudflare `cloudflared` (or `ngrok`).
+* **AI Runtime:** Ollama CLI with `qwen3:4b-instruct-2507-q4_K_M`.
+* **Tunnel Utility:** Cloudflare `cloudflared` (or `ngrok`) for exposing local AI gateway during demo.
+* **Cloud Services:** Vercel account, Render account, Supabase project with PostgreSQL 15+ and pgvector.
 
-### 12.2 Startup Sequence
-
+### 12.2 Target Startup Sequence (Proposed)
 ```bash
-# 1. LOCAL OLLAMA INFERENCE (Operator Laptop)
+# 1. Local AI Engine (Operator Laptop)
 ollama run qwen3:4b-instruct-2507-q4_K_M
 
-# 2. LOCAL AI GATEWAY (Shield Microservice)
+# 2. Local AI Gateway (Shield microservice on port 8001)
 python -m backend.gateway.local_ai_gateway --port 8001
 
-# 3. SECURE REVERSE INGRESS TUNNEL
+# 3. Secure Ingress Tunnel (Exposes port 8001 to Render backend)
 cloudflared tunnel --url http://localhost:8001
-# Copy assigned public URL (e.g., https://<ephemeral-id>.trycloudflare.com)
 
-# 4. BACKEND APPLICATION (FastAPI)
+# 4. FastAPI Backend Application (Local dev or Render web service)
 cd backend
-python -m venv venv && source venv/bin/activate
+python -m venv venv && source venv/bin/activate  # Or .\\venv\\Scripts\\Activate.ps1
 pip install -r requirements.txt
-# Update QWEN_GATEWAY_URL in .env with tunnel URL
 uvicorn main:app --reload --port 8000
 
-# 5. FRONTEND APPLICATION (Next.js 14+)
+# 5. Next.js Frontend Application (Local dev or Vercel edge)
 cd frontend
 npm install
 npm run dev
-# Access local dashboard at http://localhost:3000
-```
-
-### 12.3 Pre-Demo Verification Commands
-
-```bash
-# Verify backend multi-component health status
-curl -s http://localhost:8000/api/v1/health | jq .
-
-# Execute 15-second Golden Demo database reseed
-python backend/scripts/seed_demo_data.py
-
-# Run backend unit test suite
-pytest tests/unit/ -v
-
-# Verify Next.js production build and TypeScript compilation
-cd frontend && npm run build
 ```
 
 ---
 
-## 13. Repository Layout
+## 13. Proposed Repository Layout
 
 ```text
 WorkSense/
 |-- .gitignore                             Exclusion rules for builds, envs, and secrets
-|-- README.md                              Master repository architecture overview
-|-- docs/                                  Authoritative 10-document specification suite
+|-- README.md                              Authoritative project entry point and overview
+|-- docs/                                  Canonical 9-document specification suite
 |   |-- 01-PRD.md                          Product Requirements Document
 |   |-- 02-TRD.md                          Technical Requirements Document
 |   |-- 03-Workflow-Roles.md               Workflows, Roles & Permissions
-|   |-- 04-UI-UX-Design.md                 UI/UX & Visual Design System
-|   |-- 05-Database-API.md                 Database Schemas & REST API Contracts
-|   |-- 06-System-Architecture.md          System Architecture & Modular Monolith
-|   |-- 07-AI-ML-Architecture.md           AI, ML, Solvers & Governance
-|   |-- 08-Deployment-Architecture.md      Deployment Architecture & Operational Runbook
-|   |-- 09-Project-Memory.md               Project Memory & Navigation Layer
-|   `-- 10-Implementation-Details.md       Implementation Details & Phased Roadmap
-|-- backend/                               FastAPI Modular Monolith Core (Target)
+|   |-- 04-UI-UX-Design.md                 UI/UX & Visual Design Specification
+|   |-- 05-Database-API.md                 Database & API Specification (36 Tables, 54 Endpoints)
+|   |-- 06-System-Architecture.md          System Architecture Document
+|   |-- 07-AI-ML-Architecture.md           AI & Machine Learning Architecture
+|   |-- 08-Deployment-Architecture.md      Deployment Architecture & Runbook
+|   `-- 09-Project-Memory.md               Project Memory & Continuity Document
+|-- backend/                               [Target Implementation - Stage 1+]
 |   |-- api/v1/                            Domain REST routers
-|   |-- services/                          20 domain engines
-|   |-- database/migrations/               Supabase PostgreSQL DDL migrations
+|   |-- core/                              Security, config, middleware, database session
+|   |-- services/                          Domain business logic engines
+|   |-- database/migrations/               Supabase PostgreSQL DDL migration scripts
 |   |-- gateway/local_ai_gateway.py        Authenticated Ollama shield microservice
 |   `-- main.py                            FastAPI application entry point
-`-- frontend/                              Next.js 14+ Presentation Tier (Target)
-    |-- app/                               App Router pages, layouts, and route handlers
+`-- frontend/                              [Target Implementation - Stage 1+]
+    |-- app/                               Next.js App Router layouts, pages, and routes
     |-- components/                        Design-system conforming UI components
-    `-- public/assets/                     Brand SVGs, static vectors, and icons
+    `-- lib/                               API clients, auth hooks, state stores
 ```
 
 ---
 
-## 14. Governance and Compliance Mandates
+## 14. Governance and Ethical Standards
 
-* **Ethical AI Alignment:** WorkSense adheres to international principles of algorithmic transparency, explainability, contestability, and purpose limitation.
-* **Prohibition on Autonomous Adverse Actions:** The platform architecturally prohibits the automated execution of terminations, pay reductions, or adverse employment decisions.
-* **Open Source and Demonstration Status:** Built for HackDriven's *Build Bengaluru* Hackathon. All synthetic applicant profiles, corporate policy clauses, and performance artifacts are fictional constructs designed to showcase enterprise decision intelligence.
+* **Augmentation, Not Automation:** WorkSense explicitly preserves human agency. AI systems evaluate evidence and generate recommendations; accountable human professionals make all employment decisions.
+* **Non-Surveillance Commitment:** WorkSense rejects invasive behavioral surveillance. Competencies and risks are evaluated through validated operational outcomes, peer endorsements, and transparent indicators.
+* **Demonstration Transparency:** Built for the HackDriven *Build Bengaluru* Hackathon. All synthetic personnel records, evaluation scores, and company policies are fictional constructs created for prototype demonstration.

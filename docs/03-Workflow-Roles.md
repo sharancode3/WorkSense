@@ -15,7 +15,7 @@
 | **Owner** | WorkSense Product Operations & Architecture Group |
 | **Intended Audience** | Frontend & Backend Engineers, UI/UX Designers, Workflow Developers, Security & Compliance Auditors, System Integrators |
 | **Source-of-Truth Statement** | This document defines role definitions, permission boundaries, data classifications, end-to-end business workflows, state machines, cross-role handoffs, human approval gates, and exception behaviors for WorkSense. Downstream UI wireframes, API endpoint implementations, and database permission schemas must derive directly from the rules established herein. |
-| **Related Documents** | `docs/01-PRD.md` (Product Requirements Document), `docs/02-TRD.md` (Technical Requirements Document), `docs/03-ARCHITECTURE.md` (System Architecture), `docs/05-DATA-SCHEMAS.md` (Data Schemas & API Contracts) |
+| **Related Documents** | `docs/01-PRD.md` (Product Requirements Document), `docs/02-TRD.md` (Technical Requirements Document), `docs/06-System-Architecture.md` (System Architecture), `docs/05-Database-API.md` (Data Schemas & API Contracts) |
 | **Change Control Policy** | Any modifications to role authorities, human approval gates, or state transitions require formal review and sign-off by the Product Lead and Technical Architect. |
 
 ---
@@ -31,7 +31,7 @@ This specification operationalizes the product vision (`docs/01-PRD.md`) and tec
 
 ### 2.2 Scope Boundaries
 * **In Scope:** Human role profiles, permission models (RBAC + ABAC + RLS), data classification tiers, decision authority matrices, 17 detailed end-to-end workflows (`WF-TAL`, `WF-TWIN`, `WF-ONB`, `WF-GROW`, `WF-RET`, `WF-POL`, `WF-PLAN`, `WF-GOV`, `WF-XMOD`), state machines, audit events, notification rules, and acceptance criteria.
-* **Out of Scope:** Pixel-level UI CSS styling, physical PostgreSQL DDL migration scripts, raw REST endpoint route handlers, and low-level network tunnel configuration. (These belong in `docs/03-ARCHITECTURE.md` and `docs/05-DATA-SCHEMAS.md`).
+* **Out of Scope:** Pixel-level UI CSS styling, physical PostgreSQL DDL migration scripts, raw REST endpoint route handlers, and low-level network tunnel configuration. (These belong in `docs/06-System-Architecture.md` and `docs/05-Database-API.md`).
 
 ---
 
@@ -339,7 +339,7 @@ stateDiagram-v2
 
 * **Workflow ID:** `WF-TAL-001`
 * **Workflow Name:** Candidate Application and Candidate Twin Creation
-* **Purpose:** Ingest external digital resumes, neutralize prompt-injection threats, extract structured biographical data, verify facts with the candidate, and initialize the Candidate Twin.
+* **Purpose:** Ingest external digital resumes, isolate potential prompt-injection payloads via delimiter wrapping and schema validation, extract structured biographical data, verify facts with the candidate, and initialize the Candidate Twin.
 * **Actors:**
   * *Primary:* Candidate
   * *Supporting:* WorkSense System, AI Document Firewall, Qwen Gateway
@@ -772,7 +772,7 @@ stateDiagram-v2
 1. Survival Model evaluates longitudinal features (tenure stagnation, comp ratio, promotion recency, project churn).
 2. Model calculates hazard curve: 3-Month ($P_{3m} = 0.22$), 6-Month ($P_{6m} = 0.72$), 12-Month ($P_{12m} = 0.81$).
 3. TreeSHAP extracts top contributing risk factors:
-   * Factor 1: Role Stagnation ($+34\%$)
+   * Factor 1: Role Stagnation ($+34\%$, Demo Seed Feature Contribution)
    * Factor 2: Below-Market Comp Ratio ($+22\%$)
    * Protective Factor: Strong Team Peer Recognition ($-18\%$)
 4. Qwen synthesizes confidential HRBP briefing explaining contributing drivers.
@@ -998,7 +998,7 @@ Items are presented strictly in the **WHAT → WHY → EVIDENCE → WHAT NEXT** 
 
 | Priority | Category | Sample Decision Item Summary | Direct Action Button |
 | :--- | :--- | :--- | :--- |
-| **P0 (Critical)** | Retention Risk | Senior Infrastructure Lead exhibits 72% 6-month attrition hazard due to role stagnation. | `[Review Retention Case]` |
+| **P0 (Critical)** | Retention Risk | Senior Infrastructure Lead exhibits 72% 6-month attrition hazard due to role stagnation (Fictional Demo Seed Data). | `[Review Retention Case]` |
 | **P0 (Critical)** | Onboarding Blocker | New Staff ML Engineer blocked on GPU cluster provisioning for 48 hours. | `[Approve Access Request]` |
 | **P1 (High)** | Capability Risk | Cloud Security knowledge concentrated in 2 employees; 1 has pending mobility request. | `[Initiate Upskilling Track]` |
 | **P1 (High)** | Policy Conflict | Revised Travel Policy v3 contradicts Regional Sales Guidelines Section 4. | `[Resolve Conflict in Studio]` |
@@ -1093,7 +1093,7 @@ flowchart TD
 
 * **Workflow ID:** `WF-GOV-004`
 * **Workflow Name:** Compliance Audit and Decision Lineage Review
-* **Purpose:** Allow compliance officers and regulatory auditors to inspect the complete, unbroken cryptographic decision lineage for any hiring, promotion, policy, or transfer event.
+* **Purpose:** Allow compliance officers and regulatory auditors to inspect the complete, unbroken decision lineage and audit history for any hiring, promotion, policy, or transfer event.
 * **Actors:**
   * *Primary:* Compliance / Governance Auditor
 * **Trigger:** Routine regulatory audit or employee dispute investigation.
@@ -1106,7 +1106,7 @@ flowchart TD
    * Interview questions asked, raw transcripts, and adaptive probe triggers.
    * Recruiter notes, hiring manager approval signature, and EnterPro workflow hash.
 3. Auditor verifies zero use of protected attributes and confirms compliance with anti-bias mandates.
-4. Auditor exports cryptographically signed Decision Lineage PDF.
+4. Auditor exports structured Decision Lineage audit summary with actor, timestamp, source, and outcome references.
 
 ---
 
@@ -1328,7 +1328,7 @@ For every consequential platform operation, the system commits an immutable reco
 * **Then** Qwen shall refuse to issue an approval or denial, render an explicit **Abstention Notice** citing the conflicting sections, and create an escalation ticket in the HRBP Command Center.
 
 ### AC-WF-06: Longitudinal Retention Intervention Execution
-* **Given** an active employee holding critical skills who exhibits a 72% 6-month attrition hazard due to role stagnation in `WF-RET-001`,
+* **Given** an active employee holding critical skills who exhibits a 72% 6-month attrition hazard due to role stagnation in `WF-RET-001` (Demo Seed Scenario),
 * **When** the HRBP initiates an internal mobility intervention in `WF-RET-002`,
 * **Then** EnterPro shall route approval requests to both the Releasing and Receiving Managers, and upon dual approval, the backend shall update the Employee Twin reporting line and department in Supabase.
 

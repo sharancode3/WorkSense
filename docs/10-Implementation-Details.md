@@ -78,7 +78,7 @@ Before writing any application code, the operational boundaries, terminology, an
    * *Candidate Ranking:* Transparent, auditable 12-feature weighted deterministic formula baseline for the prototype; full LightGBM LambdaMART is the production roadmap target.
    * *Attrition Prototype Strategy:* Cox Proportional Hazards survival curves across 3/6/12-month horizons paired with pre-calibrated TreeSHAP feature attributions for the demonstration cohort.
    * *Skill Confidence Formulation:* Explicit temporal decay: $	ext{Confidence}(t) = 	ext{Proficiency} 	imes e^{-\lambda \Delta t} 	imes 	ext{Validation Multiplier}$ (where $\lambda = 0.00385$, 180-day half-life).
-   * *EnterPro Integration Method:* REST webhooks with HMAC SHA-256 signature verification (`X-EnterPro-Signature`) and timestamp replay protection.
+   * *EnterPro Integration Method:* Adapter-interface boundary (`EnterProAdapter`) with configurable signature validation; exact contract TBD pending official documentation.
    * *Ingress Tunnel Provider:* Cloudflare Quick Tunnel (`cloudflared`) providing an encrypted outbound-only HTTPS proxy to the Local AI Gateway.
 
 ### Feature Classification Matrix
@@ -150,7 +150,7 @@ ightarrow$ WHAT NEXT** contract.
 
 Establish the unified relational data foundation, Row-Level Security policies, private storage, and a cross-module synthetic organization.
 
-### Relational Schema Deployment (131 Tables across 16 Domains)
+### Relational Schema Deployment (36 Proposed Tables across 16 Domains)
 * **Core Organizations & Profiles:** `organizations`, `departments`, `teams`, `user_profiles`, `role_assignments`.
 * **Talent & Recruitment:** `job_requisitions`, `candidate_profiles`, `candidate_applications`, `candidate_rankings`.
 * **Twin & Skill Graph:** `person_twins`, `skills`, `skill_relationships`, `person_skills`, `evidence_items`, `evidence_links`.
@@ -175,7 +175,7 @@ Establish the unified relational data foundation, Row-Level Security policies, p
 * **Key Demonstration Personas:**
   * Executive Lead: VP of Engineering.
   * Department Manager: Marcus Vance (Infrastructure Manager).
-  * Retention Target: **Marcus Chen** (Senior Infrastructure Lead, L5, 38 months in band, 6mo hazard 72%).
+  * Retention Target: **Marcus Chen** (Senior Infrastructure Lead, L5, 38 months in band, 6mo hazard 72% - Fictional Demo Seed Data).
   * External Candidate: **Sarah Lin** (Staff Machine Learning Engineer applicant, PR #402 citation).
   * Recruiter Persona: Lead Technical Recruiter.
   * HRBP Persona: Strategic People Partner.
@@ -195,8 +195,8 @@ Build the structural core of WorkSense: continuous twins, dynamic capability con
 * **Relational Capability Graph (`MOD-07`):**
   * PostgreSQL recursive Common Table Expression (CTE) queries traversing `skill_relationships`.
   * Computes adjacent skill credit: Candidate with Triton proficiency receives 85% adjacent credit toward CUDA requirements based on validated graph distance.
-* **Cryptographic Evidence Ledger:**
-  * Every evidence item records `source_type` (`github_pr`, `jira_milestone`, `peer_review`), `external_reference`, `verifier_id`, and a cryptographic SHA-256 content hash.
+* **Append-Oriented Evidence Ledger:**
+  * Every evidence item records `source_type` (`github_pr`, `jira_milestone`, `peer_review`), `external_reference`, `verifier_id`, and a persistent content hash reference.
 * **Dynamic Temporal Skill Confidence Engine:**
   * Calculates confidence using evidence count, observation recency, and verification authority:
 
@@ -299,7 +299,7 @@ ightarrow$ State updated.
 
 ### Workflow Engine Architecture
 * **State Machine Alignment:** Enforces EnterPro's 10-state lifecycle (`DRAFT`, `SUBMITTED`, `PENDING_APPROVAL`, `APPROVED`, `EXECUTING`, `COMPLETED`, `REJECTED`, `CANCELLED`, `FAILED`, `EXPIRED`).
-* **Cryptographic Callback Security:** Webhook endpoint `/api/v1/workflows/callbacks` verifies HMAC SHA-256 signature (`X-EnterPro-Signature`) and enforces timestamp replay checks ($< 300	ext{s}$).
+* **Adapter Callback Security:** Webhook endpoint `/api/v1/workflows/callbacks` validates incoming payloads via `EnterProAdapter` with configurable authentication headers and replay protection.
 * **Idempotency Safeguard:** Ingests unique `event_id` to ensure duplicate webhook deliveries are safely ignored.
 
 **Stage 7 Exit Condition:** Judges observe a recommendation transform into an auditable, human-approved EnterPro workflow with live state synchronization.
@@ -439,10 +439,10 @@ Implement a single, hardened Qwen Gateway (`MOD-16`) protecting local Ollama exe
 
 ## Stage 15 — Governance, Audit, and Explainability
 
-Deploy the cryptographic audit infrastructure tracking every model inference, human override, and workflow state transition.
+Deploy the append-oriented audit infrastructure tracking every model inference, human override, and workflow state transition.
 
 ### Working Features
-* **Immutable Audit Event Ledger:** Table `audit_events` logs timestamp, actor UUID, action type, before/after JSON states, and cryptographic SHA-256 event hashes.
+* **Append-Oriented Audit Event Ledger:** Table `audit_events` logs timestamp, actor UUID, action type, before/after JSON states, and structured event identifiers.
 * **Model & Prompt Registry:** Table `model_registry` records model name, version, quantization hash, prompt template version, and approval timestamps.
 * **Human Override Tracking:** Any recruiter ranking override or manager calibration adjustment requires an explicit text justification logged to audit tables.
 * **Complete Flow Reconstructability:** Every hiring offer, transfer, or exception can be traced back to its underlying evidence artifacts, model versions, and human sign-offs.
@@ -467,7 +467,7 @@ Execute rigorous multi-tier testing covering functional paths, security boundari
   * Google OR-Tools CP-SAT constraint validation under budget/deadline limits.
 * **Security & Authorization Tests (`tests/security/`):**
   * RLS boundary enforcement: Non-HR roles attempting to query `attrition_predictions` receive empty sets.
-  * AI Document Firewall: Ingestion of prompt-injected resumes neutralizing command executions.
+  * AI Document Firewall: Ingestion of prompt-injected resumes with layered risk reduction (isolating command payloads).
   * Secret isolation: Verifying that Next.js client bundles contain zero service-role keys.
 
 **Stage 16 Exit Condition:** All critical golden-path and security test suites pass with 100% recorded verification.
@@ -524,7 +524,7 @@ The completed WorkSense prototype proves an unbroken, evidence-backed lifecycle:
    Marcus is matched to lead AI Fraud infrastructure; HRBP approves transfer via EnterPro.
    │
 5. External Screening:
-   Sarah Lin ranks #1 (94% match) for Staff ML; Triton credits CUDA adjacency citing PR #402.
+   Sarah Lin ranks #1 (94% match - Demo Seed) for Staff ML; Triton credits CUDA adjacency citing PR #402.
    │
 6. Structured Adaptive Interview:
    Sarah answers caching core question; Qwen generates adaptive probe on Redis split-brain;
@@ -538,7 +538,7 @@ The completed WorkSense prototype proves an unbroken, evidence-backed lifecycle:
    EnterPro provisions GPU cluster access and resolves onboarding blockers via signed webhooks.
    │
 9. Full Traceability:
-   The entire lifecycle is cryptographically anchored to the Evidence Ledger and Audit Trail.
+   The entire lifecycle is traceable through the Evidence Ledger and Audit Trail.
 ```
 
 WorkSense delivers not a superficial dashboard collection or generic chatbot, but a deep, trustworthy, and role-aware workforce decision intelligence platform.

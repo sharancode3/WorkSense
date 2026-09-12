@@ -84,16 +84,16 @@
 
 | Document Index | File Path | Primary Purpose | When to Read | Authority Level | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **01-PRD** | [`docs/01-PRD.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/01-PRD.md) | Product requirements, personas, 5 core engines, Golden Demo narrative. | Defining feature scope, user stories, and acceptance criteria. | Product Source of Truth | Approved Baseline |
-| **02-TRD** | [`docs/02-TRD.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/02-TRD.md) | Technical stack boundaries, architectural constraints, security invariants. | Establishing technical constraints and non-functional requirements. | Technical Source of Truth | Approved Baseline |
-| **03-Workflow-Roles** | [`docs/03-Workflow-Roles.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/03-Workflow-Roles.md) | 7 user roles, permissions matrix, EnterPro 10-state machine, handoffs. | Implementing RBAC, state transitions, and human approval gates. | Operational Authority | Approved Baseline |
-| **04-UI-UX-Design** | [`docs/04-UI-UX-Design.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/04-UI-UX-Design.md) | Design tokens, WHAT-WHY-EVIDENCE pattern, 10 flagship screen contracts. | Building frontend UI components, layouts, themes, and views. | Design Authority | Approved Baseline |
-| **05-Database-API** | [`docs/05-Database-API.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/05-Database-API.md) | 16 data domains (131 tables), 109 REST endpoints, pgvector, RLS. | Writing migrations, ORM models, API routes, and RLS policies. | Data & API Authority | Approved Baseline |
-| **06-System-Architecture**| [`docs/06-System-Architecture.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/06-System-Architecture.md) | Modular monolith design, 20 domain engines, AI Document Firewall. | Structuring backend services, integration boundaries, and events. | Structural Authority | Approved Baseline |
-| **07-AI-ML-Architecture**| [`docs/07-AI-ML-Architecture.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/07-AI-ML-Architecture.md) | LightGBM ranker, Cox survival model, TreeSHAP, OR-Tools CP-SAT, Qwen. | Implementing ML pipelines, prompt templates, RAG, and solvers. | AI & ML Authority | Approved Baseline |
-| **08-Deployment-Architecture**| [`docs/08-Deployment-Architecture.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/08-Deployment-Architecture.md) | Vercel, Render, Supabase, local Ollama tunnel, degraded modes, runbooks. | Deploying cloud services, tunnel agents, and demo rehearsal. | Operational Authority | Approved Baseline |
-| **09-Project-Memory** | [`docs/09-Project-Memory.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/09-Project-Memory.md) | Master memory, locked decisions, implementation tracker, agent contract. | First read for every task; verification before and after changes. | Governance & Memory | Approved Master |
-| **10-Implementation-Details** | [`docs/10-Implementation-Details.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/10-Implementation-Details.md) | Phased engineering execution roadmap across Stages 0 to 17. | Step-by-step feature implementation, testing, and demo hardening. | Operational Roadmap | Approved Baseline |
+| **01-PRD** | [`docs/01-PRD.md`](./01-PRD.md) | Product requirements, personas, 5 core engines, Golden Demo narrative. | Defining feature scope, user stories, and acceptance criteria. | Product Source of Truth | Approved Baseline |
+| **02-TRD** | [`docs/02-TRD.md`](./02-TRD.md) | Technical stack boundaries, architectural constraints, security invariants. | Establishing technical constraints and non-functional requirements. | Technical Source of Truth | Approved Baseline |
+| **03-Workflow-Roles** | [`docs/03-Workflow-Roles.md`](./03-Workflow-Roles.md) | 7 user roles, permissions matrix, EnterPro 10-state machine, handoffs. | Implementing RBAC, state transitions, and human approval gates. | Operational Authority | Approved Baseline |
+| **04-UI-UX-Design** | [`docs/04-UI-UX-Design.md`](./04-UI-UX-Design.md) | Design tokens, WHAT-WHY-EVIDENCE pattern, 10 flagship screen contracts. | Building frontend UI components, layouts, themes, and views. | Design Authority | Approved Baseline |
+| **05-Database-API** | [`docs/05-Database-API.md`](./05-Database-API.md) | 16 core data domains (36 tables), 54 REST endpoints, pgvector, RLS. | Writing migrations, ORM models, API routes, and RLS policies. | Data & API Authority | Approved Baseline |
+| **06-System-Architecture**| [`docs/06-System-Architecture.md`](./06-System-Architecture.md) | Modular monolith design, 20 domain engines, AI Document Firewall. | Structuring backend services, integration boundaries, and events. | Structural Authority | Approved Baseline |
+| **07-AI-ML-Architecture**| [`docs/07-AI-ML-Architecture.md`](./07-AI-ML-Architecture.md) | LightGBM ranker, Cox survival model, TreeSHAP, OR-Tools CP-SAT, Qwen. | Implementing ML pipelines, prompt templates, RAG, and solvers. | AI & ML Authority | Approved Baseline |
+| **08-Deployment-Architecture**| [`docs/08-Deployment-Architecture.md`](./08-Deployment-Architecture.md) | Vercel, Render, Supabase, local Ollama tunnel, degraded modes, runbooks. | Deploying cloud services, tunnel agents, and demo rehearsal. | Operational Authority | Approved Baseline |
+| **09-Project-Memory** | [`docs/09-Project-Memory.md`](./09-Project-Memory.md) | Master memory, locked decisions, implementation tracker, agent contract. | First read for every task; verification before and after changes. | Governance & Memory | Approved Master |
+| **10-Implementation-Details** | [`docs/10-Implementation-Details.md`](./10-Implementation-Details.md) | Phased engineering execution roadmap across Stages 0 to 17. | Step-by-step feature implementation, testing, and demo hardening. | Operational Roadmap | Approved Baseline |
 | *Context Reference* | `outputs/HR_Hackathon_Project_Context.md` | Original hackathon problem statement and background track notes. | Historical reference only (superseded where conflicting with docs 01-08). | Historical Context | Superseded Reference |
 
 ---
@@ -118,7 +118,8 @@ When resolving technical or product ambiguities, adhere strictly to this precede
 | :--- | :--- | :--- | :--- | :--- |
 | **DEC-01** | **Product** | Product name is strictly **WorkSense**. All aliases ('NEXUS', 'Nexus') are obsolete. | PRD / Prompt | Eliminates brand confusion and satisfies hackathon submission identity. |
 | **DEC-02** | **Product** | WorkSense is an evidence-first decision platform, NOT a generic HRMS/payroll tool. | PRD §1 | Focuses entirely on talent intelligence, workforce risk, and strategic planning. |
-| **DEC-03** | **Product** | Continuous Candidate Twin $ightarrow$ Employee Twin lifecycle. Zero re-keying of data. | PRD §4.2 | Screening evidence directly seeds capability onboarding and workforce graphs. |
+| **DEC-03** | **Product** | Continuous Candidate Twin $
+ightarrow$ Employee Twin lifecycle. Zero re-keying of data. | PRD §4.2 | Screening evidence directly seeds capability onboarding and workforce graphs. |
 | **DEC-04** | **Technology** | Modular monolith: Next.js 14+ (Vercel) + FastAPI (Render) + Supabase PostgreSQL 15+. | TRD §3 | Eliminates microservice network overhead while maintaining clean code domains. |
 | **DEC-05** | **Technology** | Supabase serves as unified data tier: PostgreSQL + Auth + Storage + pgvector + RLS. | DB-API §1 | Single managed platform provides relational rigor, vector search, and private ACLs. |
 | **DEC-06** | **AI / ML** | Primary local model is locked to **`qwen3:4b-instruct-2507-q4_K_M`** via Ollama. | AI-ML §10.1 | Runs within 4GB consumer GPU constraints (RTX 3050); text-only reasoning. |
@@ -131,7 +132,10 @@ When resolving technical or product ambiguities, adhere strictly to this precede
 | **DEC-13** | **Governance**| Zero Employee Surveillance: Keystroke tracking, webcams, and emotion analytics banned. | PRD §2.5 | Preserves human dignity and complies with ethical AI and privacy standards. |
 | **DEC-14** | **Governance**| Automated graceful abstention (`abstained: true`) on missing/conflicting policy evidence. | AI-ML §10.50 | Eliminates ungrounded policy hallucinations; routes directly to human HR tickets. |
 | **DEC-15** | **UI / UX** | Design system: Deep Blue (`#0F172A`) primary with Restrained Lime (`#84CC16`) accent. | UI-UX §12 | Delivers a crisp, modern operational aesthetic; cream/beige backgrounds banned. |
-| **DEC-16** | **UI / UX** | Universal UI interaction standard: **WHAT $ightarrow$ WHY $ightarrow$ EVIDENCE $ightarrow$ WHAT NEXT**. | UI-UX §2.3 | Every insight card displays plain conclusion, rationale, cited PR/file, and action. |
+| **DEC-16** | **UI / UX** | Universal UI interaction standard: **WHAT $
+ightarrow$ WHY $
+ightarrow$ EVIDENCE $
+ightarrow$ WHAT NEXT**. | UI-UX §2.3 | Every insight card displays plain conclusion, rationale, cited PR/file, and action. |
 | **DEC-17** | **Deployment**| Hybrid Cloud-Edge: Cloud Vercel/Render/Supabase connects to local Qwen via tunnel. | Deploy §8.4 | Satisfies hackathon laptop model mandate while providing public judge URLs. |
 | **DEC-18** | **Deployment**| Multi-tier degraded operational modes (Level 0 through Level 4). | Deploy §8.46 | System remains fully functional on stored records if laptop sleeps or Wi-Fi drops. |
 | **DEC-19** | **Workflows** | Enterprise execution managed via **EnterPro** signed REST webhooks (10-state machine). | Workflow §5 | Fulfills mandatory hackathon enterprise workflow governance integration. |
@@ -253,8 +257,8 @@ WorkSense implements a **Modular Monolith** architecture:
 ## 10.14 Data Memory
 
 * **Authoritative Records:** Master employee data, roles, and job requisitions live in relational PostgreSQL tables. Qwen text generation is never authoritative.
-* **Evidence Ledger:** Continuous operational deliverables (GitHub PRs, Jira milestones, manager sign-offs) reside in `evidence_items` with immutable cryptographic SHA-256 provenance hashes.
-* **Row-Level Security Invariant:** Active across all 131 application tables. Retention tables (`attrition_predictions`) are locked strictly to the `hr_bp` role.
+* **Evidence Ledger:** Continuous operational deliverables (GitHub PRs, Jira milestones, manager sign-offs) reside in `evidence_items` with append-oriented provenance references.
+* **Row-Level Security Invariant:** Active across all 36 core relational tables. Retention tables (`attrition_predictions`) are locked strictly to the `hr_bp` role.
 * **Storage Buckets:** Supabase Storage buckets (`resumes`, `policies`) are private; downloads utilize short-lived signed URLs (expiring in 900s).
 
 ---
@@ -287,7 +291,10 @@ WorkSense implements a **Modular Monolith** architecture:
 ## 10.16 UI/UX Memory
 
 * **Visual Identity:** High-contrast *Electric Blue & Cyber Lime* design system (`#0F172A` deep slate background in dark theme, `#FFFFFF` crisp surfaces in light theme, `#84CC16` accent).
-* **Universal Screen Contract:** Every insight card enforces the **WHAT $ightarrow$ WHY $ightarrow$ EVIDENCE $ightarrow$ WHAT NEXT** layout.
+* **Universal Screen Contract:** Every insight card enforces the **WHAT $
+ightarrow$ WHY $
+ightarrow$ EVIDENCE $
+ightarrow$ WHAT NEXT** layout.
 * **Prohibited Visual Tropes:** Cream/beige backgrounds, neon glows, glassmorphism, animated floating blobs, and sloppy AI-generated SVGs are strictly forbidden.
 * **Flagship Screens:** 
   1. Talent Requisition Console (`SCR-01`)
@@ -345,9 +352,9 @@ flowchart LR
 The live hackathon presentation executes a single, cohesive 15-minute narrative:
 1. **The Strategic Challenge:** Executive Leadership accesses the *Strategic Workforce Simulator* (`SCR-10`). A critical corporate initiative demands staffing an **8-person AI Fraud Detection Team in 90 days** within a $180,000 budget ceiling.
 2. **Mathematical Optimization:** Google OR-Tools CP-SAT evaluates Strategy A (Internal Heavy), Strategy B (Balanced Hybrid), and Strategy C (External Heavy). Strategy B is selected (Ready in 70 days, $140,000 cost, moderate disruption).
-3. **Retention Risk Mitigation:** The simulation flags an operational vulnerability: **Marcus Chen** (Senior Infrastructure Lead) is identified in the *Retention Risk Console* (`SCR-08`) with an elevated 6-month attrition risk (72%). TreeSHAP reveals tenure stagnation in band L5 (+34%). Rather than losing Marcus, WorkSense identifies an internal match: transferring Marcus to lead the new AI Fraud Team infrastructure.
+3. **Retention Risk Mitigation:** The simulation flags an operational vulnerability: **Marcus Chen** (Senior Infrastructure Lead) is identified in the *Retention Risk Console* (`SCR-08`) with an elevated 6-month attrition risk (72% - Demo Seed). Analysis indicates tenure stagnation in band L5 (+34% - Demo Seed). Rather than losing Marcus, WorkSense identifies an internal match: transferring Marcus to lead the new AI Fraud Team infrastructure.
 4. **Governed Enterprise Transfer:** The HRBP initiates the internal mobility request, dispatching an auditable workflow to **EnterPro**.
-5. **External Candidate Screening:** To fill the remaining Staff ML Engineer vacancy, the Recruiter opens `SCR-02`. LightGBM ranks **Sarah Lin** #1 (94% match), crediting Triton expertise toward CUDA adjacency and citing verified GitHub PR #402.
+5. **External Candidate Screening:** To fill the remaining Staff ML Engineer vacancy, the Recruiter opens `SCR-02`. LightGBM ranks **Sarah Lin** #1 (94% match - Demo Seed), crediting Triton expertise toward CUDA adjacency and citing verified GitHub PR #402.
 6. **Structured Adaptive Interview:** In `SCR-03`, Sarah completes the distributed caching competency. An adaptive probe targets Redis split-brain recovery, extracting verifiable rubric evidence.
 7. **Twin Continuity & Adaptive Onboarding:** Sarah is hired. Her Candidate Twin seamlessly converts into an Employee Twin in `SCR-04`. Pre-verified screening capabilities automatically waive redundant onboarding tracks.
 
@@ -363,11 +370,11 @@ The live hackathon presentation executes a single, cohesive 15-minute narrative:
 | **Project Memory** | `docs/09-Project-Memory.md` | Master memory authored and indexed | **VERIFIED** | `docs/09-Project-Memory.md` | Proceed to implementation phase |
 | **Frontend Application** | Next.js 14+ App Router | Zero source files created | **NOT STARTED** | Workspace root contains only `docs/` | Initialize Next.js project in workspace root |
 | **Backend Application** | FastAPI Modular Monolith | Zero source files created | **NOT STARTED** | Workspace root contains only `docs/` | Initialize FastAPI project structure |
-| **Database Migrations** | 131 tables in Supabase | Zero SQL migration files created | **NOT STARTED** | `backend/database/migrations/` pending | Author initial SQL DDL migrations |
+| **Database Migrations** | 36 tables in Supabase | Zero SQL migration files created | **NOT STARTED** | `backend/database/migrations/` pending | Author initial SQL DDL migrations |
 | **AI Document Firewall** | Python text extractor | Zero source files created | **NOT STARTED** | `backend/services/firewall/` pending | Implement PDF text extraction & regex sanitizer |
 | **Local AI Gateway** | FastAPI port 8001 guard | Zero source files created | **NOT STARTED** | `backend/gateway/local_ai_gateway.py` pending | Implement gateway with Semaphore(1) |
 | **Ollama Local Model** | `qwen3:4b-instruct` | Model specified in docs; daemon unverified | **DOCUMENTED** | Host environment dependent | Verify Ollama daemon and pull GGUF binary |
-| **EnterPro Webhooks** | Signed HMAC REST adapter | Zero source files created | **NOT STARTED** | `backend/integrations/enterpro/` pending | Implement EnterPro webhook callback route |
+| **EnterPro Webhooks** | EnterPro adapter interface (specifications TBD) | Zero source files created | **NOT STARTED** | `backend/integrations/enterpro/` pending | Implement EnterPro webhook callback route |
 | **Cloud Deployments** | Vercel, Render, Supabase | Accounts/projects documented; not deployed | **DOCUMENTED** | Cloud consoles pending setup | Provision cloud resources after local test |
 
 ---
@@ -466,7 +473,8 @@ The live hackathon presentation executes a single, cohesive 15-minute narrative:
 ## 10.27 File and Directory Map
 
 ```text
-c:\SHARAN PROJECTS\WorkSense├── docs/                                  # AUTHORITATIVE MASTER SPECIFICATIONS
+WorkSense/
+├── docs/                                  # AUTHORITATIVE MASTER SPECIFICATIONS
 │   ├── 01-PRD.md                          # Product Requirements Document (Approved)
 │   ├── 02-TRD.md                          # Technical Requirements Document (Approved)
 │   ├── 03-Workflow-Roles.md               # Workflows, Roles & Permissions (Approved)
@@ -504,7 +512,10 @@ Every future engineering agent operating within the WorkSense repository agrees 
 8. **Isolate untrusted document content.** Uploaded files must pass through the AI Document Firewall.
 9. **Enforce Row-Level Security.** Never rely solely on frontend UI hiding for data protection.
 10. **Keep service-role keys server-side.** Never expose database passwords or admin keys to Vercel client bundles.
-11. **Enforce WHAT $ightarrow$ WHY $ightarrow$ EVIDENCE $ightarrow$ WHAT NEXT.** Apply this UI layout standard to all insight surfaces.
+11. **Enforce WHAT $
+ightarrow$ WHY $
+ightarrow$ EVIDENCE $
+ightarrow$ WHAT NEXT.** Apply this UI layout standard to all insight surfaces.
 12. **Implement graceful degradation.** Support AI-Degraded Mode whenever local Ollama is offline.
 13. **Do not create microservices.** Maintain the clean modular monolith design within FastAPI and Next.js.
 14. **Do not introduce Kubernetes, Kafka, or Redis** unless formally mandated in a revised ADR.
@@ -669,13 +680,13 @@ pytest tests/unit/                             # Executes core test suite
 
 ## 10.38 Final Project Memory Checklist
 
-- [x] Product name **WorkSense** is applied consistently; all legacy aliases ('NEXUS', 'Nexus') are deprecated.
-- [x] All 8 preceding authoritative specifications (`docs/01` through `docs/08`) are indexed and linked.
-- [x] The core five connected intelligence systems and continuous Twin lifecycle are defined.
-- [x] All locked technology, model, governance, and visual decisions are recorded in [Section 10.6](#106-locked-decisions-register).
-- [x] Qwen's bounded role (reasoning/explanation only; calculations delegated to specialized solvers) is reinforced.
-- [x] Current implementation reality is truthfully documented as Day-0 baseline in [Section 10.20](#1020-current-implementation-status).
-- [x] Hybrid cloud-edge deployment topology (Vercel, Render, Supabase, Local Qwen via Ollama) is documented.
-- [x] Multi-tier degraded operational modes and emergency demo runbooks are actionable.
-- [x] Agent working contract, pre-change checklist, and post-change checklist are established.
-- [x] Zero application source code, deployments, or preceding documents were altered during this task.
+- [Documented] Product name **WorkSense** is applied consistently; all legacy aliases ('NEXUS', 'Nexus') are deprecated.
+- [Documented] All 8 preceding authoritative specifications (`docs/01` through `docs/08`) are indexed and linked.
+- [Documented] The core five connected intelligence systems and continuous Twin lifecycle are defined.
+- [Documented] All locked technology, model, governance, and visual decisions are recorded in [Section 10.6](#106-locked-decisions-register).
+- [Documented] Qwen's bounded role (reasoning/explanation only; calculations delegated to specialized solvers) is reinforced.
+- [Documented] Current implementation reality is truthfully documented as Day-0 baseline in [Section 10.20](#1020-current-implementation-status).
+- [Documented] Hybrid cloud-edge deployment topology (Vercel, Render, Supabase, Local Qwen via Ollama) is documented.
+- [Documented] Multi-tier degraded operational modes and emergency demo runbooks are actionable.
+- [Documented] Agent working contract, pre-change checklist, and post-change checklist are established.
+- [Documented] Zero application source code, deployments, or preceding documents were altered during this task.

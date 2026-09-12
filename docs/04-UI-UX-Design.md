@@ -166,7 +166,7 @@ WorkSense serves 7 distinct human roles with tailored information density, navig
 | **Recruiter** | Talent Pipeline | 1. Screen applicants<br>2. Compare top candidates<br>3. Conduct adaptive interviews | Left Sidebar (Pipeline, Candidate Split-View, Interviews, Offers) | High (Dense) | Full candidate pool; internal salaries masked | Side-by-side comparison matrix, transcript viewer | Desktop Priority |
 | **HRBP** | HR Command Center | 1. Triage capability risks<br>2. Review retention cases<br>3. Audit policy conflicts | Left Sidebar (Command, Capability, Retention, Policies, Planning) | High (Dense) | Full workforce scope; confidential retention access | Prioritized decision feed, SHAP waterfall charts | Desktop Priority |
 | **Leadership** | Strategy Room | 1. Evaluate org readiness<br>2. Run workforce simulations<br>3. Execute staffing strategies | Left Sidebar (Readiness, Risks, Simulator, Decisions) | High (Aggregated) | Aggregated organizational data; no PII by default | Interactive constraint sliders, tradeoff tables | Tablet / Desktop Priority |
-| **Admin / Gov** | Governance Console | 1. Audit model traces<br>2. Inspect human overrides<br>3. Manage access policies | Left Sidebar (Access, Workflows, Audit, Models, System) | High (Dense) | System configuration & cryptographic audit logs | Searchable cryptographic log tables | Desktop Priority |
+| **Admin / Gov** | Governance Console | 1. Audit model traces<br>2. Inspect human overrides<br>3. Manage access policies | Left Sidebar (Access, Workflows, Audit, Models, System) | High (Dense) | System configuration & append-oriented audit logs | Searchable audit event tables | Desktop Priority |
 
 ---
 
@@ -259,7 +259,7 @@ Every page across WorkSense follows a consistent 8-tier visual hierarchy to ensu
 5. **Main Decision Surface:** Central cognitive workspace (e.g., Comparison Table, Radar Graph, Scenario Builder).
 6. **Supporting Evidence Ledger:** Chronological evidence cards, source document links, and SHAP vectors.
 7. **Contextual Detail Drawer:** Slides from right (`440px`) upon row click for granular inspection.
-8. **Audit & Governance Footer:** Cryptographic hash, last verified timestamp, and responsible human owner.
+8. **Audit & Governance Footer:** Event ID reference, last verified timestamp, and responsible human owner.
 
 ---
 
@@ -795,11 +795,11 @@ Workflows must be visually distinct from recommendations. A recommendation repre
 
 * **Page ID:** `SCR-ADM-15`
 * **Role(s):** System Admin, Governance Officer.
-* **Purpose:** Oversee role-based access controls, inspect cryptographic audit ledgers, monitor AI model traces, and verify system health.
-* **Primary Action:** `[Export Cryptographic Audit Bundle]`.
+* **Purpose:** Oversee role-based access controls, inspect append-oriented audit logs, monitor AI model traces, and verify system health.
+* **Primary Action:** `[Export Audit History Bundle]`.
 * **Information Hierarchy:**
   1. User & Role Assignment Directory (Hybrid RBAC scope management).
-  2. Cryptographic Audit Ledger (Searchable table of every model inference, human override, and EnterPro transaction).
+  2. Enterprise Audit Ledger (Searchable history of every model inference, human override, and EnterPro transaction).
   3. AI Model Registry & Prompt Versions (Track active Ollama models, prompt hashes, latency).
   4. System Infrastructure Health (Supabase, Ollama, EnterPro connection monitors).
 * **Acceptance Criteria:** Admin access provides audit and configuration capabilities but does NOT grant unilateral HR hiring/firing authority.
@@ -1054,7 +1054,7 @@ Empty states provide immediate contextual orientation and a clear recovery call-
 | `SCR-LED-11`| **Org Readiness Map** | Leadership | Evaluate aggregated capability coverage across domains. | Domain heatmaps, single-point-of-failure risks| Aggregated only, filtered | **P1 (Seed Data)** | Strategic context |
 | `SCR-EMP-12`| **Career Explorer** | Employee | Explore aspirational roles and internal gap-closing gigs. | Role prerequisites, internal gig listings | Private aspirations | **P1 (Seed Data)** | Growth mobility |
 | `SCR-HR-13` | **Policy Governance** | HR Admin | Detect conflicts across policy corpora; approve publish. | Policy versions, contradiction flags | Conflict detected, clean | **P1 (Seed Data)** | Enterprise governance |
-| `SCR-ADM-14`| **Audit Ledger** | Admin | Inspect cryptographic log traces of model & human decisions. | SHA-256 hashes, timestamps, actor IDs | Search, export | **P1 (Seed Data)** | Compliance proof |
+| `SCR-ADM-14`| **Audit Ledger** | Admin | Inspect audit log traces of model & human decisions. | Event IDs, timestamps, actor IDs, deltas | Search, export | **P1 (Seed Data)** | Compliance proof |
 
 ---
 

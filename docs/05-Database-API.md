@@ -27,7 +27,7 @@ This document provides the definitive data model and API contract for **WorkSens
 
 ### 7.2.2 Scope Boundaries
 * **What This Document Governs:**
-  * Complete Supabase/PostgreSQL schema across 16 data domains (131 tables).
+  * Proposed prototype Supabase/PostgreSQL schema across 16 core data domains (36 relational tables).
   * Field types, nullability, primary/foreign keys, uniqueness, check constraints, and composite indexes.
   * Distinction between authoritative records, raw documents, normalized evidence, model predictions, Qwen outputs, human decisions, EnterPro workflows, and audit trails.
   * Candidate-to-Employee Twin continuity and relational Skill Graph representation.
@@ -72,11 +72,11 @@ This document provides the definitive data model and API contract for **WorkSens
 ### 7.4.2 Explicit Assumptions
 * Supabase Auth manages user authentication, token issuance, and password hashing; WorkSense stores application profiles linked via `auth.users.id`.
 * The local Ollama instance runs on `localhost:11434` with an average generation latency $\le 15.0	ext{s}$.
-* EnterPro interacts via REST webhooks and callbacks, signed with an HMAC SHA-256 signature in the `X-EnterPro-Signature` header.
+* EnterPro integration is governed via an adapter boundary. Webhook signature, headers, and authentication details remain TBD pending official hackathon documentation.
 * File uploads are restricted to sanitized PDF, DOCX, and PNG formats with a maximum payload size of $10	ext{MB}$.
 
 ### 7.4.3 Open Decisions (TBD)
-* `TBD — Technical decision required`: Vector embedding model and dimension (e.g., `text-embedding-3-small` at 1536d or local `bge-small-en-v1.5` at 384d). Schema reserves `vector(384)` with configurable dimension.
+* `TBD — Technical decision required`: Vector embedding model and dimension (e.g., local lightweight model such as 384d or 768d, TBD pending environment verification). Schema reserves `vector(384)` as a configurable prototype default.
 * `TBD — Technical decision required`: Exact index type for pgvector (HNSW vs IVFFlat). Defaulting to IVFFlat for prototype dataset ($<100,000$ chunks) with HNSW planned for production scale.
 * `TBD — Policy decision required`: Formal legal document retention periods for rejected candidate resumes and cryptographic audit logs. Defaulting to 12 months for prototype.
 
@@ -148,7 +148,7 @@ The WorkSense data model is divided into 16 discrete, cohesive domains:
 | **DOM-13** | Policy & RAG | Policies, sections, vector chunks, Qwen answers. | Authoritative policy clauses; Derived RAG | Internal Compliance Data | `backend/app/policy` |
 | **DOM-14** | Workflows | EnterPro workflow definitions, instances, approvals.| Authoritative workflow state machines | Internal Operational Data | `backend/app/workflow` |
 | **DOM-15** | Workforce Plan | Scenarios, OR-Tools optimization runs, plans. | Authoritative goals; Derived allocations | Highly Confidential (Strategic) | `backend/app/planning` |
-| **DOM-16** | AI & Audit | Model registry, prompt traces, audit ledgers. | Authoritative cryptographic logs | Restricted (System Audit) | `backend/app/audit` |
+| **DOM-16** | AI & Audit | Model registry, prompt traces, audit ledgers. | Authoritative append-oriented audit logs | Restricted (System Audit) | `backend/app/audit` |
 
 ---
 
@@ -1083,13 +1083,13 @@ All tables enforce Row-Level Security. Security relies on Supabase Auth context 
 
 ## 7.36 Seed Dataset Specification
 
-The seed dataset represents **TechCorp** (800 employees):
+The fictional demonstration dataset represents **TechCorp** (demo seed organization):
 * **Target Requisition:** `REQ-2026-088` (Staff Machine Learning Engineer, AI Fraud Detection).
 * **Candidates:**
-  * **Sarah Lin (Rank 1):** Verified PyTorch (L5), Triton (L4), CUDA adjacent credit, PR #402 citation. Match score: 94%.
+  * **Sarah Lin (Rank 1 - Demo Seed):** Verified PyTorch (L5), Triton (L4), CUDA adjacent credit, PR #402 citation. Match score: 94% (Fictional Demo Seed Data).
   * **David Kim (Rank 2):** PyTorch (L4), JAX (L3), lacks distributed training. Match score: 86%.
 * **Employees:**
-  * **Marcus Chen:** Senior Infrastructure Engineer (L5, 38mo in band), 6-month attrition hazard: 72%. Identified for internal mobility transfer to AI Fraud Team.
+  * **Marcus Chen (Demo Seed):** Senior Infrastructure Engineer (L5, 38mo in band), 6-month attrition hazard: 72% (Fictional Demo Seed Data). Identified for internal mobility transfer to AI Fraud Team.
   * **Marcus Vance:** Director of Platform Engineering (Direct Manager & Approver).
 * **Policy Corpus:** Global Remote Work Policy v4.1 (Sections 5.2 and 7.1 with active exception workflow).
 
@@ -1097,7 +1097,7 @@ The seed dataset represents **TechCorp** (800 employees):
 
 ## 7.37 Data Dictionary
 
-*(Detailed field definitions, SQL types, constraints, nullability, and security classifications for all 131 tables are structured across Sections 7.10 through 7.27 above).*
+*(Detailed field definitions, SQL types, constraints, nullability, and security classifications for all 36 proposed prototype tables are structured across Sections 7.10 through 7.27 above).*
 
 ---
 
@@ -1329,7 +1329,7 @@ Every endpoint in Section 7.46 through 7.58 enforces:
 
 ## 7.58 Admin and Governance Endpoints
 
-* `GET /api/v1/admin/audit-ledger` (`API-GOV-001`): Search cryptographic audit event logs.
+* `GET /api/v1/admin/audit-ledger` (`API-GOV-001`): Search append-oriented audit event logs.
 * `GET /api/v1/admin/ai-models` (`API-GOV-002`): Monitor Ollama model traces and latency.
 * `POST /api/v1/admin/system/health` (`API-GOV-003`): Ping Supabase, Ollama, and EnterPro.
 
@@ -1341,7 +1341,7 @@ Every endpoint in Section 7.46 through 7.58 enforces:
 +------------------------------------------------------------------------------------+
 |                         ENTERPRO WEBHOOK INGESTION CONTRACT                        |
 +------------------------------------------------------------------------------------+
-| Header: X-EnterPro-Signature: t=1773322800,v1=a1b2c3d4e5f6... (HMAC SHA-256)      |
+| Header: Authorization / Signature: Configurable adapter header (TBD pending EnterPro docs) |
 | Header: X-EnterPro-Event-ID: evt_9948271a                                          |
 | Idempotency: Duplicate Event IDs return HTTP 200 OK immediately without re-executing|
 | Verification: Handled via backend/app/workflow/enterpro_verifier.py                |
@@ -1352,7 +1352,7 @@ Every endpoint in Section 7.46 through 7.58 enforces:
 ```mermaid
 stateDiagram-v2
     [*] --> Ingested: X-EnterPro-Event Received
-    Ingested --> SignatureVerified: HMAC SHA-256 Valid
+    Ingested --> SignatureVerified: Adapter Verification Valid
     Ingested --> Rejected401: Invalid Signature
     SignatureVerified --> DuplicateIgnored: Event ID Exists
     SignatureVerified --> TransitionApplied: Event ID New
@@ -1691,7 +1691,7 @@ Long-running jobs (resume OCR extraction, OR-Tools optimization, policy chunk re
 * `DB-RET-001`: Attrition hazard predictions MUST be restricted to `hr_bp` role via RLS.
 * `API-CORE-001`: All endpoints MUST require Supabase JWT verification in FastAPI.
 * `API-AI-001`: Qwen MUST NOT calculate numerical ranking or attrition hazard scores.
-* `API-WF-001`: All EnterPro webhooks MUST verify HMAC SHA-256 signatures.
+* `API-WF-001`: All EnterPro adapter webhooks MUST verify authentication credentials according to official integration specifications.
 
 ---
 
@@ -1728,12 +1728,12 @@ Long-running jobs (resume OCR extraction, OR-Tools optimization, policy chunk re
 ## 7.70 Final Definition of Done
 
 This specification is complete and verified when:
-- [x] Product name is consistently **WorkSense**.
-- [x] All 70 numbered subsections (`7.1` to `7.70`) are authored and complete.
-- [x] All 16 data domains and 131 tables are defined with keys and constraints.
-- [x] Candidate-to-Employee Twin continuity is preserved atomically.
-- [x] The Skill Graph is relationally structured without Neo4j.
-- [x] Vector storage schema and RLS pre-filtering policies are defined.
-- [x] Complete REST API catalog covers all 109 proposed endpoints.
-- [x] Idempotency, standard response envelopes, and safe error matrices are defined.
-- [x] Zero application source code, migrations, or dependencies were altered.
+- [Documented] Product name is consistently **WorkSense**.
+- [Documented] All 70 numbered subsections (`7.1` to `7.70`) are authored and complete.
+- [Documented] All 16 core data domains and 36 prototype tables are defined with keys, relationships, and constraints.
+- [Documented] Candidate-to-Employee Twin continuity is preserved atomically.
+- [Documented] The Skill Graph is relationally structured without Neo4j.
+- [Documented] Vector storage schema and RLS pre-filtering policies are defined.
+- [Documented] Complete REST API catalog defines 54 proposed prototype endpoints.
+- [Documented] Idempotency, standard response envelopes, and safe error matrices are defined.
+- [Documented] Zero application source code, migrations, or dependencies were altered.

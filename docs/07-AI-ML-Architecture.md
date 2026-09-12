@@ -34,7 +34,7 @@ This document provides the definitive technical specification for all artificial
   * TreeSHAP local and global explainability, probability calibration, confidence stratifications, and explicit abstention triggers.
   * Comprehensive AI threat modeling, fairness testing, privacy minimization, and evaluation benchmarks.
 * **What This Document Explicitly Delegates:**
-  * Physical GPU driver installation, Ollama daemon systemd scripts, and network tunneling configuration belong to `docs/08-Deployment-Guide.md`.
+  * Physical GPU driver installation, Ollama daemon systemd scripts, and network tunneling configuration belong to `docs/08-Deployment-Architecture.md`.
   * Table schema definitions and REST JSON payloads belong to `docs/05-Database-API.md`.
   * Component-level software architecture belongs to `docs/06-System-Architecture.md`.
 
@@ -49,7 +49,7 @@ This document provides the definitive technical specification for all artificial
 | **WorkSense TRD** | `docs/02-TRD.md` | Approved | Technical Source of Truth | Supabase PostgreSQL 15+; pgvector; Next.js + FastAPI; local text-only Qwen3-4B-Instruct via Ollama; EnterPro workflows. | None. Technical boundaries locked to TRD modular monolith. |
 | **Workflow & Roles Specification** | `docs/03-Workflow-Roles.md` | Approved | Operational Authority | 7 human roles; hybrid RBAC+ABAC+RLS; EnterPro 10-state machine; cross-role handoffs; abstention states. | Addressed: Model outputs enforce strict role visibility and human approval. |
 | **UI/UX & Design Specification** | `docs/04-UI-UX-Design.md` | Approved | Experience Authority | WHAT-WHY-EVIDENCE-WHAT NEXT pattern; 10 flagship screen contracts; status vocabulary; Qwen state machine. | Addressed: Model explanations structured to fit UI Insight Cards. |
-| **Database & API Specification** | `docs/05-Database-API.md` | Approved | Data & Interface Authority | 16 data domains (131 tables); 109 REST endpoints; pgvector schema; storage policies; transaction boundaries. | Addressed: Schemas match feature inputs and model output tables. |
+| **Database & API Specification** | `docs/05-Database-API.md` | Approved | Data & Interface Authority | 16 core data domains (36 proposed prototype tables); 54 proposed REST endpoints; pgvector schema; storage policies; transaction boundaries. | Addressed: Schemas match feature inputs and model output tables. |
 | **System Architecture Document** | `docs/06-System-Architecture.md` | Approved | Structural Authority | Modular monolith; 20 domain engines; AI Document Firewall; trust boundaries; C4 component models. | Addressed: AI modules sit strictly within backend service layers. |
 
 ---
@@ -251,8 +251,8 @@ qwen3:4b-instruct-2507-q4_K_M"]
 | Normalized Evidence    | GitHub PR #402 (evidence_items)| YES (After verification) |
 | Authoritative Record   | Employee Band L5 (employees)   | YES (Master record)      |
 | Derived Feature        | Months in Band = 38 (Pipeline) | NO (Ephemeral feature)   |
-| Model Prediction       | 6-Month Hazard = 72% (attrition)| NO (Advisory prediction) |
-| Statistical Attribution| SHAP Tenure Delta = +34%       | NO (Analytical metadata) |
+| Model Prediction       | 6-Month Hazard = 72% (Demo Seed)| NO (Advisory prediction) |
+| Statistical Attribution| Stagnation Delta = +34% (Demo)  | NO (Analytical metadata) |
 | Qwen Explanation       | Grounded Match Brief (ai_output)| NO (Explanatory text)    |
 | Human Decision         | Formal Hiring Approval (decisions)| YES (Authoritative gate) |
 | Governed Execution     | Transfer Provisioned (EnterPro)| YES (State machine event)|
@@ -493,7 +493,7 @@ flowchart TD
 
 ## 10.18 Retrieval and Embedding Architecture
 
-* **Embedding Model:** Standardized on `bge-small-en-v1.5` (or `text-embedding-3-small` fallback) outputting normalized **384-dimensional dense vectors**.
+* **Embedding Model:** Standardized on a proposed lightweight local model (e.g., `bge-small-en-v1.5` at 384 dimensions; exact model and dimension **TBD pending offline environment verification**).
 * **Vector Store:** Managed **Supabase PostgreSQL** utilizing the native `pgvector` extension.
 * **SQL Pre-Filtering Invariant:** All vector similarity searches **MUST** enforce organizational boundaries and publication status in the SQL `WHERE` clause prior to cosine distance calculation:
   ```sql
@@ -613,7 +613,7 @@ Score = Sum(Weight_i * Feature_i)"]
     
     SCORER --> PROTO_DET
     PROTO_DET --> RANKED["Rank-Ordered Candidate List
-(Integer Scores: Sarah Lin 94%, David Kim 86%)"]
+(Fictional Demo Seed Scores: Sarah Lin 94%, David Kim 86%)"]
     RANKED --> EXPLAIN["4. Qwen Reasoning Gateway
 (Synthesizes grounded comparison citing PR #402)"]
     EXPLAIN --> REC["5. Recruiter Candidate Comparison View"]
@@ -708,7 +708,10 @@ flowchart LR
 ## 10.31 Role Readiness
 
 * **Calculation Formula:**
-  $$	ext{Readiness Index} = \left( 0.60 	imes rac{\sum 	ext{Matched Mandatory Skills}}{	ext{Total Mandatory Required}} ight) + \left( 0.25 	imes rac{\sum 	ext{Adjacent Credited Skills}}{	ext{Total Preferred Required}} ight) + \left( 0.15 	imes 	ext{Evidence Strength} ight)$$
+  $$	ext{Readiness Index} = \left( 0.60 	imes rac{\sum 	ext{Matched Mandatory Skills}}{	ext{Total Mandatory Required}} 
+ight) + \left( 0.25 	imes rac{\sum 	ext{Adjacent Credited Skills}}{	ext{Total Preferred Required}} 
+ight) + \left( 0.15 	imes 	ext{Evidence Strength} 
+ight)$$
 * **Anti-Fake Precision Invariant:** Rendered as an integer percentage (e.g., $78\%$). Raw decimal precision (e.g., $78.419\%$) is outlawed to prevent false certainty.
 
 ---
@@ -770,7 +773,7 @@ WorkSense formulates attrition as a **Continuous Time-to-Event Survival Analysis
 * **Why Survival Analysis:** Handles right-censored data (employees who remain employed), models changing baseline hazard rates over time, and yields actionable multi-horizon probabilities.
 * **Hazard Horizons:** Evaluates voluntary attrition hazard probabilities across three operational windows:
   1. **3-Month Hazard:** Immediate operational vulnerability.
-  2. **6-Month Hazard:** Medium-term strategic retention horizon (Primary Golden Demo target: 72%).
+  2. **6-Month Hazard:** Medium-term strategic retention horizon (Primary Golden Demo seed target: 72%).
   3. **12-Month Hazard:** Longitudinal organizational workforce planning horizon.
 
 ---
@@ -841,8 +844,8 @@ $$	ext{Hazard}(x) = \phi_0 + \sum_{i=1}^{M} \phi_i(x)$$
 ```mermaid
 flowchart TD
     PRED["Elevated Attrition Prediction
-(Marcus Chen: 6mo Hazard = 72%)"] --> SHAP["TreeSHAP Factor Extraction
-(Tenure Stagnation +34%, Comp-Ratio +22%)"]
+(Marcus Chen: 6mo Hazard = 72% - Demo Seed)"] --> SHAP["Factor Contribution Extraction (Proposed: TreeSHAP)
+(Tenure Stagnation +34%, Comp-Ratio +22% - Demo Seed)"]
     SHAP --> GRAPH_SEARCH["Relational Graph Search
 (Finds Strategic Gaps matching Marcus's L5 Infra Skills)"]
     GRAPH_SEARCH --> MATCH["Identified Solution:
@@ -968,7 +971,7 @@ flowchart TD
 | **THREAT-02** | Vector Retrieval Poisoning | Malicious policy text uploaded to bias RAG | Dual HR Director sign-off required for policy publication | Low |
 | **THREAT-03** | Unauthorized Retention Access | Non-HR user attempts to read attrition predictions | Supabase RLS policy restricting tables to `hr_bp` role | Critical Mitigated|
 | **THREAT-04** | Local Ollama DoS / Resource Exhaustion | Spammed requests spike local GPU memory | Concurrency semaphore (1 thread); 15.0s hard timeout | Low |
-| **THREAT-05** | EnterPro Webhook Spoofing | Adversary sends fake approval callbacks | HMAC SHA-256 signature verification (`X-EnterPro-Signature`) | Negligible |
+| **THREAT-05** | EnterPro Webhook Spoofing | Adversary sends fake approval callbacks | EnterPro adapter verification (signature method TBD pending official documentation) | Negligible |
 
 ---
 
@@ -1035,7 +1038,7 @@ flowchart TD
 ## 10.58 Qwen Evaluation Dataset
 
 A curated benchmark of 25 synthetic validation test cases is maintained to evaluate local Qwen performance:
-* **Test Domains:** Candidate rationale synthesis, adaptive follow-up probing, policy conflict abstention, performance evidence summarization, and prompt injection neutralization.
+* **Test Domains:** Candidate rationale synthesis, adaptive follow-up probing, policy conflict abstention, performance evidence summarization, and layered prompt injection risk reduction.
 * **Pass Criterion:** $100\%$ schema conformance; $0\%$ hallucinations of numerical scores.
 
 ---
@@ -1178,7 +1181,7 @@ PHASE 3: ENTERPRISE MATURITY
 * All prompts enforce XML safety boundaries and output Pydantic JSON schemas.
 
 ### 10.68.2 Open Decisions (TBD)
-* `TBD — AI/ML decision required`: Exact embedding model (384d `bge-small` vs 1536d `text-embedding-3-small`) based on offline hackathon environment.
+* `TBD — AI/ML decision required`: Exact embedding model and dimension (e.g., 384d vs 768d local embeddings) verified against target offline hackathon environment.
 * `TBD — AI/ML decision required`: Exact LightGBM ranking weights for adjacent skill credits vs raw experience.
 * `TBD — AI/ML decision required`: Calibration parameters for Cox hazard baseline survival curves on larger enterprise datasets.
 
