@@ -93,6 +93,7 @@
 | **07-AI-ML-Architecture**| [`docs/07-AI-ML-Architecture.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/07-AI-ML-Architecture.md) | LightGBM ranker, Cox survival model, TreeSHAP, OR-Tools CP-SAT, Qwen. | Implementing ML pipelines, prompt templates, RAG, and solvers. | AI & ML Authority | Approved Baseline |
 | **08-Deployment-Architecture**| [`docs/08-Deployment-Architecture.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/08-Deployment-Architecture.md) | Vercel, Render, Supabase, local Ollama tunnel, degraded modes, runbooks. | Deploying cloud services, tunnel agents, and demo rehearsal. | Operational Authority | Approved Baseline |
 | **09-Project-Memory** | [`docs/09-Project-Memory.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/09-Project-Memory.md) | Master memory, locked decisions, implementation tracker, agent contract. | First read for every task; verification before and after changes. | Governance & Memory | Approved Master |
+| **10-Implementation-Details** | [`docs/10-Implementation-Details.md`](file:///c:/SHARAN%20PROJECTS/WorkSense/docs/10-Implementation-Details.md) | Phased engineering execution roadmap across Stages 0 to 17. | Step-by-step feature implementation, testing, and demo hardening. | Operational Roadmap | Approved Baseline |
 | *Context Reference* | `outputs/HR_Hackathon_Project_Context.md` | Original hackathon problem statement and background track notes. | Historical reference only (superseded where conflicting with docs 01-08). | Historical Context | Superseded Reference |
 
 ---
@@ -384,6 +385,7 @@ The live hackathon presentation executes a single, cohesive 15-minute narrative:
 | `07-AI-ML-Architecture.md` | `docs/07-AI-ML-Architecture.md` | YES | YES | None | None (Approved Baseline) |
 | `08-Deployment-Architecture.md`| `docs/08-Deployment-Architecture.md`| YES | YES | None | None (Approved Baseline) |
 | `09-Project-Memory.md` | `docs/09-Project-Memory.md` | YES | YES | None | Approved Master Baseline |
+| `10-Implementation-Details.md`| `docs/10-Implementation-Details.md`| YES | YES | None | Approved Implementation Roadmap |
 
 ---
 

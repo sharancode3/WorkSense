@@ -352,7 +352,7 @@ WorkSense establishes strict architectural safeguards to protect employee privac
 
 ## 9. Canonical Specification Suite
 
-The WorkSense engineering foundation is fully detailed across nine comprehensive specifications:
+The WorkSense engineering foundation is fully detailed across ten comprehensive specifications:
 
 ```text
 docs/
@@ -364,7 +364,8 @@ docs/
 |-- 06-System-Architecture.md      System Architecture Document (1,275 lines, 73 KB)
 |-- 07-AI-ML-Architecture.md       AI & Machine Learning Architecture (1,208 lines, 74 KB)
 |-- 08-Deployment-Architecture.md  Deployment Architecture & Runbook (989 lines, 57 KB)
-`-- 09-Project-Memory.md           Project Memory & Navigation Layer (689 lines, 53 KB)
+|-- 09-Project-Memory.md           Project Memory & Navigation Layer (680 lines, 53 KB)
+`-- 10-Implementation-Details.md   Implementation Details & Roadmap (544 lines, 34 KB)
 ```
 
 ---
@@ -457,7 +458,7 @@ cd frontend && npm run build
 WorkSense/
 |-- .gitignore                             Exclusion rules for builds, envs, and secrets
 |-- README.md                              Master repository architecture overview
-|-- docs/                                  Authoritative 9-document specification suite
+|-- docs/                                  Authoritative 10-document specification suite
 |   |-- 01-PRD.md                          Product Requirements Document
 |   |-- 02-TRD.md                          Technical Requirements Document
 |   |-- 03-Workflow-Roles.md               Workflows, Roles & Permissions
@@ -466,7 +467,8 @@ WorkSense/
 |   |-- 06-System-Architecture.md          System Architecture & Modular Monolith
 |   |-- 07-AI-ML-Architecture.md           AI, ML, Solvers & Governance
 |   |-- 08-Deployment-Architecture.md      Deployment Architecture & Operational Runbook
-|   `-- 09-Project-Memory.md               Project Memory & Navigation Layer
+|   |-- 09-Project-Memory.md               Project Memory & Navigation Layer
+|   `-- 10-Implementation-Details.md       Implementation Details & Phased Roadmap
 |-- backend/                               FastAPI Modular Monolith Core (Target)
 |   |-- api/v1/                            Domain REST routers
 |   |-- services/                          20 domain engines
