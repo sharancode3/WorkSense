@@ -133,23 +133,24 @@ flowchart TD
         TUNNEL["Secure Tunnel (Cloudflare Tunnel / ngrok)"]
     end
 
-    Users -->|HTTPS / WSS| FE
-    FE -->|Authenticated REST API / Bearer JWT| GW
+    Users -->|"HTTPS / WSS"| FE
+    FE -->|"Authenticated REST API / Bearer JWT"| GW
     GW --> MOD
     MOD --> FW
     MOD --> AIGW
     MOD --> ML
     MOD --> EPG
-    MOD -->|SQL / Service Key / RLS Context| DB
-    MOD -->|Vector Cosine Search| VEC
-    MOD -->|Signed URLs / Upload| STOR
-    GW -->|Token Verification| AUTH
+    MOD -->|"SQL / Service Key / RLS Context"| DB
+    MOD -->|"Vector Cosine Search"| VEC
+    MOD -->|"Signed URLs / Upload"| STOR
+    GW -->|"Token Verification"| AUTH
 
-    AIGW -->|Local HTTP / Authenticated Tunnel| OLLAMA
+    AIGW -->|"Local HTTP / Authenticated Tunnel"| OLLAMA
     OLLAMA --> QWEN
-    EPG -->|REST Webhooks & API| ENTERPRO
-    ENTERPRO -->|Webhook Callbacks| EPG
-    TUNNEL -.->|Exposes Local AI/FastAPI| FE
+    EPG -->|"REST Webhooks and API"| ENTERPRO
+    ENTERPRO -->|"Webhook Callbacks"| EPG
+    TUNNEL -.->|"Exposes Local AI/FastAPI"| FE
+
 ```
 
 ### 6.2 Trust Boundaries
@@ -181,15 +182,16 @@ flowchart LR
         EP["EnterPro (Signed Webhooks, Human Approvals)"]
     end
 
-    U -->|TLS 1.3| FE
-    UP -->|Raw Upload| FW
-    FE -->|JWT Bearer| API
-    FW -->|Sanitized Text| API
-    API -->|RLS-Scoped Queries| DB
-    API -->|Private Upload/Download| STOR
-    API -->|Internal Bounded Payload| OLL
-    API -->|Signed Payload| EP
-    EP -->|Adapter Webhook Callback| API
+    U -->|"TLS 1.3"| FE
+    UP -->|"Raw Upload"| FW
+    FE -->|"JWT Bearer"| API
+    FW -->|"Sanitized Text"| API
+    API -->|"RLS-Scoped Queries"| DB
+    API -->|"Private Upload/Download"| STOR
+    API -->|"Internal Bounded Payload"| OLL
+    API -->|"Signed Payload"| EP
+    EP -->|"Adapter Webhook Callback"| API
+
 ```
 
 * **Trust Boundary 1 (Client to Backend):** Next.js client is untrusted. All user claims, session tokens, and input parameters **MUST** be validated server-side by FastAPI.
@@ -324,6 +326,7 @@ flowchart TD
     ABAC -- "No" --> E403A["403 Forbidden (Record Outside Authorized Scope)"]
     ABAC -- "Yes" --> RLS["Execute Database Query with Supabase RLS Context"]
     RLS --> SUCCESS["200 OK / 201 Created (Data Returned)"]
+
 ```
 
 ---
@@ -465,6 +468,7 @@ flowchart TD
     FLAG --> H["Structured Pydantic Extraction via Qwen Gateway"]
     G --> H
     H --> I["Validation against Schema & Database Commit"]
+
 ```
 
 ### 16.2 AI Document Firewall Contract
@@ -552,6 +556,7 @@ sequenceDiagram
     API->>EP: Dispatch EnterPro Workflow (Policy Exception Approval)
     EP-->>API: Workflow Instance Created (ID: EP-WF-9941)
     API-->>Employee: 201 Created (Workflow Tracking Card Rendered)
+
 ```
 
 * **Grounding Invariant:** Vector similarity score **DOES NOT** confer policy eligibility. The deterministic rules engine evaluates compliance; Qwen synthesizes the plain-language explanation and references citations.
@@ -670,6 +675,7 @@ stateDiagram-v2
     COMPLETED --> [*]
     REJECTED --> [*]
     REJECTED_INVALID --> [*]
+
 ```
 
 ### 25.2 Prototype Workflow Specifications

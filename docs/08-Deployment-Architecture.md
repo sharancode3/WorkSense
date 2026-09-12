@@ -154,15 +154,12 @@ flowchart TD
     end
 
     subgraph VercelCloud["2. Presentation Tier (Vercel Global Edge)"]
-        FE["WorkSense Next.js 14+ Frontend
-        (SSR, React Server Components, Tailwind CSS)"]
+        FE["WorkSense Next.js 14+ Frontend<br/>(SSR, React Server Components, Tailwind CSS)"]
     end
 
     subgraph RenderCloud["3. Application & Orchestration Tier (Render Managed Cloud)"]
-        BE["WorkSense FastAPI Modular Monolith
-        (Python 3.11, OR-Tools CP-SAT, Lifelines Survival)"]
-        FW["AI Document Firewall
-        (Text Extractor, Macro Stripper, XML Boundaries)"]
+        BE["WorkSense FastAPI Modular Monolith<br/>(Python 3.11, OR-Tools CP-SAT, Lifelines Survival)"]
+        FW["AI Document Firewall<br/>(Text Extractor, Macro Stripper, XML Boundaries)"]
     end
 
     subgraph SupabaseCloud["4. Data Platform Tier (Supabase Managed Cloud)"]
@@ -173,40 +170,37 @@ flowchart TD
     end
 
     subgraph TunnelProvider["5. Ingress Tunnel Infrastructure"]
-        TUN_CLOUD["Cloudflare Tunnel / ngrok Edge
-        (Encrypted TLS 1.3 Reverse Proxy)"]
+        TUN_CLOUD["Cloudflare Tunnel / ngrok Edge<br/>(Encrypted TLS 1.3 Reverse Proxy)"]
     end
 
     subgraph LaptopHost["6. Local Operator Host Tier (Hackathon Laptop - RTX 3050)"]
         TUN_CLIENT["Tunnel Client (cloudflared / ngrok agent)"]
-        GW["Local AI Gateway (FastAPI / Port 8001)
-        (Auth, Concurrency Semaphore, Schema Validation)"]
-        OLLAMA["Ollama Daemon (Port 11434 - 127.0.0.1)
-        qwen3:4b-instruct-2507-q4_K_M"]
+        GW["Local AI Gateway (FastAPI / Port 8001)<br/>(Auth, Concurrency Semaphore, Schema Validation)"]
+        OLLAMA["Ollama Daemon (Port 11434 - 127.0.0.1)<br/>qwen3:4b-instruct-2507-q4_K_M"]
     end
 
     subgraph EnterpriseTier["7. Enterprise Governance Tier"]
-        ENTERPRO["EnterPro Workflow Engine
-        (Human Approvals & Webhook Callback Signer)"]
+        ENTERPRO["EnterPro Workflow Engine<br/>(Human Approvals & Webhook Callback Signer)"]
     end
 
     %% Network Connections
-    USER -->|HTTPS / TLS 1.3| FE
-    USER -->|Direct Auth Token Handshake| AUTH
-    FE -->|HTTPS / REST + JWT Bearer| BE
+    USER -->|"HTTPS / TLS 1.3"| FE
+    USER -->|"Direct Auth Token Handshake"| AUTH
+    FE -->|"HTTPS / REST + JWT Bearer"| BE
     
-    BE -->|SQL Pooler (Port 5432) / RLS| PG
-    BE -->|pgvector Cosine Queries| PGV
-    BE -->|S3 REST / Signed URLs| STOR
-    BE -->|JWT Verification| AUTH
+    BE -->|"SQL Pooler Port 5432 / RLS"| PG
+    BE -->|"pgvector Cosine Queries"| PGV
+    BE -->|"S3 REST / Signed URLs"| STOR
+    BE -->|"JWT Verification"| AUTH
     
-    BE -->|HTTPS / Adapter Workflow Requests| ENTERPRO
-    ENTERPRO -->|HTTPS / Callback Signature| BE
+    BE -->|"HTTPS / Adapter Workflow Requests"| ENTERPRO
+    ENTERPRO -->|"HTTPS / Callback Signature"| BE
 
-    BE -->|HTTPS / X-WorkSense-Tunnel-Auth| TUN_CLOUD
-    TUN_CLOUD -->|Outbound Encrypted WebSocket| TUN_CLIENT
-    TUN_CLIENT -->|HTTP / Localhost:8001| GW
-    GW -->|HTTP / Localhost:11434| OLLAMA
+    BE -->|"HTTPS / X-WorkSense-Tunnel-Auth"| TUN_CLOUD
+    TUN_CLOUD -->|"Outbound Encrypted WebSocket"| TUN_CLIENT
+    TUN_CLIENT -->|"HTTP / Localhost:8001"| GW
+    GW -->|"HTTP / Localhost:11434"| OLLAMA
+
 ```
 
 ---
@@ -296,28 +290,24 @@ The operator's laptop executes the local AI tier:
 ```mermaid
 flowchart LR
     subgraph LaptopHost["Hackathon Operator Laptop (Windows 11 / RTX 3050 4GB)"]
-        TUN_AGENT["Tunnel Agent
-        (cloudflared / ngrok)"]
+        TUN_AGENT["Tunnel Agent<br/>(cloudflared / ngrok)"]
         
         subgraph PythonGateway["Local AI Gateway (Port 8001)"]
-            AUTH_CHK["Auth & Token Validator
-            (Bearer Secret Check)"]
-            SEM["In-Process Semaphore
-            (asyncio.Semaphore(1))"]
-            TASK_FILTER["Task Allow-List Filter
-            (Rejects Unapproved Tasks)"]
+            AUTH_CHK["Auth & Token Validator<br/>(Bearer Secret Check)"]
+            SEM["In-Process Semaphore<br/>(asyncio.Semaphore(1))"]
+            TASK_FILTER["Task Allow-List Filter<br/>(Rejects Unapproved Tasks)"]
         end
         
         subgraph OllamaDaemon["Ollama Service (127.0.0.1:11434)"]
-            MODEL["qwen3:4b-instruct-2507-q4_K_M
-            (4.0 GB VRAM Offloaded)"]
+            MODEL["qwen3:4b-instruct-2507-q4_K_M<br/>(4.0 GB VRAM Offloaded)"]
         end
     end
 
-    TUN_AGENT -->|HTTP POST| AUTH_CHK
+    TUN_AGENT -->|"HTTP POST"| AUTH_CHK
     AUTH_CHK --> TASK_FILTER
     TASK_FILTER --> SEM
-    SEM -->|POST /api/generate| MODEL
+    SEM -->|"POST /api/generate"| MODEL
+
 ```
 
 ---
@@ -351,7 +341,7 @@ sequenceDiagram
     participant Gateway as Local AI Gateway (Laptop)
     participant Ollama as Local Ollama Daemon
 
-    Render->>Tunnel: POST /api/v1/generate-explanation<br/>Headers: X-WorkSense-Tunnel-Auth, X-Correlation-ID
+    Render->>Tunnel: POST /api/v1/generate-explanation - Headers: X-WorkSense-Tunnel-Auth, X-Correlation-ID
     Tunnel->>Gateway: Forward Request
     Gateway->>Gateway: Constant-Time Token Comparison(X-WorkSense-Tunnel-Auth)
     alt Invalid / Missing Token
@@ -365,6 +355,7 @@ sequenceDiagram
         Gateway-->>Tunnel: HTTP 200 OK + Pydantic Conforming Payload
         Tunnel-->>Render: HTTP 200 OK
     end
+
 ```
 
 ---
@@ -421,16 +412,17 @@ flowchart TD
         ENTERPRO["EnterPro Orchestrator"]
     end
 
-    BROWSER -->|JWT Bearer Token| V_EDGE
-    V_EDGE -->|JWT Forwarding| API
+    BROWSER -->|"JWT Bearer Token"| V_EDGE
+    V_EDGE -->|"JWT Forwarding"| API
     API --> AUTH_VAL
-    AUTH_VAL -->|RLS Context / Service Role| DB
-    API -->|Signed Read URLs| VAULT
-    API -->|Pre-Shared Auth Header| TUNNEL
-    TUNNEL -->|Localhost Auth Token| GW
-    GW -->|Unauthenticated Localhost Socket| OLLAMA
-    API -->|Adapter Outbound Requests| ENTERPRO
-    ENTERPRO -->|Adapter Signed Webhooks| API
+    AUTH_VAL -->|"RLS Context / Service Role"| DB
+    API -->|"Signed Read URLs"| VAULT
+    API -->|"Pre-Shared Auth Header"| TUNNEL
+    TUNNEL -->|"Localhost Auth Token"| GW
+    GW -->|"Unauthenticated Localhost Socket"| OLLAMA
+    API -->|"Adapter Outbound Requests"| ENTERPRO
+    ENTERPRO -->|"Adapter Signed Webhooks"| API
+
 ```
 
 ---
@@ -516,6 +508,7 @@ flowchart TD
         INSTALL_BE --> TEST_BE["pytest tests/unit/"]
         TEST_BE --> START_BE["uvicorn backend.main:app (Port $PORT)"]
     end
+
 ```
 
 ---
@@ -657,6 +650,7 @@ sequenceDiagram
     Op->>Render: 6. curl https://<worksense-api>.onrender.com/api/v1/health
     Render-->>Op: "qwen_ai_gateway": "healthy"
     Op->>Op: 7. Ready for Live Hackathon Presentation
+
 ```
 
 ---
@@ -706,6 +700,7 @@ sequenceDiagram
             API-->>EP: HTTP 200 OK
         end
     end
+
 ```
 
 ---
@@ -861,8 +856,7 @@ flowchart TD
     end
 
     subgraph DedicatedGPU["3. Dedicated Managed AI Cluster"]
-        VLLM["vLLM Inference Cluster (AWS EC2 g5.xlarge)
-        Qwen3-14B-Instruct (Continuous Batching)"]
+        VLLM["vLLM Inference Cluster (AWS EC2 g5.xlarge)<br/>Qwen3-14B-Instruct (Continuous Batching)"]
     end
 
     subgraph SupabaseDedicated["4. Enterprise Data Platform"]
@@ -873,9 +867,10 @@ flowchart TD
     CLOUDFLARE --> ALB
     ALB --> ECSCluster
     ECSCluster <--> REDIS
-    ECSCluster -->|Private VPC Peering| VLLM
-    ECSCluster -->|VPC Peering / TLS| PG_PRO
+    ECSCluster -->|"Private VPC Peering"| VLLM
+    ECSCluster -->|"VPC Peering / TLS"| PG_PRO
     ECSCluster --> S3_PRO
+
 ```
 
 ---

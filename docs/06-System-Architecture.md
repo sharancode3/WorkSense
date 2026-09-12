@@ -113,47 +113,37 @@ The System Context diagram illustrates how WorkSense fits within the organizatio
 ```mermaid
 flowchart TD
     subgraph HumanActors["WorkSense User Personas"]
-        CAND["Candidate
-(Applicant & Interviewee)"]
-        EMP["Employee
-(Self-Service & Twin Inspection)"]
-        MGR["Department Manager
-(Approver & Team Coverage)"]
-        HRBP["HR Business Partner
-(Recruiter & Retention Lead)"]
-        EXEC["Executive Leadership
-(Workforce Strategy Lead)"]
-        ADMIN["System Administrator
-(Governance & Audit)"]
+        CAND["Candidate<br/>(Applicant & Interviewee)"]
+        EMP["Employee<br/>(Self-Service & Twin Inspection)"]
+        MGR["Department Manager<br/>(Approver & Team Coverage)"]
+        HRBP["HR Business Partner<br/>(Recruiter & Retention Lead)"]
+        EXEC["Executive Leadership<br/>(Workforce Strategy Lead)"]
+        ADMIN["System Administrator<br/>(Governance & Audit)"]
     end
 
     subgraph CoreSystem["WorkSense Workforce Decision Platform"]
-        WS["WorkSense Application
-(Next.js Frontend + FastAPI Modular Monolith)"]
+        WS["WorkSense Application<br/>(Next.js Frontend + FastAPI Modular Monolith)"]
     end
 
     subgraph ExternalSystems["External & Platform Dependencies"]
-        SUPA["Supabase Managed Platform
-(PostgreSQL 15+, pgvector, Auth, Storage)"]
-        OLLAMA["Local Ollama Engine
-(qwen3:4b-instruct-2507-q4_K_M)"]
-        ENTERPRO["EnterPro Platform
-(Enterprise Workflow & Execution Engine)"]
-        TUNNEL["Secure Tunnel (Cloudflare/ngrok)
-(Encrypted Local AI Bridge)"]
+        SUPA["Supabase Managed Platform<br/>(PostgreSQL 15+, pgvector, Auth, Storage)"]
+        OLLAMA["Local Ollama Engine<br/>(qwen3:4b-instruct-2507-q4_K_M)"]
+        ENTERPRO["EnterPro Platform<br/>(Enterprise Workflow & Execution Engine)"]
+        TUNNEL["Secure Tunnel (Cloudflare/ngrok)<br/>(Encrypted Local AI Bridge)"]
     end
 
-    CAND -->|Applies, interviews, views status| WS
-    EMP -->|Inspects Twin, asks policies, requests gigs| WS
-    MGR -->|Validates evidence, unblocks onboarding, approves leave| WS
-    HRBP -->|Screens candidates, triages retention, governs policies| WS
-    EXEC -->|Simulates workforce plans, evaluates org readiness| WS
-    ADMIN -->|Inspects audit logs, configures roles| WS
+    CAND -->|"Applies, interviews, views status"| WS
+    EMP -->|"Inspects Twin, asks policies, requests gigs"| WS
+    MGR -->|"Validates evidence, unblocks onboarding, approves leave"| WS
+    HRBP -->|"Screens candidates, triages retention, governs policies"| WS
+    EXEC -->|"Simulates workforce plans, evaluates org readiness"| WS
+    ADMIN -->|"Inspects audit logs, configures roles"| WS
 
-    WS <-->|Authoritative data, vectors, auth JWT, private files| SUPA
-    WS <-->|Encrypted inference requests & responses| TUNNEL
-    TUNNEL <-->|Local reasoning orchestration| OLLAMA
-    WS <-->|Workflow dispatches, approval states, webhook callbacks| ENTERPRO
+    WS <-->|"Authoritative data, vectors, auth JWT, private files"| SUPA
+    WS <-->|"Encrypted inference requests and responses"| TUNNEL
+    TUNNEL <-->|"Local reasoning orchestration"| OLLAMA
+    WS <-->|"Workflow dispatches, approval states, webhook callbacks"| ENTERPRO
+
 ```
 
 ---
@@ -165,18 +155,11 @@ The Container Architecture diagram breaks WorkSense into its high-level runtime 
 ```mermaid
 flowchart TD
     subgraph ClientTier["Client Tier (Web Browser)"]
-        SPA["Next.js Web Client
-(TypeScript, React 19, Tailwind CSS, shadcn/ui)
-Role-Scoped Navigation & Contextual UI"]
+        SPA["Next.js Web Client<br/>(TypeScript, React 19, Tailwind CSS, shadcn/ui)<br/>Role-Scoped Navigation & Contextual UI"]
     end
 
     subgraph ApplicationTier["Application Tier (Backend Modular Monolith)"]
-        FASTAPI["FastAPI Application Server (Python 3.10+)
-- Auth & Scope Validation
-- 20 Internal Domain Modules
-- Mathematical ML Solvers (OR-Tools, Cox, LightGBM)
-- AI Document Firewall
-- EnterPro Adapter"]
+        FASTAPI["FastAPI Application Server (Python 3.10+)<br/>- Auth & Scope Validation<br/>- 20 Internal Domain Modules<br/>- Mathematical ML Solvers (OR-Tools, Cox, LightGBM)<br/>- AI Document Firewall<br/>- EnterPro Adapter"]
     end
 
     subgraph DataTier["Data & Platform Tier (Supabase)"]
@@ -186,33 +169,27 @@ Row-Level Security Enabled)]
         PGV[(pgvector Extension
 384d Policy Embeddings
 Cosine Similarity Search)]
-        AUTH["Supabase Auth
-JWT Token Issuance & Management"]
-        STORAGE["Supabase Storage
-Private Buckets: Resumes, Policies, Proofs"]
+        AUTH["Supabase Auth<br/>JWT Token Issuance & Management"]
+        STORAGE["Supabase Storage<br/>Private Buckets: Resumes, Policies, Proofs"]
     end
 
     subgraph IntelligenceTier["Local AI Tier (Developer Laptop)"]
-        OLLAMA_SRV["Ollama Server (Localhost:11434)
-Model: qwen3:4b-instruct-2507-q4_K_M
-Isolated Reasoning & Grounded Explanation"]
+        OLLAMA_SRV["Ollama Server (Localhost:11434)<br/>Model: qwen3:4b-instruct-2507-q4_K_M<br/>Isolated Reasoning & Grounded Explanation"]
     end
 
     subgraph WorkflowTier["Enterprise Workflow Tier"]
-        EP_SRV["EnterPro Platform API
-- Human Approval Chains
-- Provisioning Workflows
-- Webhook Dispatcher"]
+        EP_SRV["EnterPro Platform API<br/>- Human Approval Chains<br/>- Provisioning Workflows<br/>- Webhook Dispatcher"]
     end
 
-    SPA -->|HTTPS / REST API / Supabase JWT| FASTAPI
-    SPA -->|Direct Auth Session Check| AUTH
-    FASTAPI -->|Asyncpg / SQLAlchemy 2.0 / Parameterized SQL| DB
-    FASTAPI -->|Vector Cosine Queries with SQL Pre-filtering| PGV
-    FASTAPI -->|S3-Compatible API / Signed URLs| STORAGE
-    FASTAPI -->|HTTP REST / Bounded Tool Calls / JSON Schemas| OLLAMA_SRV
-    FASTAPI -->|HTTPS Webhook / REST Adapter| EP_SRV
-    EP_SRV -->|HTTPS Adapter Callbacks (Auth Configurable)| FASTAPI
+    SPA -->|"HTTPS / REST API / Supabase JWT"| FASTAPI
+    SPA -->|"Direct Auth Session Check"| AUTH
+    FASTAPI -->|"Asyncpg / SQLAlchemy 2.0 / Parameterized SQL"| DB
+    FASTAPI -->|"Vector Cosine Queries with SQL Pre-filtering"| PGV
+    FASTAPI -->|"S3-Compatible API / Signed URLs"| STORAGE
+    FASTAPI -->|"HTTP REST / Bounded Tool Calls / JSON Schemas"| OLLAMA_SRV
+    FASTAPI -->|"HTTPS Webhook / REST Adapter"| EP_SRV
+    EP_SRV -->|"HTTPS Adapter Callbacks : Auth Configurable"| FASTAPI
+
 ```
 
 ---
@@ -293,6 +270,7 @@ flowchart TD
     CoreDomains --> EVID
     CoreDomains --> AUDIT
     CoreDomains --> STORAGE_CL
+
 ```
 
 ---
@@ -341,30 +319,15 @@ WorkSense enforces a strict 4-layer internal architecture within every backend d
 
 ```mermaid
 flowchart TD
-    L1["1. ROUTE / CONTROLLER LAYER (FastAPI APIRouter)
-- Transport serialization & Pydantic schema validation
-- Supabase JWT authentication extraction
-- HTTP status code mapping (200, 201, 401, 403, 422)
-- Zero business logic"]
-    L2["2. APPLICATION / USE-CASE SERVICE LAYER
-- Orchestrates domain transactions
-- Enforces command-level authorization and access scopes
-- Manages Idempotency-Key validation
-- Dispatches domain events and audit log entries"]
-    L3["3. DOMAIN SERVICE LAYER
-- Pure business rules & state transition validation
-- Capability gap calculations & skill graph distance traversal
-- EnterPro state machine transitions
-- Deterministic policy eligibility rules"]
-    L4["4. REPOSITORY & ADAPTER LAYER
-- PostgreSQL access via SQLAlchemy / Asyncpg
-- Supabase Storage signed URL generation
-- Qwen Gateway (Ollama HTTP client)
-- EnterPro Webhook Adapter"]
+    L1["1. ROUTE / CONTROLLER LAYER (FastAPI APIRouter)<br/>- Transport serialization & Pydantic schema validation<br/>- Supabase JWT authentication extraction<br/>- HTTP status code mapping (200, 201, 401, 403, 422)<br/>- Zero business logic"]
+    L2["2. APPLICATION / USE-CASE SERVICE LAYER<br/>- Orchestrates domain transactions<br/>- Enforces command-level authorization and access scopes<br/>- Manages Idempotency-Key validation<br/>- Dispatches domain events and audit log entries"]
+    L3["3. DOMAIN SERVICE LAYER<br/>- Pure business rules & state transition validation<br/>- Capability gap calculations & skill graph distance traversal<br/>- EnterPro state machine transitions<br/>- Deterministic policy eligibility rules"]
+    L4["4. REPOSITORY & ADAPTER LAYER<br/>- PostgreSQL access via SQLAlchemy / Asyncpg<br/>- Supabase Storage signed URL generation<br/>- Qwen Gateway (Ollama HTTP client)<br/>- EnterPro Webhook Adapter"]
 
     L1 --> L2
     L2 --> L3
     L3 --> L4
+
 ```
 
 ---
@@ -411,17 +374,12 @@ flowchart TD
     DB_EVID["evidence_items"] --> TWIN_AGG
     DB_ONB["onboarding_plans"] --> TWIN_AGG
     
-    TWIN_AGG --> CALC_DECAY["Skill Decay Evaluator
-(Flags inactive >180d)"]
-    CALC_DECAY --> COMPILED_TWIN["Compiled Workforce Twin DTO
-- Verified Capabilities (L1-L5)
-- Freshness Score (1-100)
-- Active Stale Warnings
-- Linked Evidence Artifacts"]
+    TWIN_AGG --> CALC_DECAY["Skill Decay Evaluator<br/>(Flags inactive >180d)"]
+    CALC_DECAY --> COMPILED_TWIN["Compiled Workforce Twin DTO<br/>- Verified Capabilities (L1-L5)<br/>- Freshness Score (1-100)<br/>- Active Stale Warnings<br/>- Linked Evidence Artifacts"]
     
     COMPILED_TWIN --> UI_RADAR["Next.js Radar Visualization"]
-    COMPILED_TWIN --> SNAPSHOT_STORE["employee_twin_snapshots
-(Point-in-time historical copy)"]
+    COMPILED_TWIN --> SNAPSHOT_STORE["employee_twin_snapshots<br/>(Point-in-time historical copy)"]
+
 ```
 
 ---
@@ -456,15 +414,11 @@ Evidence is the foundational anchor of WorkSense. No capability claim or model r
 
 ```mermaid
 flowchart LR
-    SRC["Raw Source
-(GitHub PR, Jira, PDF, ASR)"] -->|Extract & Normalize| EV_ITEM["evidence_items
-(Claim, URI, Strength, Observed At)"]
-    EV_ITEM -->|Tether via Foreign Key| EV_LINK["evidence_links
-(person_skill, interview_response)"]
-    EV_LINK -->|Formal Human Sign-Off| EV_VAL["evidence_validations
-(Manager / Recruiter Actor ID)"]
-    EV_VAL -->|Contestation Trigger| EV_DISP["evidence_disputes
-(Employee Challenge Flow)"]
+    SRC["Raw Source<br/>(GitHub PR, Jira, PDF, ASR)"] -->|"Extract and Normalize"| EV_ITEM["evidence_items<br/>(Claim, URI, Strength, Observed At)"]
+    EV_ITEM -->|"Tether via Foreign Key"| EV_LINK["evidence_links<br/>(person_skill, interview_response)"]
+    EV_LINK -->|"Formal Human Sign-Off"| EV_VAL["evidence_validations<br/>(Manager / Recruiter Actor ID)"]
+    EV_VAL -->|"Contestation Trigger"| EV_DISP["evidence_disputes<br/>(Employee Challenge Flow)"]
+
 ```
 
 * **Strength Stratification:**
@@ -488,9 +442,7 @@ flowchart TD
     end
 
     subgraph EventBus["In-Process Domain Event Dispatcher"]
-        EV_TABLE["domain_events (PostgreSQL Table)
-- Event Name, Payload, Occurred At
-- Transactional Outbox Pattern"]
+        EV_TABLE["domain_events (PostgreSQL Table)<br/>- Event Name, Payload, Occurred At<br/>- Transactional Outbox Pattern"]
     end
 
     subgraph Consumers["Event Consumers"]
@@ -500,8 +452,9 @@ flowchart TD
         C4["MOD-19: Write Audit Ledger Entry"]
     end
 
-    Producers -->|Appends in DB Transaction| EV_TABLE
+    Producers -->|"Appends in DB Transaction"| EV_TABLE
     EV_TABLE --> Consumers
+
 ```
 
 ---
@@ -512,14 +465,15 @@ WorkSense enforces a multi-layered defense-in-depth authorization model:
 
 ```mermaid
 flowchart TD
-    U["User Browser"] -->|1. Transmits Supabase JWT| GW["FastAPI API Gateway"]
-    GW -->|2. Validates Signature & Expiry| AUTH_DEP["FastAPI Auth Dependency"]
-    AUTH_DEP -->|3. Resolves User Profile & Roles| IAM["MOD-02: Identity & IAM"]
-    IAM -->|4. Checks Scope (Dept/Team/Case)| ABAC["Attribute-Based Scope Checker"]
-    ABAC -->|5. Passes Verified User Claims| DB_CLIENT["Supabase DB Client"]
-    DB_CLIENT -->|6. Sets auth.uid() in DB Session| RLS["Supabase Row-Level Security"]
-    RLS -->|7. Evaluates Table Policies| SQL_EXEC["PostgreSQL Data Engine"]
-    SQL_EXEC -->|8. Returns Filtered Rowset| GW
+    U["User Browser"] -->|"1. Transmits Supabase JWT"| GW["FastAPI API Gateway"]
+    GW -->|"2. Validates Signature and Expiry"| AUTH_DEP["FastAPI Auth Dependency"]
+    AUTH_DEP -->|"3. Resolves User Profile and Roles"| IAM["MOD-02: Identity & IAM"]
+    IAM -->|"4. Checks Scope : Dept, Team, Case"| ABAC["Attribute-Based Scope Checker"]
+    ABAC -->|"5. Passes Verified User Claims"| DB_CLIENT["Supabase DB Client"]
+    DB_CLIENT -->|"6. Sets auth.uid in DB Session"| RLS["Supabase Row-Level Security"]
+    RLS -->|"7. Evaluates Table Policies"| SQL_EXEC["PostgreSQL Data Engine"]
+    SQL_EXEC -->|"8. Returns Filtered Rowset"| GW
+
 ```
 
 * **Core Principle:** **UI hiding is not authorization.** The frontend adapts its navigation to user roles for ergonomic clarity, but the backend FastAPI services and PostgreSQL RLS policies independently evaluate every transaction.
@@ -554,21 +508,16 @@ WorkSense establishes 9 explicit trust boundaries protecting sensitive workforce
 
 ```mermaid
 flowchart TD
-    UPLOAD["User Uploads Document
-(PDF / DOCX <= 10MB)"] --> VALIDATE["MIME & Size Validator
-(Magic bytes inspection)"]
+    UPLOAD["User Uploads Document<br/>(PDF / DOCX <= 10MB)"] --> VALIDATE["MIME & Size Validator<br/>(Magic bytes inspection)"]
     VALIDATE --> HASH["SHA-256 Deduplication Check"]
-    HASH --> S3_STORE["Supabase Storage
-(Private Bucket)"]
-    S3_STORE --> EXTRACT["Programmatic Text Extraction
-(pypdf / pdfplumber - Text-First)"]
-    EXTRACT --> FIREWALL["AI Document Firewall
-(Strip Macros, Sanitize Prompts)"]
+    HASH --> S3_STORE["Supabase Storage<br/>(Private Bucket)"]
+    S3_STORE --> EXTRACT["Programmatic Text Extraction<br/>(pypdf / pdfplumber - Text-First)"]
+    EXTRACT --> FIREWALL["AI Document Firewall<br/>(Strip Macros, Sanitize Prompts)"]
     FIREWALL --> CHUNK["Normalized Text Chunks"]
-    CHUNK --> LLM_EXTRACT["Local Qwen3-4B-Instruct
-(Structured JSON Entity Extraction)"]
+    CHUNK --> LLM_EXTRACT["Local Qwen3-4B-Instruct<br/>(Structured JSON Entity Extraction)"]
     LLM_EXTRACT --> SCHEMA_VAL["Pydantic Schema Validation"]
     SCHEMA_VAL --> DB_INSERT["Insert candidate_profiles / policy_chunks"]
+
 ```
 
 ---
@@ -646,12 +595,13 @@ sequenceDiagram
     FA-->>UI: Workflow Created (Status: Awaiting Approval)
     
     EP->>MGR: Notification: Pending Approval Request
-    MGR->>EP: Approve Request (Reason: "Tax compliance verified")
+    MGR->>EP: Approve Request (Reason: Tax compliance verified)
     EP->>FA: POST /api/v1/webhooks/enterpro (Adapter Verified)
     FA->>FA: Verify Adapter Credentials & Deduplicate Event ID
     FA->>DB: UPDATE workflow_instances (state = 'approved')
     FA->>DB: INSERT audit_events (Action: 'workflow:approved')
     FA-->>EP: HTTP 200 OK
+
 ```
 
 ---
@@ -683,6 +633,7 @@ sequenceDiagram
     Q-->>API: Grounded comparative rationale text
     API->>DB: INSERT candidate_rankings
     API-->>C: Application Submitted (Status: In Screening)
+
 ```
 
 ---
@@ -709,6 +660,7 @@ sequenceDiagram
     C->>API: Submit Adaptive Response
     API->>DB: INSERT interview_questions (type = 'adaptive_probe')
     API->>REC: Notification: Interview Completed (Review Required)
+
 ```
 
 ---
@@ -735,6 +687,7 @@ sequenceDiagram
     API->>DB: COMMIT TRANSACTION
     API->>EP: Dispatch GPU Access Ticket to Platform Manager
     API-->>EMP: Welcome to TechCorp! Onboarding Journey Active
+
 ```
 
 ---
@@ -759,6 +712,7 @@ sequenceDiagram
     API-->>EMP: Display Answer + Citations + [Submit Exception Form]
     EMP->>API: POST /api/v1/workflows (Submit Exception Request)
     API->>EP: Dispatch EnterPro Approval Chain (Manager -> Director)
+
 ```
 
 ---
@@ -782,6 +736,7 @@ sequenceDiagram
     Q-->>HR: Grounded brief: "Marcus is a strong match for AI Fraud Lead."
     HR->>API: POST /api/v1/retention/cases/:id/intervene (Transfer Action)
     API->>EP: Dispatch Internal Transfer Workflow via EnterPro
+
 ```
 
 ---
@@ -807,6 +762,7 @@ sequenceDiagram
     API-->>EXEC: Display Strategy A vs B vs C Comparison
     EXEC->>API: POST /api/v1/planning/plans/:id/select (Selects Strategy B)
     API->>EP: Dispatch Governed Action Bundle (3 Transfers + 3 Upskill + 2 Hires)
+
 ```
 
 ---
@@ -1007,6 +963,7 @@ flowchart LR
 
     Phase1 --> Phase2
     Phase2 --> Phase3
+
 ```
 
 ---
@@ -1016,38 +973,34 @@ flowchart LR
 ```mermaid
 flowchart TD
     subgraph CloudVercel["Cloud Tier: Vercel"]
-        FE["Next.js Web Application
-(Edge Network Deploy)"]
+        FE["Next.js Web Application<br/>(Edge Network Deploy)"]
     end
 
     subgraph CloudBackend["Backend Tier: Render / Cloud VM"]
-        BE["FastAPI Modular Monolith
-(Uvicorn ASGI Server)"]
+        BE["FastAPI Modular Monolith<br/>(Uvicorn ASGI Server)"]
     end
 
     subgraph CloudData["Data Tier: Supabase Cloud"]
-        SB["PostgreSQL 15+ & pgvector
-Auth & Storage Buckets"]
+        SB["PostgreSQL 15+ & pgvector<br/>Auth & Storage Buckets"]
     end
 
     subgraph LocalLaptop["Developer Machine Tier"]
-        OLLAMA["Ollama Engine (Localhost:11434)
-qwen3:4b-instruct-2507-q4_K_M"]
-        TUNNEL_CLIENT["Secure Tunnel Daemon
-(Cloudflare / ngrok)"]
+        OLLAMA["Ollama Engine (Localhost:11434)<br/>qwen3:4b-instruct-2507-q4_K_M"]
+        TUNNEL_CLIENT["Secure Tunnel Daemon<br/>(Cloudflare / ngrok)"]
     end
 
     subgraph EnterpriseCloud["Enterprise SaaS Tier"]
         ENTERPRO["EnterPro Platform Workflows"]
     end
 
-    FE -->|HTTPS / API Requests| BE
-    FE -->|Direct Client Auth| SB
-    BE -->|Async Database Connection| SB
-    BE -->|Encrypted HTTPS Requests| TUNNEL_CLIENT
-    TUNNEL_CLIENT -->|Localhost Loopback| OLLAMA
-    BE -->|Outbound Webhooks| ENTERPRO
-    ENTERPRO -->|Inbound Signed Callbacks| BE
+    FE -->|"HTTPS / API Requests"| BE
+    FE -->|"Direct Client Auth"| SB
+    BE -->|"Async Database Connection"| SB
+    BE -->|"Encrypted HTTPS Requests"| TUNNEL_CLIENT
+    TUNNEL_CLIENT -->|"Localhost Loopback"| OLLAMA
+    BE -->|"Outbound Webhooks"| ENTERPRO
+    ENTERPRO -->|"Inbound Signed Callbacks"| BE
+
 ```
 
 ---

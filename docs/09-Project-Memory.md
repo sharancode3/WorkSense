@@ -173,15 +173,11 @@ ightarrow$ WHAT NEXT**. | UI-UX §2.3 | Every insight card displays plain conclu
 
 ```mermaid
 flowchart LR
-    M1["1. Talent Intelligence
-    (Screening & Interviews)"] --> M2["2. Workforce Twin & Skill Graph
-    (Capabilities & Evidence)"]
-    M2 --> M3["3. Growth & Retention Intel
-    (Mobility & Survival Risk)"]
-    M2 --> M4["4. Policy-to-Action Intel
-    (RAG, Rules & Exceptions)"]
-    M2 & M3 --> M5["5. Decision Simulator
-    (OR-Tools Staffing Optimization)"]
+    M1["1. Talent Intelligence<br/>(Screening & Interviews)"] --> M2["2. Workforce Twin and Skill Graph<br/>(Capabilities and Evidence)"]
+    M2 --> M3["3. Growth & Retention Intel<br/>(Mobility & Survival Risk)"]
+    M2 --> M4["4. Policy-to-Action Intel<br/>(RAG, Rules & Exceptions)"]
+    M2 & M3 --> M5["5. Decision Simulator<br/>(OR-Tools Staffing Optimization)"]
+
 ```
 
 1. **Talent Intelligence Engine (`MOD-04`, `MOD-09`):** Programmatic resume extraction, LightGBM multi-feature candidate ranking (with deterministic prototype formula fallback), and Structured Core + Adaptive Interviewing (max 2 probes).
@@ -314,19 +310,13 @@ ightarrow$ WHAT NEXT** layout.
 
 ```mermaid
 flowchart LR
-    V["Vercel Edge
-    (Next.js Frontend)"] -->|HTTPS / JWT| R["Render Cloud
-    (FastAPI Backend)"]
-    R -->|SQL / TLS| S["Supabase Cloud
-    (PostgreSQL, RLS, Storage)"]
-    R -->|HTTPS / Secret Header| T["Secure Tunnel
-    (Cloudflare / ngrok)"]
-    T -->|Localhost:8001| GW["Local AI Gateway
-    (Laptop)"]
-    GW -->|Localhost:11434| O["Ollama Daemon
-    (qwen3:4b)"]
-    R <-->|Signed Webhooks| EP["EnterPro Cloud
-    (Governance)"]
+    V["Vercel Edge<br/>(Next.js Frontend)"] -->|"HTTPS / JWT"| R["Render Cloud<br/>(FastAPI Backend)"]
+    R -->|"SQL / TLS"| S["Supabase Cloud<br/>(PostgreSQL, RLS, Storage)"]
+    R -->|"HTTPS / Secret Header"| T["Secure Tunnel<br/>(Cloudflare / ngrok)"]
+    T -->|"Localhost:8001"| GW["Local AI Gateway<br/>(Laptop)"]
+    GW -->|"Localhost:11434"| O["Ollama Daemon<br/>(qwen3:4b)"]
+    R <-->|"Signed Webhooks"| EP["EnterPro Cloud<br/>(Governance)"]
+
 ```
 * **Operational Reality:** Local Qwen functions only while the operator's laptop is awake, connected to power/Wi-Fi, and running Ollama + the tunnel.
 * **Graceful Degradation:** If the laptop drops offline, the system enters **AI-Degraded Mode** (Level 1). Stored candidate rankings, skill graphs, and survival curves continue operating seamlessly; UI displays an amber status pill.

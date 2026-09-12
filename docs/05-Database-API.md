@@ -164,7 +164,7 @@ erDiagram
     ORGANIZATIONS ||--o{ JOB_REQUISITIONS : publishes
     JOB_REQUISITIONS ||--o{ APPLICATIONS : receives
     CANDIDATES ||--o{ APPLICATIONS : submits
-    CANDIDATES ||--o| EMPLOYEES : "converts to on hire"
+    CANDIDATES ||"--o"| EMPLOYEES : "converts to on hire"
     
     EMPLOYEES ||--o{ PERSON_SKILLS : possesses
     SKILLS ||--o{ PERSON_SKILLS : categorizes
@@ -184,19 +184,21 @@ erDiagram
     
     WORKFORCE_SCENARIOS ||--o{ WORKFORCE_PLANS : optimizes
     WORKFORCE_PLANS ||--o{ WORKFLOW_INSTANCES : triggers
+
 ```
 
 ### 7.8.2 Identity and Access ER Diagram
 
 ```mermaid
 erDiagram
-    AUTH_USERS ||--o| PROFILES : "extends 1:1"
+    AUTH_USERS ||"--o"| PROFILES : "extends 1:1"
     ORGANIZATIONS ||--o{ PROFILES : employs
     PROFILES ||--o{ USER_ROLES : assigned
     ROLES ||--o{ USER_ROLES : binds
     ROLES ||--o{ ROLE_PERMISSIONS : grants
     PERMISSIONS ||--o{ ROLE_PERMISSIONS : defines
     PROFILES ||--o{ USER_ACCESS_SCOPES : restricted_by
+
 ```
 
 ### 7.8.3 Candidate-to-Employee Continuity Flow Diagram
@@ -230,12 +232,13 @@ flowchart TD
     C3 --> C5
     C5 --> C6
     C3 --> T1
-    T1 -->|Offer Accepted| T2
-    T2 -->|Sets candidate_id FK| E1
+    T1 -->|"Offer Accepted"| T2
+    T2 -->|"Sets candidate_id FK"| E1
     T2 --> E2
-    C6 -->|Transfers Evidence Links| E4
-    E4 -->|Validates Capabilities| E3
-    E3 -->|Waives Verified Training| E5
+    C6 -->|"Transfers Evidence Links"| E4
+    E4 -->|"Validates Capabilities"| E3
+    E3 -->|"Waives Verified Training"| E5
+
 ```
 
 ### 7.8.4 Skill Graph Relational Structure Diagram
@@ -249,6 +252,7 @@ erDiagram
     SKILLS ||--o{ PERSON_SKILLS : possessed_by
     PERSON_SKILLS ||--o{ SKILL_OBSERVATIONS : aggregated_from
     EVIDENCE_ITEMS ||--o{ SKILL_OBSERVATIONS : validates
+
 ```
 
 ### 7.8.5 Evidence and Provenance Traceability Diagram
@@ -261,23 +265,25 @@ erDiagram
     EVIDENCE_ITEMS ||--o{ EVIDENCE_VALIDATIONS : signed_by
     EVIDENCE_ITEMS ||--o{ EVIDENCE_DISPUTES : contested_by
     PROFILES ||--o{ EVIDENCE_VALIDATIONS : validator
+
 ```
 
 ### 7.8.6 Policy Data-Flow and Vector Grounding Diagram
 
 ```mermaid
 flowchart TD
-    P1["Policy Document PDF"] -->|Ingestion & OCR| P2["documents"]
-    P2 -->|Text Extraction| P3["policy_versions"]
-    P3 -->|Section Splitting| P4["policy_sections"]
-    P4 -->|Chunking & Embedding| P5["policy_chunks (vector 384)"]
-    P5 -->|Conflict Detector| P6["policy_conflicts"]
+    P1["Policy Document PDF"] -->|"Ingestion and OCR"| P2["documents"]
+    P2 -->|"Text Extraction"| P3["policy_versions"]
+    P3 -->|"Section Splitting"| P4["policy_sections"]
+    P4 -->|"Chunking and Embedding"| P5["policy_chunks (vector 384)"]
+    P5 -->|"Conflict Detector"| P6["policy_conflicts"]
     
-    Q1["Employee Natural Language Query"] -->|pgvector Cosine Search| P5
-    P5 -->|Top 5 Context Chunks| Q2["FastAPI RAG Service"]
-    Q2 -->|Context + Strict Prompt| Q3["Local Qwen3-4B-Instruct"]
-    Q3 -->|Grounded Answer + Citations| Q4["policy_answers"]
-    Q4 -->|Pre-filled Request Trigger| Q5["workflow_instances (EnterPro)"]
+    Q1["Employee Natural Language Query"] -->|"pgvector Cosine Search"| P5
+    P5 -->|"Top 5 Context Chunks"| Q2["FastAPI RAG Service"]
+    Q2 -->|"Context + Strict Prompt"| Q3["Local Qwen3-4B-Instruct"]
+    Q3 -->|"Grounded Answer + Citations"| Q4["policy_answers"]
+    Q4 -->|"Pre-filled Request Trigger"| Q5["workflow_instances (EnterPro)"]
+
 ```
 
 ### 7.8.7 EnterPro Workflow Persistence Architecture
@@ -290,6 +296,7 @@ erDiagram
     WORKFLOW_INSTANCES ||--o{ WORKFLOW_APPROVALS : awaits
     WORKFLOW_INSTANCES ||--o{ WORKFLOW_CALLBACKS : receives
     WORKFLOW_INSTANCES ||--o{ WORKFLOW_HISTORY : logs
+
 ```
 
 ---
@@ -1358,6 +1365,7 @@ stateDiagram-v2
     SignatureVerified --> TransitionApplied: Event ID New
     TransitionApplied --> AuditLogged: Audit Event Inserted
     AuditLogged --> [*]: HTTP 200 OK
+
 ```
 
 ---

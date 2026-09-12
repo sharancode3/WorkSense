@@ -213,10 +213,11 @@ flowchart TD
         A3["AI Model Registry & Prompts (/admin/models)"]
     end
 
-    Area1 -.->|Offer Accepted / Hired| Area2
+    Area1 -.->|"Offer Accepted / Hired"| Area2
     Area2 --> Area3
     Area3 --> Area4
     Area4 --> Area5
+
 ```
 
 ---

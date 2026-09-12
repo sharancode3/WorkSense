@@ -182,6 +182,7 @@ flowchart LR
     G2 --> G3
     G2 --> G4
     G3 & G4 --> G5
+
 ```
 
 ### 5.1 Talent Intelligence
@@ -260,34 +261,31 @@ flowchart TD
     end
 
     subgraph OperatorHost["6. Local AI Inference Tier (Operator Laptop)"]
-        GATEWAY["Local AI Gateway
-        - Pre-shared Token Authentication
-        - Concurrency Lock: Semaphore(1)
-        - Strict Schema Validation"]
-        OLLAMA["Ollama Runtime (127.0.0.1:11434)
-        Model: Qwen3-4B-Instruct-2507"]
+        GATEWAY["Local AI Gateway<br/>- Pre-shared Token Authentication<br/>- Concurrency Lock: Semaphore(1)<br/>- Strict Schema Validation"]
+        OLLAMA["Ollama Runtime (127.0.0.1:11434)<br/>Model: Qwen3-4B-Instruct-2507"]
     end
 
     subgraph EnterpriseBoundary["7. Enterprise Workflow Boundary"]
         ENTERPRO["EnterPro Workflow Engine (Orchestration & Approvals)"]
     end
 
-    BROWSER -->|HTTPS / TLS 1.3| FE
-    BROWSER -->|Auth Handshake| AUTH
-    FE -->|HTTPS / JWT Bearer| API
+    BROWSER -->|"HTTPS / TLS 1.3"| FE
+    BROWSER -->|"Auth Handshake"| AUTH
+    FE -->|"HTTPS / JWT Bearer"| API
 
     API --> FIREWALL
     API --> RULES
-    API -->|PostgreSQL Connection / RLS| DB
-    API -->|Vector Cosine Search| PGV
-    API -->|Signed Document URLs| STORAGE
+    API -->|"PostgreSQL Connection / RLS"| DB
+    API -->|"Vector Cosine Search"| PGV
+    API -->|"Signed Document URLs"| STORAGE
 
-    API -->|Adapter Requests| ENTERPRO
-    ENTERPRO -->|Workflow Callbacks| EP_ADAPTER
+    API -->|"Adapter Requests"| ENTERPRO
+    ENTERPRO -->|"Workflow Callbacks"| EP_ADAPTER
 
-    API -->|HTTPS / Authenticated Tunnel Request| TUNNEL
+    API -->|"HTTPS / Authenticated Tunnel Request"| TUNNEL
     TUNNEL --> GATEWAY
-    GATEWAY -->|HTTP / Localhost:11434| OLLAMA
+    GATEWAY -->|"HTTP / Localhost:11434"| OLLAMA
+
 ```
 
 ### Critical Architectural Distinctions

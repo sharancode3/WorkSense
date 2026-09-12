@@ -331,6 +331,7 @@ stateDiagram-v2
 
     ARCHIVED --> [*]
     CANCELLED --> [*]
+
 ```
 
 ---
@@ -1056,16 +1057,17 @@ Items are presented strictly in the **WHAT → WHY → EVIDENCE → WHAT NEXT** 
 ```mermaid
 flowchart TD
     QUERY["Incoming User Query / Analytical Action"] --> EVAL{"Context Evaluator"}
-    EVAL -->|Evidence Missing| ABSTAIN["Trip ABSTAINED State"]
-    EVAL -->|Conflicting Clauses| ABSTAIN
-    EVAL -->|Model Offline / Timeout| ABSTAIN
-    EVAL -->|Prompt Injection Suspected| ABSTAIN
-    EVAL -->|Normal & Grounded| EXECUTE["Execute Normal Synthesis & Answer"]
+    EVAL -->|"Evidence Missing"| ABSTAIN["Trip ABSTAINED State"]
+    EVAL -->|"Conflicting Clauses"| ABSTAIN
+    EVAL -->|"Model Offline / Timeout"| ABSTAIN
+    EVAL -->|"Prompt Injection Suspected"| ABSTAIN
+    EVAL -->|"Normal and Grounded"| EXECUTE["Execute Normal Synthesis & Answer"]
 
     ABSTAIN --> PAYLOAD["Format Standard Abstention Payload"]
     PAYLOAD --> UI["Render Explanatory Banner to User (No Hallucination)"]
     PAYLOAD --> ESCALATE["Create Escalation Case in HR Command Center"]
     ESCALATE --> HUMAN["Human HRBP Resolves Case Manually"]
+
 ```
 
 ---

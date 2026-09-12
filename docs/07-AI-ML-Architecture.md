@@ -144,30 +144,22 @@ All consequential actions adhere to **Human Primacy**: AI advises and explains, 
 ```mermaid
 flowchart TD
     subgraph Client["1. Presentation Tier (Next.js)"]
-        UI["Role-Scoped Interface
-(WHAT-WHY-EVIDENCE-WHAT NEXT)"]
+        UI["Role-Scoped Interface<br/>(WHAT-WHY-EVIDENCE-WHAT NEXT)"]
     end
 
     subgraph GatewayTier["2. FastAPI Application & Security Boundary"]
         API["FastAPI Use-Case Router"]
         AUTH["Supabase JWT & Scope Validator"]
-        FW["AI Document Firewall
-(Macro Stripper & Prompt Sanitizer)"]
+        FW["AI Document Firewall<br/>(Macro Stripper & Prompt Sanitizer)"]
     end
 
     subgraph SolverTier["3. Specialized Computational Solvers (Python ML Core)"]
-        RANK_SRV["LightGBM Candidate Ranker
-(Multi-Feature Scorer)"]
-        SURV_SRV["Cox Survival Hazard Model
-(3/6/12-Month Longitudinal Horizons)"]
-        SHAP_SRV["TreeSHAP Attribution Engine
-(Contributing & Protective Signals)"]
-        OPT_SRV["Google OR-Tools CP-SAT
-(Combinatorial Workforce Allocator)"]
-        GRAPH_SRV["Relational Graph Engine
-(PostgreSQL Traversal & Adjacency)"]
-        RULES_SRV["Deterministic Policy Rules Engine
-(Probation & Jurisdictional Evaluator)"]
+        RANK_SRV["LightGBM Candidate Ranker<br/>(Multi-Feature Scorer)"]
+        SURV_SRV["Cox Survival Hazard Model<br/>(3/6/12-Month Longitudinal Horizons)"]
+        SHAP_SRV["TreeSHAP Attribution Engine<br/>(Contributing & Protective Signals)"]
+        OPT_SRV["Google OR-Tools CP-SAT<br/>(Combinatorial Workforce Allocator)"]
+        GRAPH_SRV["Relational Graph Engine<br/>(PostgreSQL Traversal & Adjacency)"]
+        RULES_SRV["Deterministic Policy Rules Engine<br/>(Probation & Jurisdictional Evaluator)"]
     end
 
     subgraph StorageTier["4. Data & Vector Store (Supabase)"]
@@ -180,38 +172,36 @@ Resumes & Policy PDFs)]
     end
 
     subgraph QwenTier["5. Local Language Reasoning Tier"]
-        QWEN_GATE["MOD-16: Bounded Qwen Gateway
-(XML Tagging, Schema Validation, Context Budget)"]
-        OLLAMA["Local Ollama Server (Port 11434)
-qwen3:4b-instruct-2507-q4_K_M"]
+        QWEN_GATE["MOD-16: Bounded Qwen Gateway<br/>(XML Tagging, Schema Validation, Context Budget)"]
+        OLLAMA["Local Ollama Server (Port 11434)<br/>qwen3:4b-instruct-2507-q4_K_M"]
     end
 
     subgraph WorkflowTier["6. Enterprise Execution Tier"]
-        EP["EnterPro Workflow Engine
-(Human Approvals & Webhook Callbacks)"]
+        EP["EnterPro Workflow Engine<br/>(Human Approvals & Webhook Callbacks)"]
     end
 
-    UI -->|HTTPS / JWT| API
+    UI -->|"HTTPS / JWT"| API
     API --> AUTH
     AUTH --> FW
     FW --> STORAGE
     
-    API -->|Features / Evidence| RANK_SRV
-    API -->|Tenure / Comp / Band| SURV_SRV
+    API -->|"Features / Evidence"| RANK_SRV
+    API -->|"Tenure / Comp / Band"| SURV_SRV
     SURV_SRV --> SHAP_SRV
-    API -->|Staffing Constraints| OPT_SRV
-    API -->|Skill Distances| GRAPH_SRV
-    API -->|Eligibility Queries| RULES_SRV
-    API -->|Vector Similarity Queries| PGV
+    API -->|"Staffing Constraints"| OPT_SRV
+    API -->|"Skill Distances"| GRAPH_SRV
+    API -->|"Eligibility Queries"| RULES_SRV
+    API -->|"Vector Similarity Queries"| PGV
     
-    RANK_SRV & SURV_SRV & OPT_SRV & RULES_SRV -->|Validated Mathematical Outputs| QWEN_GATE
-    QWEN_GATE <-->|Local Inference Stream| OLLAMA
+    RANK_SRV & SURV_SRV & OPT_SRV & RULES_SRV -->|"Validated Mathematical Outputs"| QWEN_GATE
+    QWEN_GATE <-->|"Local Inference Stream"| OLLAMA
     
-    QWEN_GATE -->|Grounded Explanations & Citations| API
+    QWEN_GATE -->|"Grounded Explanations and Citations"| API
     API --> DB
-    API -->|Governed Action Request| EP
-    EP -->|Signed Webhook Event| API
+    API -->|"Governed Action Request"| EP
+    EP -->|"Signed Webhook Event"| API
     API --> UI
+
 ```
 
 ---
@@ -299,6 +289,7 @@ sequenceDiagram
         GW-->>App: Return Validated Result
     end
     GW->>Sem: release_slot()
+
 ```
 
 ---
@@ -474,19 +465,13 @@ The AI Document Firewall isolates untrusted document contents from system execut
 
 ```mermaid
 flowchart TD
-    RAW["Raw Uploaded PDF / DOCX
-(Resume or Policy File)"] --> SCAN["1. ClamAV / Magic Byte Scan
-(Rejects Macros, Binaries, Executables)"]
-    SCAN --> EXTRACT["2. Programmatic Text Extractor
-(pypdf / pdfplumber - Text Only)"]
-    EXTRACT --> SANITIZE["3. Regex Prompt Sanitizer
-(Strips 'SYSTEM:', 'IGNORE INSTRUCTIONS')"]
-    SANITIZE --> XML_WRAP["4. XML Safety Boundary Enclosure
-(<untrusted_data>...</untrusted_data>)"]
-    XML_WRAP --> LLM["5. Qwen Structured Extraction Task
-(Strict JSON Schema Enforced)"]
-    LLM --> AUDIT["6. Security Audit Event Logger
-(Flags suspicious injection attempts)"]
+    RAW["Raw Uploaded PDF / DOCX<br/>(Resume or Policy File)"] --> SCAN["1. ClamAV / Magic Byte Scan<br/>(Rejects Macros, Binaries, Executables)"]
+    SCAN --> EXTRACT["2. Programmatic Text Extractor<br/>(pypdf / pdfplumber - Text Only)"]
+    EXTRACT --> SANITIZE["3. Regex Prompt Sanitizer<br/>(Strips 'SYSTEM:', 'IGNORE INSTRUCTIONS')"]
+    SANITIZE --> XML_WRAP["4. XML Safety Boundary Enclosure<br/>(<untrusted_data>...</untrusted_data>)"]
+    XML_WRAP --> LLM["5. Qwen Structured Extraction Task<br/>(Strict JSON Schema Enforced)"]
+    LLM --> AUDIT["6. Security Audit Event Logger<br/>(Flags suspicious injection attempts)"]
+
 ```
 
 ---
@@ -530,26 +515,18 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Q["Employee Query:
-'Can I work 10 days out-of-state on probation?'"] --> PARSE["Intent & Entity Parser (Qwen)"]
+    Q["Employee Query:<br/>'Can I work 10 days out-of-state on probation?'"] --> PARSE["Intent & Entity Parser (Qwen)"]
     PARSE --> VEC["Query Embedder (384d Vector)"]
-    VEC --> SEARCH["pgvector Cosine Search
-(SQL Pre-filtered: org_id = auth_org_id)"]
-    SEARCH --> CHUNKS["Retrieved Chunks:
-- Remote Policy v4.1 §5.2
-- Tax Guidelines §7.1"]
+    VEC --> SEARCH["pgvector Cosine Search<br/>(SQL Pre-filtered: org_id = auth_org_id)"]
+    SEARCH --> CHUNKS["Retrieved Chunks:<br/>- Remote Policy v4.1 §5.2<br/>- Tax Guidelines §7.1"]
     
     CHUNKS --> RULES["Deterministic Policy Rules Engine"]
-    RULES --> STATUS["Rule Evaluator Output:
-Status: Exception Required
-Approver: Director Level"]
+    RULES --> STATUS["Rule Evaluator Output:<br/>Status: Exception Required<br/>Approver: Director Level"]
     
     CHUNKS & STATUS --> PROMPT["Grounded Context Assembler"]
     PROMPT --> QWEN["Local Qwen3-4B-Instruct"]
-    QWEN --> ANSWER["PolicyAnswerDTO
-- Grounded Answer Text
-- Direct Clause Citations (§5.2, §7.1)
-- Pre-filled EnterPro Exception Form"]
+    QWEN --> ANSWER["PolicyAnswerDTO<br/>- Grounded Answer Text<br/>- Direct Clause Citations (§5.2, §7.1)<br/>- Pre-filled EnterPro Exception Form"]
+
 ```
 
 ---
@@ -597,26 +574,20 @@ WorkSense enforces a two-tier ranking strategy:
 
 ```mermaid
 flowchart TD
-    POOL["Raw Applicant Pool (48 Candidates)"] --> FILTER["1. Mandatory Eligibility Gate (Hard SQL Filter)
-(Location / Minimum Experience)"]
-    FILTER --> FEAT["2. Feature Engineering Pipeline
-(Computes 12 Relational & Evidence Vectors)"]
+    POOL["Raw Applicant Pool (48 Candidates)"] --> FILTER["1. Mandatory Eligibility Gate (Hard SQL Filter)<br/>(Location / Minimum Experience)"]
+    FILTER --> FEAT["2. Feature Engineering Pipeline<br/>(Computes 12 Relational & Evidence Vectors)"]
     FEAT --> SCORER["3. Ranking Scorer Engine"]
     
     subgraph ScorerImplementation["Scorer Options"]
-        PROD_ML["Option A (Production Target):
-LightGBM LambdaMART Learning-to-Rank"]
-        PROTO_DET["Option B (Hackathon Baseline):
-Auditable Deterministic Multi-Feature Formula
-Score = Sum(Weight_i * Feature_i)"]
+        PROD_ML["Option A (Production Target):<br/>LightGBM LambdaMART Learning-to-Rank"]
+        PROTO_DET["Option B (Hackathon Baseline):<br/>Auditable Deterministic Multi-Feature Formula<br/>Score = Sum(Weight_i * Feature_i)"]
     end
     
     SCORER --> PROTO_DET
-    PROTO_DET --> RANKED["Rank-Ordered Candidate List
-(Fictional Demo Seed Scores: Sarah Lin 94%, David Kim 86%)"]
-    RANKED --> EXPLAIN["4. Qwen Reasoning Gateway
-(Synthesizes grounded comparison citing PR #402)"]
+    PROTO_DET --> RANKED["Rank-Ordered Candidate List<br/>(Fictional Demo Seed Scores: Sarah Lin 94%, David Kim 86%)"]
+    RANKED --> EXPLAIN["4. Qwen Reasoning Gateway<br/>(Synthesizes grounded comparison citing PR #402)"]
     EXPLAIN --> REC["5. Recruiter Candidate Comparison View"]
+
 ```
 
 ---
@@ -635,21 +606,17 @@ WorkSense establishes an objective, fair assessment format combining structural 
 
 ```mermaid
 flowchart TD
-    RUBRIC["Approved Competency Rubric
-(e.g., High-Concurrency Caching)"] --> CORE["1. Common Core Question
-(Every candidate receives identical question)"]
+    RUBRIC["Approved Competency Rubric<br/>(e.g., High-Concurrency Caching)"] --> CORE["1. Common Core Question<br/>(Every candidate receives standardized question)"]
     CORE --> CAND_ANS["2. Candidate Audio/Text Response"]
-    CAND_ANS --> EXTRACT["3. Evidence Signal Extractor (Qwen)
-(Identifies technical claims & evidence gaps)"]
+    CAND_ANS --> EXTRACT["3. Evidence Signal Extractor (Qwen)<br/>(Identifies technical claims & evidence gaps)"]
     EXTRACT --> GAP_CHECK{"4. Evidence Gap Detected?"}
     
-    GAP_CHECK -- "Yes (Uncertainty High & Probes < 2)" --> PROBE["5. Bounded Adaptive Probe
-(Targets split-brain recovery threshold)"]
+    GAP_CHECK -- "Yes (Uncertainty High & Probes < 2)" --> PROBE["5. Bounded Adaptive Probe<br/>(Targets split-brain recovery threshold)"]
     PROBE --> CAND_ANS
     
     GAP_CHECK -- "No (Sufficient Evidence or Max Probes Reached)" --> NEXT_COMP["6. Advance to Next Core Competency"]
-    NEXT_COMP --> EVAL["7. Structured Assessment DTO Generated
-(Requires Recruiter Review & Validation)"]
+    NEXT_COMP --> EVAL["7. Structured Assessment DTO Generated<br/>(Requires Recruiter Review & Validation)"]
+
 ```
 
 ---
@@ -695,10 +662,11 @@ flowchart LR
         FINOPS["Multi-Region FinOps (L2)"]
     end
 
-    DOCKER -->|PREREQUISITE_OF| K8S
-    K8S -->|ADJACENT_TO (0.75)| TERRA
-    GO -->|RELATED_TO (0.80)| K8S
-    TERRA -->|TRANSFERABLE_TO (0.65)| FINOPS
+    DOCKER -->|"PREREQUISITE_OF"| K8S
+    K8S -->|"ADJACENT_TO : 0.75"| TERRA
+    GO -->|"RELATED_TO : 0.80"| K8S
+    TERRA -->|"TRANSFERABLE_TO : 0.65"| FINOPS
+
 ```
 
 * **Readiness Query:** Computes distance between an employee's verified `person_skills` and target position requirements in `role_skill_requirements`. Missing nodes are classified as **Capability Gaps** and linked to internal gig opportunities.
@@ -843,18 +811,13 @@ $$	ext{Hazard}(x) = \phi_0 + \sum_{i=1}^{M} \phi_i(x)$$
 
 ```mermaid
 flowchart TD
-    PRED["Elevated Attrition Prediction
-(Marcus Chen: 6mo Hazard = 72% - Demo Seed)"] --> SHAP["Factor Contribution Extraction (Proposed: TreeSHAP)
-(Tenure Stagnation +34%, Comp-Ratio +22% - Demo Seed)"]
-    SHAP --> GRAPH_SEARCH["Relational Graph Search
-(Finds Strategic Gaps matching Marcus's L5 Infra Skills)"]
-    GRAPH_SEARCH --> MATCH["Identified Solution:
-Senior Infrastructure Lead for AI Fraud Team"]
-    MATCH --> BRIEF["Qwen Case Brief Synthesis
-(Formulates confidential brief citing protective signals)"]
-    BRIEF --> HRBP["HRBP Review Console
-[Initiate EnterPro Internal Transfer]"]
+    PRED["Elevated Attrition Prediction<br/>(Marcus Chen: 6mo Hazard = 72% - Demo Seed)"] --> SHAP["Factor Contribution Extraction (Proposed: TreeSHAP)<br/>(Tenure Stagnation +34%, Comp-Ratio +22% - Demo Seed)"]
+    SHAP --> GRAPH_SEARCH["Relational Graph Search<br/>(Finds Strategic Gaps matching Marcus's L5 Infra Skills)"]
+    GRAPH_SEARCH --> MATCH["Identified Solution:<br/>Senior Infrastructure Lead for AI Fraud Team"]
+    MATCH --> BRIEF["Qwen Case Brief Synthesis<br/>(Formulates confidential brief citing protective signals)"]
+    BRIEF --> HRBP["HRBP Review Console<br/>[Initiate EnterPro Internal Transfer]"]
     HRBP --> EP_ACTION["EnterPro Internal Mobility Workflow Execution"]
+
 ```
 
 ---
@@ -928,19 +891,12 @@ The system executes automated, graceful abstention under predefined failure stat
 
 ```mermaid
 flowchart TD
-    IN["Inbound User Query / Task Trigger"] --> CHECK{"Evaluator Checks:
-1. Is authoritative evidence present?
-2. Do policy clauses contradict?
-3. Is local Ollama reachable?
-4. Are parameters within domain?"}
+    IN["Inbound User Query / Task Trigger"] --> CHECK{"Evaluator Checks:<br/>1. Is authoritative evidence present?<br/>2. Do policy clauses contradict?<br/>3. Is local Ollama reachable?<br/>4. Are parameters within domain?"}
     
     CHECK -- "All Checks Pass" --> EXEC["Execute Inference & Synthesize Grounded Output"]
     
-    CHECK -- "Conflict / Missing Evidence / Offline" --> ABSTAIN["Trigger Automated Abstention
-- Output abstained: true
-- Present plain-language explanation
-- Render [Open HR Support Ticket] Button
-- Log Security/Governance Audit Event"]
+    CHECK -->|"Conflict / Missing Evidence / Offline"| ABSTAIN["Trigger Automated Abstention<br/>- Output abstained: true<br/>- Present plain-language explanation<br/>- Render [Open HR Support Ticket] Button<br/>- Log Security/Governance Audit Event"]
+
 ```
 
 ---
@@ -1031,6 +987,7 @@ flowchart TD
 
     ComponentEval --> EndToEndEval
     SafetyEval --> EndToEndEval
+
 ```
 
 ---
