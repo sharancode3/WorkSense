@@ -1544,8 +1544,8 @@ class RecruitmentService:
         matching_cands = [
             c for c in workforce_service._candidate_profiles.values()
             if (not org_id or c["organization_id"] == org_id) and (
-                c.get("profile_id") == profile_id 
-                or c.get("id") == profile_id 
+                c.get("profile_id") == profile_id
+                or c.get("id") == profile_id
                 or c.get("email", "").lower() in [email.lower(), "candidate@worksense.local", "elena.rostova@example.com"]
             )
         ]

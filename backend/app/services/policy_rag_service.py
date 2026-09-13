@@ -478,18 +478,18 @@ class PolicyRAGService:
         """Categorizes user query into known policy domains or unknown/out-of-domain."""
         q = query.lower()
         if any(k in q for k in [
-            "remote", "hybrid", "telecommute", "work from home", "wfh", 
+            "remote", "hybrid", "telecommute", "work from home", "wfh",
             "home office", "internet stipend", "equipment stipend", "core hours", "10:00"
         ]):
             return "remote_work"
         if any(k in q for k in [
-            "probation", "probationary", "day 45", "day 90", "check-in", 
+            "probation", "probationary", "day 45", "day 90", "check-in",
             "mid-point", "confirmation of regular", "90 days", "extension"
         ]):
             return "probation"
         if any(k in q for k in [
-            "health insurance", "dental", "vision", "premiums", "coverage", 
-            "tuition", "learning and development", "learning stipend", "allowance", 
+            "health insurance", "dental", "vision", "premiums", "coverage",
+            "tuition", "learning and development", "learning stipend", "allowance",
             "conference", "certifications", "coursework", "$2,500", "2500"
         ]):
             return "benefits"

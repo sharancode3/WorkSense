@@ -165,4 +165,3 @@ def test_system_version_endpoint():
     assert data["app_version"] == "1.0.0"
     assert "git_commit" in data
     assert "schema_version" in data
-
