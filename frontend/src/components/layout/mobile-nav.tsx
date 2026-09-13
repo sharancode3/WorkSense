@@ -24,6 +24,7 @@ import {
   AlertCircle,
   LogIn,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 import { getNavigationForUser } from "@/config/navigation";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -48,6 +49,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   FileText,
   FilePlus,
   AlertCircle,
+  Sparkles,
 };
 
 export interface MobileNavProps {

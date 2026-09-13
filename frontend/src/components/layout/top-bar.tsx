@@ -28,6 +28,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Workforce Decision Dashboard",
   "/policies": "Policy Reasoning & Grounded Q&A",
   "/recommendations": "Recommendations & Human Approvals",
+  "/demo": "Guided Demo (Golden Path)",
   "/recruitment/jobs": "Job Requisitions",
   "/hr/onboarding": "Adaptive Onboarding Command Center",
   "/manager/onboarding": "Manager Onboarding Workspace",

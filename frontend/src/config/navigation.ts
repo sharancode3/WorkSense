@@ -23,6 +23,14 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         iconName: "FileCheck",
       },
       {
+        id: "cand-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
+    ],
+    secondaryItems: [
+      {
         id: "cand-access",
         title: "My Profile & Access",
         href: "/my-access",
@@ -52,6 +60,14 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         iconName: "FileText",
       },
       {
+        id: "emp-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
+    ],
+    secondaryItems: [
+      {
         id: "emp-access",
         title: "My Access & Scope",
         href: "/my-access",
@@ -69,16 +85,16 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         iconName: "Users",
       },
       {
-        id: "mgr-onboarding",
-        title: "Team Onboarding",
-        href: "/manager/onboarding",
-        iconName: "UserCheck",
-      },
-      {
         id: "mgr-team",
         title: "Direct Reports",
         href: "/workforce/employees",
         iconName: "Users",
+      },
+      {
+        id: "mgr-onboarding",
+        title: "Team Onboarding",
+        href: "/manager/onboarding",
+        iconName: "UserCheck",
       },
       {
         id: "mgr-skills",
@@ -98,6 +114,14 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         href: "/policies",
         iconName: "FileText",
       },
+      {
+        id: "mgr-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
+    ],
+    secondaryItems: [
       {
         id: "mgr-access",
         title: "My Access & Scope",
@@ -140,6 +164,26 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         iconName: "FileText",
       },
       {
+        id: "rec-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
+    ],
+    secondaryItems: [
+      {
+        id: "rec-roles",
+        title: "Job Role Catalog",
+        href: "/workforce/roles",
+        iconName: "BookOpen",
+      },
+      {
+        id: "rec-departments",
+        title: "Departments & Org Tree",
+        href: "/workforce/departments",
+        iconName: "Building2",
+      },
+      {
         id: "rec-access",
         title: "My Access & Scope",
         href: "/my-access",
@@ -155,12 +199,6 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         title: "Decision Dashboard",
         href: "/dashboard",
         iconName: "LayoutDashboard",
-      },
-      {
-        id: "hr-operations",
-        title: "Operations Hub",
-        href: "/hr",
-        iconName: "Briefcase",
       },
       {
         id: "hr-directory",
@@ -192,6 +230,12 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         href: "/policies",
         iconName: "FileText",
       },
+      {
+        id: "hr-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
     ],
     secondaryItems: [
       {
@@ -222,7 +266,13 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         id: "hr-data-quality",
         title: "Data Quality Engine",
         href: "/workforce/data-quality",
-        iconName: "AlertCircle",
+        iconName: "Activity",
+      },
+      {
+        id: "hr-access",
+        title: "My Access & Scope",
+        href: "/my-access",
+        iconName: "Shield",
       },
     ],
   },
@@ -264,6 +314,26 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         title: "Governance Policies",
         href: "/policies",
         iconName: "FileText",
+      },
+      {
+        id: "lead-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
+      },
+    ],
+    secondaryItems: [
+      {
+        id: "lead-employees",
+        title: "Employee Evidence",
+        href: "/workforce/employees",
+        iconName: "Users",
+      },
+      {
+        id: "lead-dept-tree",
+        title: "Org Hierarchy",
+        href: "/workforce/departments",
+        iconName: "Building2",
       },
       {
         id: "lead-access",
@@ -316,7 +386,13 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
         id: "admin-data-quality",
         title: "Data Quality Engine",
         href: "/workforce/data-quality",
-        iconName: "AlertCircle",
+        iconName: "Activity",
+      },
+      {
+        id: "admin-demo",
+        title: "Guided Demo",
+        href: "/demo",
+        iconName: "Sparkles",
       },
     ],
   },
@@ -327,7 +403,19 @@ export const ROLE_NAVIGATION: Record<string, RoleNavigationConfig> = {
  */
 export function getNavigationForUser(roles: string[]): NavigationGroup[] {
   if (!roles || roles.length === 0) {
-    return [];
+    return [
+      {
+        id: "primary-workspace",
+        title: "Core Navigation",
+        items: [
+          { id: "nav-overview", title: "Overview", href: "/dashboard", iconName: "LayoutDashboard" },
+          { id: "nav-talent", title: "Talent Decision", href: "/workforce/candidates", iconName: "UserSearch" },
+          { id: "nav-health", title: "Workforce Health", href: "/workforce/intelligence", iconName: "BarChart3" },
+          { id: "nav-actions", title: "Review Actions", href: "/recommendations", iconName: "AlertCircle" },
+          { id: "nav-demo", title: "Guided Demo", href: "/demo", iconName: "Sparkles" },
+        ],
+      },
+    ];
   }
 
   // Priority resolution for primary active role workspace
@@ -335,13 +423,13 @@ export function getNavigationForUser(roles: string[]): NavigationGroup[] {
     roles.find((r) => ["administrator", "admin"].includes(r)) ? "administrator"
     : roles.includes("hr") ? "hr"
     : roles.includes("recruiter") ? "recruiter"
-    : roles.includes("manager") ? "manager"
     : roles.includes("leadership") ? "leadership"
+    : roles.includes("manager") ? "manager"
     : roles.includes("employee") ? "employee"
     : roles.includes("candidate") ? "candidate"
-    : "employee";
+    : "hr";
 
-  const config = ROLE_NAVIGATION[primaryRole] || ROLE_NAVIGATION.employee;
+  const config = ROLE_NAVIGATION[primaryRole] || ROLE_NAVIGATION.hr;
   const groups: NavigationGroup[] = [
     {
       id: "primary-workspace",
@@ -352,7 +440,7 @@ export function getNavigationForUser(roles: string[]): NavigationGroup[] {
 
   if (config.secondaryItems && config.secondaryItems.length > 0) {
     groups.push({
-      id: "secondary-modules",
+      id: "workforce-data-foundation",
       title: "Workforce Data & Taxonomy",
       items: config.secondaryItems,
     });
@@ -365,9 +453,13 @@ export function getNavigationForUser(roles: string[]): NavigationGroup[] {
 export const NAVIGATION_GROUPS: NavigationGroup[] = [
   {
     id: "workspaces",
-    title: "Workforce Workspaces",
+    title: "Core Workspaces",
     items: [
-      { id: "dashboard", title: "Decision Dashboard", href: "/dashboard", iconName: "LayoutDashboard" },
+      { id: "dashboard", title: "Overview", href: "/dashboard", iconName: "LayoutDashboard" },
+      { id: "talent", title: "Talent Decision", href: "/workforce/candidates", iconName: "UserSearch" },
+      { id: "intelligence", title: "Workforce Health", href: "/workforce/intelligence", iconName: "BarChart3" },
+      { id: "actions", title: "Review Actions", href: "/recommendations", iconName: "AlertCircle" },
+      { id: "demo", title: "Guided Demo", href: "/demo", iconName: "Sparkles" },
       { id: "my-access", title: "My Access & Scope", href: "/my-access", iconName: "Shield" },
     ],
   },

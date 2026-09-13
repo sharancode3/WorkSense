@@ -164,7 +164,7 @@ describe("Stage 6-10 Decision Intelligence & Workflow API Clients", () => {
       const res = await getEmployeeAttritionRiskApi("emp-1");
       expect(res.employee_name).toBe("Marcus Chen");
       expect(res.risk_band).toBe("priority_review");
-      expect(res.risk_factors.length).toBe(1);
+      expect(res.risk_factors?.length).toBe(1);
     });
 
     it("retrieves cohort attrition overview with leadership privacy protection", async () => {

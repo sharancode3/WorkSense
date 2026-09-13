@@ -29,7 +29,7 @@ const GOLDEN_STEPS: GoldenStep[] = [
     stepNumber: "01",
     title: "Talent Intake & Evidence Extraction",
     role: "Candidate & Recruiter",
-    summary: "Elena Rostova applies for Senior Distributed Systems Engineer. Local Qwen parses resume against requirement evidence with zero hallucination.",
+    summary: "Elena Rostova applies for Senior Distributed Systems Engineer. Evidence extraction engine parses resume against requirement taxonomy with zero ungrounded claims.",
     evidence: [
       "Extracted 8 verifiable competencies: Python (L4), Go (L4), Kubernetes (L4), Kafka (L3), gRPC (L3)",
       "Years of experience matched: 7.5 years verified against chronology",
@@ -89,7 +89,7 @@ const GOLDEN_STEPS: GoldenStep[] = [
     stepNumber: "04",
     title: "Retention Intelligence & Policy Grounding",
     role: "Employee & People Manager",
-    summary: "Marcus Chen, a senior engineer, experiences increased on-call strain and queries remote work policies. Qwen reasons over policy documents with exact citations.",
+    summary: "Marcus Chen, a senior engineer, experiences increased on-call strain and queries remote work policies. Qwen-powered reasoning evaluates policy documents with exact citations (with deterministic grounded fallback if offline).",
     evidence: [
       "Policy Citation: Handbook Section 4.2 ('Flexible Location & Core Timezone Guidelines')",
       "Workforce Signal: Consecutive weekend on-call shifts detected without overtime credit",
@@ -125,9 +125,9 @@ const GOLDEN_STEPS: GoldenStep[] = [
   {
     id: "orchestration",
     stepNumber: "06",
-    title: "EnterPro Workflow Orchestration",
+    title: "EnterPro Workflow Orchestration (Execution Adapter)",
     role: "Enterprise Systems",
-    summary: "Following human authorization, WorkSense dispatches parameterized actions to EnterPro workflows and logs the complete event to recorded audit history.",
+    summary: "Following human authorization, WorkSense dispatches parameterized actions to the EnterPro workflow execution adapter and records the complete event in the immutable Postgres audit ledger.",
     evidence: [
       "EnterPro Webhook: Dispatched payload to /api/v1/orchestrator/workflows",
       "Action: Updated PagerDuty rotation group + scheduled quarterly mobility review",
@@ -136,7 +136,7 @@ const GOLDEN_STEPS: GoldenStep[] = [
     systemAction: "Triggers external orchestration adapter and confirms delivery acknowledgement.",
     humanGate: "Workflow completion verified by HR with full audit trail compliance.",
     sampleData: {
-      "Dispatch Target": "EnterPro Orchestrator",
+      "Dispatch Target": "EnterPro Orchestrator Adapter (Simulated Delivery)",
       "Workflow ID": "WF-ROTATION-2026-09",
       "Audit Status": "Recorded in append-oriented decision history",
       "Final State": "Action executed under human authority",

@@ -22,12 +22,11 @@ import {
   FilePlus,
   AlertCircle,
   LogIn,
-  LogOut,
   ChevronLeft,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { getNavigationForUser } from "@/config/navigation";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utilities/cn";
 
@@ -49,6 +48,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   FileText,
   FilePlus,
   AlertCircle,
+  Sparkles,
 };
 
 export interface SidebarProps {
@@ -59,7 +59,7 @@ export interface SidebarProps {
 
 export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: SidebarProps) {
   const pathname = usePathname();
-  const { isAuthenticated, user, roles, activeOrg, logout } = useAuth();
+  const { isAuthenticated, user, roles } = useAuth();
 
   return (
     <aside
@@ -138,39 +138,37 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: Si
         })}
       </nav>
 
-      {/* 3. User Identity & Bottom Controls */}
-      <div className="p-3 border-t border-boundary-subtle bg-surface-secondary/40 space-y-2">
+      {/* 3. User Identity & Scope Link */}
+      <div className="p-3 border-t border-boundary-subtle bg-surface-secondary/40">
         {isAuthenticated && user ? (
-          <div className={cn("space-y-1.5", isCollapsed ? "text-center" : "")}>
+          <div className={cn("space-y-2", isCollapsed ? "text-center" : "")}>
             {!isCollapsed ? (
-              <div className="p-2 rounded bg-surface border border-boundary-subtle text-xs space-y-1">
-                <div className="font-semibold text-content-primary truncate">
+              <Link
+                href="/my-access"
+                className="block p-2 rounded bg-surface border border-boundary-subtle hover:border-brand-primary/40 text-xs transition-colors group"
+                title="View My Access & Capabilities"
+              >
+                <div className="font-semibold text-content-primary truncate group-hover:text-brand-primary">
                   {user.full_name}
                 </div>
-                <div className="flex items-center justify-between text-[10px]">
+                <div className="flex items-center justify-between text-[10px] mt-0.5">
                   <span className="text-brand-primary font-semibold capitalize truncate">
                     {roles[0] || "User"}
                   </span>
-                  {activeOrg && (
-                    <span className="text-content-muted font-mono truncate">
-                      {activeOrg.slug}
-                    </span>
-                  )}
+                  <span className="text-content-muted font-mono truncate">
+                    Scope →
+                  </span>
                 </div>
-              </div>
-            ) : null}
-            <button
-              type="button"
-              onClick={() => logout()}
-              className={cn(
-                "w-full flex items-center gap-2 py-1.5 px-2 rounded text-xs font-medium text-status-danger hover:bg-status-danger/10 transition-colors",
-                isCollapsed ? "justify-center" : ""
-              )}
-              title="Sign Out"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              {!isCollapsed && <span>Sign Out</span>}
-            </button>
+              </Link>
+            ) : (
+              <Link
+                href="/my-access"
+                className="inline-flex p-1.5 rounded text-content-secondary hover:text-brand-primary hover:bg-surface"
+                title="My Access & Capabilities"
+              >
+                <Shield className="h-4 w-4 mx-auto" />
+              </Link>
+            )}
           </div>
         ) : (
           <div>
@@ -185,17 +183,6 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: Si
               <LogIn className="h-3.5 w-3.5" />
               {!isCollapsed && <span>Sign In</span>}
             </Link>
-          </div>
-        )}
-
-        {!isCollapsed ? (
-          <div className="flex items-center justify-between pt-1 border-t border-boundary-subtle">
-            <span className="text-xs text-content-muted font-medium">Theme</span>
-            <ThemeToggle variant="segmented" />
-          </div>
-        ) : (
-          <div className="flex justify-center pt-1 border-t border-boundary-subtle">
-            <ThemeToggle variant="icon" />
           </div>
         )}
       </div>

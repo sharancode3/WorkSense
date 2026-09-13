@@ -31,7 +31,8 @@ export interface CanonicalRecommendation {
 }
 
 export interface RecommendationApprovalRequest {
-  decision: "approved" | "rejected";
+  decision: "approved" | "rejected" | "changes_requested";
+  reasoning?: string;
   notes?: string;
 }
 

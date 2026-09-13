@@ -1,8 +1,8 @@
 """Pydantic schemas for Workforce Intelligence (Stage 7)."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # ====================================================================
@@ -24,6 +24,7 @@ class RiskFactorDetail(BaseModel):
 class AttritionRiskAssessmentResponse(BaseModel):
     """Transparent prototype risk indicator for a single employee."""
     id: str
+    organization_id: Optional[str] = None
     employee_id: str
     employee_name: str
     employee_code: str
@@ -33,10 +34,41 @@ class AttritionRiskAssessmentResponse(BaseModel):
     risk_score: float = Field(ge=0.0, le=1.0, description="0.000 to 1.000 transparent index")
     calculation_version: str = "v1.0-deterministic-prototype"
     contributing_factors: List[RiskFactorDetail] = Field(default_factory=list)
+    risk_factors: List[RiskFactorDetail] = Field(default_factory=list)
     missing_signals: List[str] = Field(default_factory=list)
     qwen_explanation: Optional[str] = None
+    explanation: str = ""
     recommended_interventions: List[str] = Field(default_factory=list)
-    assessed_at: datetime
+    supportive_interventions: List[str] = Field(default_factory=list)
+    is_mitigated: bool = False
+    assessed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    evaluated_at: Optional[datetime] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def populate_aliases(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Sync contributing_factors <-> risk_factors
+            cf = data.get("contributing_factors") or data.get("risk_factors") or []
+            data["contributing_factors"] = cf
+            data["risk_factors"] = cf
+
+            # Sync recommended_interventions <-> supportive_interventions
+            ri = data.get("recommended_interventions") or data.get("supportive_interventions") or []
+            data["recommended_interventions"] = ri
+            data["supportive_interventions"] = ri
+
+            # Sync qwen_explanation <-> explanation
+            exp = data.get("explanation") or data.get("qwen_explanation") or ""
+            data["explanation"] = exp
+            data["qwen_explanation"] = exp
+
+            # Sync assessed_at <-> evaluated_at
+            dt = data.get("evaluated_at") or data.get("assessed_at")
+            if dt:
+                data["assessed_at"] = dt
+                data["evaluated_at"] = dt
+        return data
 
 
 class AttritionDepartmentAggregate(BaseModel):

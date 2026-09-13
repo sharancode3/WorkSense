@@ -375,11 +375,263 @@ class OnboardingService:
                 "created_at": now,
             }
 
-        # Update candidate status to offered if not already converted
+        # Update candidate status to offered or converted
         if elena_cand in workforce_service._candidate_profiles:
             cand = workforce_service._candidate_profiles[elena_cand]
-            if cand.get("record_status") != "converted":
-                cand["record_status"] = "offered"
+            cand["record_status"] = "converted"
+
+        # 5. Seed Golden Demo Elena Rostova Onboarding Journey (Active 90-day plan)
+        case_id = "55000000-0000-0000-0000-000000000001"
+        plan_id = "56000000-0000-0000-0000-000000000001"
+        elena_emp_id = "69000000-0000-0000-0000-000000000003"
+        mgr_id = "69000000-0000-0000-0000-000000000001"
+
+        # Ensure Elena has an employee record in workforce service
+        if elena_emp_id not in workforce_service._employees:
+            workforce_service._employees[elena_emp_id] = {
+                "id": elena_emp_id,
+                "organization_id": org_id,
+                "profile_id": elena_cand,
+                "candidate_id": elena_cand,
+                "employee_code": "EMP-90088",
+                "hire_date": "2026-10-01",
+                "department_id": eng_dept_id,
+                "job_role_id": "61000000-0000-0000-0000-000000000001",
+                "employment_status": "active",
+                "work_location": "hybrid",
+                "employment_type": "full_time",
+                "created_at": now,
+                "updated_at": now,
+            }
+
+        # Seed the onboarding case
+        self._cases[case_id] = {
+            "id": case_id,
+            "organization_id": org_id,
+            "candidate_id": elena_cand,
+            "candidate_name": "Elena Rostova",
+            "candidate_email": "elena.rostova@example.com",
+            "employee_id": elena_emp_id,
+            "employee_code": "EMP-90088",
+            "job_opening_id": job_id,
+            "job_title": "Senior Distributed Systems Engineer",
+            "department_id": eng_dept_id,
+            "department_name": "Engineering",
+            "job_role_id": "61000000-0000-0000-0000-000000000001",
+            "role_title": "Senior Distributed Systems Engineer",
+            "manager_employee_id": mgr_id,
+            "manager_name": "Marcus Vance",
+            "hire_date": "2026-10-01",
+            "work_location": "hybrid",
+            "status": "in_review",
+            "current_plan_id": plan_id,
+            "enterpro_handoff_status": "ready",
+            "created_at": now,
+            "updated_at": now,
+        }
+
+        # Seed active plan
+        self._plans[plan_id] = {
+            "id": plan_id,
+            "case_id": case_id,
+            "version_number": 1,
+            "status": "hr_review",
+            "is_active": True,
+            "ai_generation_metadata": {
+                "journey_rationale": (
+                    "Personalized 90-day adaptive plan for Senior Distributed Systems Engineer. "
+                    "Redundant introductory containerization and Linux tasks waived due to verified Level 4 skill evidence. "
+                    "High-Throughput Python Asyncio gap scheduled as an accelerated Week 1 milestone."
+                ),
+                "pacing_strategy": (
+                    "Front-load compliance on Day 1, introduce technical standards Week 1, "
+                    "and schedule deep Raft consensus and multi-region replication across Day 30-60."
+                ),
+                "focus_areas": [
+                    "Raft Consensus & Distributed Systems",
+                    "High-Throughput Asynchronous Python",
+                    "Multi-Region Zero-Downtime Replication",
+                ],
+                "generated_at": now,
+            },
+            "critic_review": {
+                "passed": True,
+                "rule_checks": {
+                    "mandatory_tasks_retained": True,
+                    "preboarding_prior_to_day_1": True,
+                    "skill_gap_coverage": True,
+                    "day_1_workload_pacing": True,
+                },
+                "workload_pacing_score": 1.0,
+                "policy_compliance": True,
+                "concerns": [],
+                "recommendations": ["Policy compliance verified", "Skill gap adequately covered"],
+            },
+            "hr_review_status": "pending",
+            "hr_reviewer_id": None,
+            "hr_reviewed_at": None,
+            "hr_notes": None,
+            "manager_review_status": "pending",
+            "manager_reviewer_id": None,
+            "manager_reviewed_at": None,
+            "manager_notes": None,
+            "created_at": now,
+            "updated_at": now,
+        }
+
+        # Seed plan tasks
+        seed_tasks = [
+            (
+                "TASK_PREBOARD_DOCS",
+                "Complete Preboarding Documentation & Identity Verification",
+                "compliance",
+                "preboarding",
+                -3,
+                "pending",
+                "self_attestation",
+                True,
+                None,
+            ),
+            (
+                "TASK_EQUIPMENT_RECEIPT",
+                "Confirm Workstation Hardware Receipt & Asset Tagging",
+                "it_setup",
+                "preboarding",
+                -1,
+                "pending",
+                "self_attestation",
+                True,
+                None,
+            ),
+            (
+                "TASK_SECURITY_AWARENESS",
+                "Mandatory Security Awareness & Phishing Defense Training",
+                "security",
+                "day_1",
+                0,
+                "pending",
+                "system_check",
+                True,
+                None,
+            ),
+            (
+                "TASK_DIRECT_DEPOSIT",
+                "Configure Direct Deposit & Payroll Setup",
+                "compliance",
+                "day_1",
+                0,
+                "pending",
+                "self_attestation",
+                True,
+                None,
+            ),
+            (
+                "TASK_LINUX_INTRO",
+                "Introductory Linux & Containerization Fundamentals",
+                "learning",
+                "day_1",
+                0,
+                "waived",
+                "system_check",
+                False,
+                "Waived based on verified candidate evidence (Docker L4 / Linux L4)",
+            ),
+            (
+                "TASK_ENV_SETUP",
+                "Developer Environment & VPN / Zero-Trust Access Setup",
+                "it_setup",
+                "day_1",
+                0,
+                "pending",
+                "manager_approval",
+                True,
+                None,
+            ),
+            (
+                "TASK_LEARN_ASYNC_PY",
+                "Targeted Learning: High-Throughput Asynchronous Programming with Python Asyncio & FastAPI",
+                "learning",
+                "week_1",
+                4,
+                "pending",
+                "artifact_upload",
+                False,
+                None,
+            ),
+            (
+                "TASK_FIRST_COMMIT",
+                "First Production Pull Request & Deployment Pipeline Verification",
+                "it_setup",
+                "week_1",
+                5,
+                "pending",
+                "manager_approval",
+                True,
+                None,
+            ),
+            (
+                "TASK_DAY30_CHECKIN",
+                "Day 30 Milestone & Role Alignment Review",
+                "milestone_review",
+                "day_30",
+                30,
+                "pending",
+                "manager_approval",
+                True,
+                None,
+            ),
+            (
+                "TASK_DAY60_CHECKIN",
+                "Day 60 Autonomy & Project Contribution Review",
+                "milestone_review",
+                "day_60",
+                60,
+                "pending",
+                "manager_approval",
+                True,
+                None,
+            ),
+            (
+                "TASK_DAY90_FINAL_REVIEW",
+                "Day 90 Comprehensive Onboarding Completion & Goal Setting",
+                "milestone_review",
+                "day_90",
+                90,
+                "pending",
+                "hr_approval",
+                True,
+                None,
+            ),
+        ]
+
+        raw_seed_tasks: List[Dict[str, Any]] = []
+        for code, title, cat, phase, offset, status, vtype, mand, notes in seed_tasks:
+            tid = str(uuid.uuid4())
+            raw_seed_tasks.append({
+                "id": tid,
+                "plan_id": plan_id,
+                "task_code": code,
+                "title": title,
+                "description": f"{title} for {cand['first_name']} {cand['last_name']}",
+                "category": cat,
+                "phase": phase,
+                "is_mandatory": mand,
+                "owner_role": "employee" if "CHECKIN" not in code and "REVIEW" not in code else "manager",
+                "assignee_id": elena_emp_id,
+                "verification_type": vtype,
+                "status": status,
+                "scheduled_day_offset": offset,
+                "estimated_minutes": 60,
+                "evidence_url": "https://techcorp.internal/onboarding/verification" if status == "completed" else None,
+                "resolution_notes": notes,
+                "completed_at": now if status == "completed" else None,
+                "dependencies": [],
+            })
+
+        scheduled_tasks, dependencies_list = self._run_dependency_scheduler("2026-10-01", raw_seed_tasks)
+        for tk in scheduled_tasks:
+            self._plan_tasks[tk["id"]] = tk
+        self._plan_task_dependencies[plan_id] = dependencies_list
 
     # ====================================================================
     # 2. Catalogs & Template Queries
@@ -879,6 +1131,11 @@ class OnboardingService:
         for existing_case in self._cases.values():
             if existing_case["candidate_id"] == data.candidate_id and existing_case["organization_id"] == org_id:
                 logger.info(f"Onboarding case already exists for candidate {data.candidate_id}; returning idempotent case.")
+                if data.employee_code and existing_case.get("employee_code") != data.employee_code:
+                    existing_case["employee_code"] = data.employee_code
+                    emp_id = existing_case.get("employee_id")
+                    if emp_id and emp_id in workforce_service._employees:
+                        workforce_service._employees[emp_id]["employee_code"] = data.employee_code
                 return self.get_case(org_id, existing_case["id"])
 
         # 1. CANONICAL CONVERSION: Invoke workforce_service.convert_candidate_to_employee

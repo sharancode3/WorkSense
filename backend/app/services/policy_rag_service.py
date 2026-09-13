@@ -712,6 +712,11 @@ Respond with a strictly formatted JSON object adhering to this schema:
             proposed_action=proposed_action_obj,
             policy_count_evaluated=len(retrieved_chunks),
             is_degraded=is_degraded,
+            qwen_assisted=not is_degraded,
+            is_authoritative=True,
+            direct_answer=parsed_result.get("answer_text", "Policy excerpt provides relevant guidelines."),
+            reasoning_summary=parsed_result.get("answer_text", "Direct grounded policy answer."),
+            applicable_clauses=parsed_result.get("applicable_conditions", []),
             created_at=now,
         )
 

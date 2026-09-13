@@ -22,12 +22,15 @@ export interface PolicyChunk {
 }
 
 export interface PolicyCitation {
+  policy_id?: string;
   policy_code: string;
   policy_title: string;
   version_number: string;
+  effective_date?: string;
   page_number: number;
   section_heading: string;
-  verbatim_quote: string;
+  excerpt?: string;
+  verbatim_quote?: string;
   relevance_score: number;
 }
 
@@ -41,16 +44,21 @@ export interface PolicyQueryRequest {
 export interface PolicyQueryResponse {
   query_id: string;
   query_text: string;
-  direct_answer: string;
-  reasoning_summary: string;
-  applicable_clauses: string[];
-  confidence_band: "high" | "medium" | "low" | "insufficient_evidence";
-  is_authoritative: boolean;
+  direct_answer?: string;
+  answer_text?: string;
+  reasoning_summary?: string;
+  applicable_clauses?: string[];
+  applicable_conditions?: string[];
+  exceptions?: string[];
+  confidence_band?: "high" | "medium" | "low" | "insufficient_evidence" | string;
+  confidence_state?: string;
+  is_authoritative?: boolean;
   citations: PolicyCitation[];
-  escalation_required: boolean;
+  escalation_required?: boolean;
   escalation_reason?: string | null;
   suggested_action_type?: string | null;
-  qwen_assisted: boolean;
+  qwen_assisted?: boolean;
+  is_degraded?: boolean;
   created_at: string;
 }
 

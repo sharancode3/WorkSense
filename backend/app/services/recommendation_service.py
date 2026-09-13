@@ -158,16 +158,30 @@ class RecommendationService:
             "updated_at": datetime.now(timezone.utc),
         }
 
-        # Seed notification
-        notif_id = str(uuid4())
-        self._notifications[notif_id] = {
-            "id": notif_id,
+        # Seed notification for Marcus Chen
+        notif_id_1 = str(uuid4())
+        self._notifications[notif_id_1] = {
+            "id": notif_id_1,
             "organization_id": org_id,
             "recipient_id": "hr-specialist-uuid",
             "title": "Action Required: Marcus Chen Internal Mobility",
             "message": "High priority retention intervention recommendation requires HR sign-off.",
             "notification_type": "approval_requested",
             "reference_id": rec_id_1,
+            "is_read": False,
+            "created_at": datetime.now(timezone.utc),
+        }
+
+        # Seed notification for Elena Rostova
+        notif_id_2 = str(uuid4())
+        self._notifications[notif_id_2] = {
+            "id": notif_id_2,
+            "organization_id": org_id,
+            "recipient_id": "hr-specialist-uuid",
+            "title": "Action Required: Elena Rostova Provisioning Review",
+            "message": "Onboarding activation and EnterPro workstation provisioning gate ready for manager review.",
+            "notification_type": "approval_requested",
+            "reference_id": rec_id_2,
             "is_read": False,
             "created_at": datetime.now(timezone.utc),
         }
@@ -360,11 +374,23 @@ class RecommendationService:
     # In-App Notifications
     # ====================================================================
 
-    def list_notifications(self, organization_id: str, recipient_id: Optional[str] = None) -> List[NotificationResponse]:
-        """Lists in-app notifications."""
+    def list_notifications(
+        self,
+        organization_id: str,
+        recipient_id: Optional[str] = None,
+        user_roles: Optional[List[str]] = None,
+    ) -> List[NotificationResponse]:
+        """Lists in-app notifications with role-based and recipient fallback."""
         notifs = [n for n in self._notifications.values() if n["organization_id"] == organization_id]
         if recipient_id:
-            notifs = [n for n in notifs if n["recipient_id"] == recipient_id or n["recipient_id"] == "system"]
+            roles = [r.lower() for r in (user_roles or [])]
+            is_hr_or_manager = any(r in ["hr", "manager", "administrator", "leadership"] for r in roles)
+            notifs = [
+                n for n in notifs
+                if n["recipient_id"] == recipient_id
+                or n["recipient_id"] in ["system", "all", "*"]
+                or (is_hr_or_manager and n["recipient_id"] == "hr-specialist-uuid")
+            ]
         notifs.sort(key=lambda x: x["created_at"], reverse=True)
         return [NotificationResponse(**n) for n in notifs]
 

@@ -15,20 +15,24 @@ export interface RiskFactorDetail {
 
 export interface AttritionRiskAssessment {
   id: string;
-  organization_id: string;
+  organization_id?: string;
   employee_id: string;
   employee_name: string;
   employee_code: string;
   department_name: string;
   role_title: string;
   risk_score: number;
-  risk_band: "monitor" | "review" | "priority_review";
-  risk_factors: RiskFactorDetail[];
-  missing_signals: string[];
-  supportive_interventions: string[];
-  explanation: string;
-  is_mitigated: boolean;
-  evaluated_at: string;
+  risk_band: "monitor" | "review" | "priority_review" | string;
+  risk_factors?: RiskFactorDetail[];
+  contributing_factors?: RiskFactorDetail[];
+  missing_signals?: string[];
+  supportive_interventions?: string[];
+  recommended_interventions?: string[];
+  explanation?: string;
+  qwen_explanation?: string;
+  is_mitigated?: boolean;
+  evaluated_at?: string;
+  assessed_at?: string;
 }
 
 export interface AttritionDepartmentAggregate {

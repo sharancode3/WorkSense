@@ -60,7 +60,7 @@ export async function executeRecommendationApi(
  * List in-app notifications.
  */
 export async function listNotificationsApi(): Promise<NotificationItem[]> {
-  return apiClient<NotificationItem[]>("/api/v1/recommendations/notifications", {
+  return apiClient<NotificationItem[]>("/api/v1/recommendations/notifications/my", {
     method: "GET",
   });
 }

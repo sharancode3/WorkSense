@@ -332,109 +332,144 @@ export default function PolicyReasoningPage() {
               </Card>
             )}
 
-            {!isQuerying && queryResult && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Main Direct Answer */}
-                <div className="lg:col-span-2 space-y-4">
-                  <Card className="p-5 border-neutral-200 dark:border-neutral-800 space-y-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span className="text-xs font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Direct Answer
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className={`text-xs capitalize ${
-                            queryResult.confidence_band === "high"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300"
-                              : queryResult.confidence_band === "medium"
-                              ? "bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-950/40 dark:text-blue-300"
-                              : "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300"
-                          }`}
-                        >
-                          Confidence: {queryResult.confidence_band.replace("_", " ")}
-                        </Badge>
-                        {queryResult.qwen_assisted && (
-                          <Badge variant="outline" className="text-xs border-purple-300 bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300">
-                            Qwen Verified
+            {!isQuerying && queryResult && (() => {
+              const confidenceState = queryResult.confidence_band || queryResult.confidence_state || "supported";
+              const confidenceLabel = String(confidenceState).replace(/_/g, " ");
+              const isInsufficient = confidenceState === "insufficient_evidence" || confidenceState === "low";
+              const directAnswer = queryResult.direct_answer || queryResult.answer_text || "No direct policy statement returned.";
+              const reasoningSummary = queryResult.reasoning_summary || queryResult.answer_text || "Synthesized from authoritative policy excerpts.";
+              const applicableClauses = queryResult.applicable_clauses || queryResult.applicable_conditions || [];
+              const citations = Array.isArray(queryResult.citations) ? queryResult.citations : [];
+
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Main Direct Answer */}
+                  <div className="lg:col-span-2 space-y-4">
+                    <Card className="p-5 border-neutral-200 dark:border-neutral-800 space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                            Direct Grounded Answer
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="outline"
+                            className={`text-xs capitalize ${
+                              confidenceState === "high" || confidenceState === "supported"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300"
+                                : confidenceState === "medium" || confidenceState === "partially_supported"
+                                ? "bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-950/40 dark:text-blue-300"
+                                : "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300"
+                            }`}
+                          >
+                            Confidence: {confidenceLabel}
                           </Badge>
-                        )}
-                        {queryResult.is_authoritative && (
-                          <Badge variant="outline" className="text-xs border-neutral-300 text-neutral-700 dark:text-neutral-300">
-                            Authoritative
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100 leading-relaxed bg-neutral-50 dark:bg-neutral-800/40 p-3 rounded border border-neutral-100 dark:border-neutral-800">
-                      {queryResult.direct_answer}
-                    </div>
-
-                    <div className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1">
-                      <p className="font-semibold text-neutral-700 dark:text-neutral-300">Synthesized Summary:</p>
-                      <p className="whitespace-pre-line">{queryResult.reasoning_summary}</p>
-                    </div>
-
-                    {queryResult.applicable_clauses.length > 0 && (
-                      <div className="pt-2">
-                        <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Governing Clauses:</span>
-                        <ul className="mt-1 space-y-1">
-                          {queryResult.applicable_clauses.map((clause, idx) => (
-                            <li key={idx} className="text-xs text-neutral-600 dark:text-neutral-400 flex items-start gap-1.5">
-                              <span className="text-emerald-500 font-bold">•</span>
-                              <span>{clause}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {queryResult.escalation_required && (
-                      <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded flex items-start gap-2">
-                        <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
-                        <div className="text-xs">
-                          <p className="font-semibold text-amber-800 dark:text-amber-200">Formal Human Escalation Required</p>
-                          <p className="text-amber-700 dark:text-amber-300 mt-0.5">{queryResult.escalation_reason || "This request involves an exception to standard operating guidelines."}</p>
+                          {queryResult.qwen_assisted ? (
+                            <Badge variant="outline" className="text-xs border-purple-300 bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300">
+                              Qwen Verified
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-xs border-neutral-300 text-neutral-700 dark:text-neutral-300">
+                              Evidence Engine
+                            </Badge>
+                          )}
+                          {queryResult.is_authoritative && (
+                            <Badge variant="outline" className="text-xs border-neutral-300 text-neutral-700 dark:text-neutral-300">
+                              Authoritative
+                            </Badge>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </Card>
-                </div>
 
-                {/* Right Side: Exact Citations */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
-                      <BookOpen className="w-3.5 h-3.5 text-neutral-500" />
-                      Exact Citations ({queryResult.citations.length})
-                    </h3>
+                      {isInsufficient && (
+                        <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded flex items-start gap-2.5">
+                          <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+                          <div className="text-xs text-amber-800 dark:text-amber-200 space-y-1">
+                            <p className="font-semibold">Safe Abstention Triggered</p>
+                            <p className="text-[11px] leading-relaxed">
+                              WorkSense strictly refrains from fabricating policy facts when no matching clause exists in the enterprise policy library. Please review the official catalog or consult your HRBP.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100 leading-relaxed bg-neutral-50 dark:bg-neutral-800/40 p-3.5 rounded border border-neutral-100 dark:border-neutral-800">
+                        {directAnswer}
+                      </div>
+
+                      <div className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1">
+                        <p className="font-semibold text-neutral-700 dark:text-neutral-300">Reasoning & Context Summary:</p>
+                        <p className="whitespace-pre-line">{reasoningSummary}</p>
+                      </div>
+
+                      {applicableClauses.length > 0 && (
+                        <div className="pt-2">
+                          <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Governing Clauses & Conditions:</span>
+                          <ul className="mt-1.5 space-y-1">
+                            {applicableClauses.map((clause, idx) => (
+                              <li key={idx} className="text-xs text-neutral-600 dark:text-neutral-400 flex items-start gap-1.5">
+                                <span className="text-emerald-500 font-bold">•</span>
+                                <span>{clause}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {queryResult.escalation_required && (
+                        <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded flex items-start gap-2">
+                          <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+                          <div className="text-xs">
+                            <p className="font-semibold text-amber-800 dark:text-amber-200">Formal Human Escalation Required</p>
+                            <p className="text-amber-700 dark:text-amber-300 mt-0.5">{queryResult.escalation_reason || "This request involves an exception to standard operating guidelines."}</p>
+                          </div>
+                        </div>
+                      )}
+                    </Card>
                   </div>
 
-                  {queryResult.citations.map((cite, idx) => (
-                    <Card key={idx} className="p-3.5 border-neutral-200 dark:border-neutral-800 space-y-2 text-xs">
-                      <div className="flex items-center justify-between">
-                        <Badge variant="outline" className="font-mono text-[10px]">
-                          {cite.policy_code} v{cite.version_number}
-                        </Badge>
-                        <span className="text-[10px] text-neutral-400">
-                          Pg. {cite.page_number} • Match: {Math.round(cite.relevance_score * 100)}%
-                        </span>
-                      </div>
-                      <div className="font-semibold text-neutral-800 dark:text-neutral-200">
-                        {cite.section_heading}
-                      </div>
-                      <div className="text-[11px] text-neutral-600 dark:text-neutral-400 italic bg-neutral-50 dark:bg-neutral-800/30 p-2 rounded border border-neutral-100 dark:border-neutral-800">
-                        &ldquo;{cite.verbatim_quote}&rdquo;
-                      </div>
-                    </Card>
-                  ))}
+                  {/* Right Side: Exact Citations */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-neutral-500" />
+                        Exact Citations ({citations.length})
+                      </h3>
+                    </div>
+
+                    {citations.length === 0 ? (
+                      <Card className="p-6 text-center text-xs text-neutral-500 border-dashed border-neutral-300 dark:border-neutral-700">
+                        No grounding policy citations retrieved.
+                      </Card>
+                    ) : (
+                      citations.map((cite, idx) => {
+                        const quote = cite.verbatim_quote || cite.excerpt || "Authoritative excerpt";
+                        return (
+                          <Card key={idx} className="p-3.5 border-neutral-200 dark:border-neutral-800 space-y-2 text-xs">
+                            <div className="flex items-center justify-between">
+                              <Badge variant="outline" className="font-mono text-[10px]">
+                                {cite.policy_code} v{cite.version_number}
+                              </Badge>
+                              <span className="text-[10px] text-neutral-400">
+                                Pg. {cite.page_number} • Match: {Math.round((cite.relevance_score || 1.0) * 100)}%
+                              </span>
+                            </div>
+                            <div className="font-semibold text-neutral-800 dark:text-neutral-200">
+                              {cite.section_heading}
+                            </div>
+                            <div className="text-[11px] text-neutral-600 dark:text-neutral-400 italic bg-neutral-50 dark:bg-neutral-800/30 p-2 rounded border border-neutral-100 dark:border-neutral-800 leading-relaxed">
+                              &ldquo;{quote}&rdquo;
+                            </div>
+                          </Card>
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         )}
 

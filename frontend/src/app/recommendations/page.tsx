@@ -75,11 +75,13 @@ export default function RecommendationsWorkflowPage() {
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewingRec) return;
+    const rationale = reviewNotes.trim() || `Human decision recorded: ${reviewDecision} based on verified evidence review.`;
     setIsSubmittingReview(true);
     try {
       await reviewRecommendationApi(reviewingRec.id, {
         decision: reviewDecision,
-        notes: reviewNotes || `Reviewed and ${reviewDecision} by authenticated operator.`,
+        reasoning: rationale,
+        notes: rationale,
       });
       setReviewingRec(null);
       setReviewNotes("");
@@ -525,9 +527,12 @@ export default function RecommendationsWorkflowPage() {
               <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
-                    EnterPro Dispatch Acknowledged
-                  </h3>
+                  <div>
+                    <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
+                      EnterPro Simulated Dispatch Acknowledged
+                    </h3>
+                    <span className="text-[10px] text-purple-600 font-medium">Governed Enterprise Workflow Simulation</span>
+                  </div>
                 </div>
                 <button
                   onClick={() => {

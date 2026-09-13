@@ -33,6 +33,20 @@ def list_recommendations(
     )
 
 
+@router.get("/notifications", response_model=List[NotificationResponse], summary="List in-app notifications (alias)")
+@router.get("/notifications/my", response_model=List[NotificationResponse], summary="List in-app notifications")
+def list_my_notifications(
+    ctx: AccessContext = Depends(get_current_access_context),
+):
+    """Lists in-app notifications for the authenticated user and their active role."""
+    org_id = ctx.active_organization.id if ctx.active_organization else "50000000-0000-0000-0000-000000000001"
+    return recommendation_service.list_notifications(
+        organization_id=org_id,
+        recipient_id=ctx.user.id,
+        user_roles=ctx.active_roles,
+    )
+
+
 @router.get("/{recommendation_id}", response_model=CanonicalRecommendationResponse, summary="Get single recommendation")
 def get_recommendation(
     recommendation_id: str,
@@ -68,16 +82,4 @@ def dispatch_recommendation_to_enterpro(
     return recommendation_service.dispatch_to_enterpro(
         recommendation_id=recommendation_id,
         dispatched_by_id=ctx.user.id,
-    )
-
-
-@router.get("/notifications/my", response_model=List[NotificationResponse], summary="List in-app notifications")
-def list_my_notifications(
-    ctx: AccessContext = Depends(get_current_access_context),
-):
-    """Lists in-app notifications for the authenticated user."""
-    org_id = ctx.active_organization.id if ctx.active_organization else "50000000-0000-0000-0000-000000000001"
-    return recommendation_service.list_notifications(
-        organization_id=org_id,
-        recipient_id=ctx.user.id,
     )
