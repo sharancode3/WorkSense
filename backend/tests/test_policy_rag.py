@@ -124,3 +124,45 @@ def test_policy_upload_validation_and_chunking():
     assert upload_res["title"] == "Corporate Travel & Expense Policy"
     assert upload_res["extracted_chunks_count"] >= 2
     assert upload_res["ocr_required"] is False
+
+
+def test_list_policy_chunks():
+    """Verifies that pre-indexed chunks endpoint returns transparent chunks."""
+    token = _get_token_for("employee@worksense.local")
+    resp = client.get("/api/v1/policies/chunks", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 200
+    chunks = resp.json()
+    assert len(chunks) >= 5
+    assert any(c["policy_code"] == "POL-REM-01" for c in chunks)
+    assert any(c["policy_code"] == "POL-PROB-01" for c in chunks)
+    assert any(c["policy_code"] == "POL-BEN-01" for c in chunks)
+
+    # Verify chunk properties
+    first = chunks[0]
+    assert "chunk_text" in first
+    assert "section_heading" in first
+    assert "version_number" in first
+
+
+def test_can_new_hire_work_remotely_query():
+    """Verifies canonical query 'Can a new hire work remotely from day 1?' is grounded in POL-REM-01."""
+    token = _get_token_for("employee@worksense.local")
+    payload = {"query_text": "Can a new hire work remotely from day 1?"}
+    resp = client.post("/api/v1/policies/query", json=payload, headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["confidence_state"] == "supported"
+    assert len(data["citations"]) > 0
+    assert data["citations"][0]["policy_code"] == "POL-REM-01"
+    assert "probation" in data["answer_text"].lower() or "probationary" in data["answer_text"].lower()
+
+
+def test_system_version_endpoint():
+    """Verifies that /api/v1/version returns deployment metadata."""
+    resp = client.get("/api/v1/version")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["app_version"] == "1.0.0"
+    assert "git_commit" in data
+    assert "schema_version" in data
+

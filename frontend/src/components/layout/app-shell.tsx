@@ -105,7 +105,7 @@ export function AppShell({ children }: AppShellProps) {
           <div className="flex-1 flex flex-col min-w-0">
             <TopBar onOpenMobileMenu={() => setMobileNavOpen(true)} />
 
-            <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-[1440px] w-full mx-auto">
+            <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-[1440px] w-full max-w-full mx-auto overflow-x-clip">
               <ErrorBoundary>{children}</ErrorBoundary>
             </main>
 

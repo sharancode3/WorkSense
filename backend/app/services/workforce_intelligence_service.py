@@ -51,10 +51,10 @@ class WorkforceIntelligenceService:
             self._evaluate_employee_attrition_risk(emp.id)
             self._generate_performance_insights(emp.id)
 
-        # Seed internal mobility match for Marcus Chen -> AI Fraud Detection Team Lead
-        marcus = next((e for e in employees if "marcus" in e.full_name.lower()), None)
+        # Seed internal mobility match for Marcus Chen -> Principal Distributed Systems Architect
+        marcus = next((e for e in employees if "chen" in e.full_name.lower()), next((e for e in employees if "marcus" in e.full_name.lower()), None))
         roles = list(workforce_service._job_roles.values())
-        ai_lead_role = next((r for r in roles if "lead" in r.get("title", "").lower() or "staff" in r.get("title", "").lower()), roles[0] if roles else None)
+        ai_lead_role = next((r for r in roles if "principal" in r.get("title", "").lower() or "lead" in r.get("title", "").lower() or "staff" in r.get("title", "").lower()), roles[0] if roles else None)
 
         if marcus and ai_lead_role:
             match_id = str(uuid4())
@@ -65,8 +65,8 @@ class WorkforceIntelligenceService:
                 "employee_name": marcus.full_name,
                 "current_role_title": marcus.job_role_title or "Senior Infrastructure Engineer",
                 "target_job_role_id": ai_lead_role["id"],
-                "target_role_title": "AI Fraud Detection Infrastructure Lead",
-                "target_department_name": "Artificial Intelligence & Fraud Detection",
+                "target_role_title": "Principal Distributed Systems Architect",
+                "target_department_name": "Platform & Distributed Infrastructure",
                 "fit_score": 0.880,
                 "fit_percentage": 88,
                 "verified_skills_count": 6,
@@ -105,7 +105,7 @@ class WorkforceIntelligenceService:
 
         # Signal 1: Tenure Stagnation (Time in Band/Role without Mobility)
         # Golden demo: Marcus Chen has ~3.5 years tenure in band L5
-        if "marcus" in name.lower():
+        if "chen" in name.lower():
             factors.append(
                 RiskFactorDetail(
                     signal_name="Tenure in Band L5 without Mobility",

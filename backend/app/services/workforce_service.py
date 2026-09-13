@@ -1197,14 +1197,14 @@ class WorkforceService:
             skill_name=skill.get("name", "Unknown Skill"),
             skill_code=skill.get("code", "unknown"),
             skill_category=skill.get("category", "General"),
-            proficiency_level=ps["proficiency_level"],
-            confidence_band=ps["confidence_band"],
-            verification_source=ps["verification_source"],
+            proficiency_level=ps.get("proficiency_level", 3),
+            confidence_band=ps.get("confidence_band", "high" if ps.get("confidence_score", 0.5) >= 0.8 else "medium"),
+            verification_source=ps.get("verification_source", "interview_verified"),
             is_stale=ps.get("is_stale", False),
-            last_demonstrated_at=ps["last_demonstrated_at"],
+            last_demonstrated_at=ps.get("last_demonstrated_at") or datetime.now(timezone.utc).isoformat(),
             evidence_items=attached_evidence,
-            created_at=ps["created_at"],
-            updated_at=ps["updated_at"],
+            created_at=ps.get("created_at") or datetime.now(timezone.utc).isoformat(),
+            updated_at=ps.get("updated_at") or datetime.now(timezone.utc).isoformat(),
         )
 
     # ====================================================================

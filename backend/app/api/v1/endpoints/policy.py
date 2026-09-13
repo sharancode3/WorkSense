@@ -8,6 +8,7 @@ from app.schemas.auth import AccessContext
 from app.schemas.policy import (
     PolicyActionRequestResponse,
     PolicyActionSubmitRequest,
+    PolicyChunkResponse,
     PolicyQueryRequest,
     PolicyQueryResponse,
     PolicyUploadResponse,
@@ -16,6 +17,22 @@ from app.services.policy_rag_service import policy_rag_service
 from app.services.workforce_service import workforce_service
 
 router = APIRouter()
+
+
+@router.get("/chunks", response_model=List[PolicyChunkResponse], summary="List pre-indexed policy chunks")
+def list_policy_chunks(
+    policy_code: Optional[str] = None,
+    limit: int = 50,
+    ctx: AccessContext = Depends(get_current_access_context),
+):
+    """Lists pre-indexed policy chunks for transparent citation inspection."""
+    org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"
+    records = policy_rag_service.list_chunks(
+        organization_id=org_id,
+        policy_code=policy_code,
+        limit=limit,
+    )
+    return [PolicyChunkResponse(**r) for r in records]
 
 
 @router.get("", response_model=List[Dict[str, Any]], summary="List policy documents")

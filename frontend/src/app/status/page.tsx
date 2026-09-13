@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { fetchHealthStatus } from "@/lib/api/health";
 import { HealthResponse } from "@/types";
+import { env } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -115,7 +116,7 @@ export default function SystemStatusPage() {
           <p className="text-xs text-content-secondary">
             {healthData
               ? `Environment: ${healthData.environment} · Req ID: ${healthData.request_id?.slice(0, 8)}...`
-              : "Ensure backend is running locally on port 8000"}
+              : `Target: ${env.apiBaseUrl}`}
           </p>
         </div>
       </div>
@@ -198,10 +199,7 @@ export default function SystemStatusPage() {
         ) : (
           <div className="p-5 rounded-md bg-surface border border-boundary-subtle text-center space-y-3">
             <p className="text-xs text-content-secondary max-w-md mx-auto">
-              Backend service is currently unreachable. Start the FastAPI server using{" "}
-              <code className="font-mono bg-surface-secondary px-1.5 py-0.5 rounded text-[11px]">
-                python -m uvicorn app.main:app --port 8000
-              </code>
+              Backend service at <code className="font-mono bg-surface-secondary px-1.5 py-0.5 rounded text-[11px]">{env.apiBaseUrl}</code> is currently standby or spinning up. Free-tier cloud containers may take up to 45 seconds to wake up from idle.
             </p>
             <Button
               variant="secondary"

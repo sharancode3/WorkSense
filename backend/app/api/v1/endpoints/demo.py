@@ -129,7 +129,7 @@ def reset_demo_state() -> DemoResetResponse:
 def get_marcus_chen_golden_path() -> Dict[str, Any]:
     """Pre-computed narrative summary of Marcus Chen's journey from tenure stagnation to internal mobility."""
     employees = workforce_service.list_employees()
-    marcus = next((e for e in employees if "marcus" in e["full_name"].lower()), employees[0])
+    marcus = next((e for e in employees if "chen" in e["full_name"].lower()), next((e for e in employees if "marcus" in e["full_name"].lower()), employees[0]))
     marcus_id = marcus["id"]
 
     risk = workforce_intelligence_service.get_employee_attrition_risk(

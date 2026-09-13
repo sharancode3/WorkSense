@@ -43,7 +43,12 @@ class RecommendationService:
     def _seed_canonical_recommendations(self):
         """Seeds canonical cross-module recommendations for the Golden Demo story."""
         employees = [workforce_service._build_employee_response(e) for e in workforce_service._employees.values()]
-        marcus = next((e for e in employees if "marcus" in e.full_name.lower()), employees[0] if employees else None)
+        marcus = next((e for e in employees if "chen" in e.full_name.lower()), None)
+        if not marcus:
+            marcus = next((e for e in employees if getattr(e, "employee_code", "") == "EMP-10492"), None)
+        if not marcus:
+            marcus = next((e for e in employees if "marcus" in e.full_name.lower()), employees[0] if employees else None)
+
         elena = next((e for e in employees if "elena" in e.full_name.lower()), None)
         org_id = marcus.organization_id if marcus else "00000000-0000-0000-0000-000000000001"
 
@@ -58,11 +63,11 @@ class RecommendationService:
                 "subject_type": "employee",
                 "recommendation_type": "internal_mobility",
                 "source_module": "attrition_intel",
-                "title": "Strategic Internal Mobility: Transfer to AI Fraud Detection Lead",
+                "title": "Strategic Internal Mobility: Transfer to Principal Architect",
                 "summary": (
                     f"Mitigate 6-month attrition risk (72% index driven by 3.5 years tenure stagnation in band L5) by "
-                    f"transferring {marcus.full_name} to lead high-throughput streaming and inference infrastructure "
-                    f"for the urgent 90-day AI Fraud Detection Team initiative."
+                    f"transferring {marcus.full_name} to Principal Distributed Systems Architect role for the urgent "
+                    f"high-throughput streaming and inference infrastructure initiative."
                 ),
                 "proposed_action": {
                     "action_type": "internal_transfer",
@@ -99,13 +104,13 @@ class RecommendationService:
             "source_module": "onboarding",
             "title": "Onboarding Journey Activation & EnterPro IT Provisioning",
             "summary": (
-                "Elena Rostova has accepted the Staff Machine Learning Engineer offer (92% interview score). "
+                "Elena Rostova has accepted the Senior Distributed Systems Engineer offer (92% interview score). "
                 "The multi-brain onboarding journey is fully planned and validated by the Plan Quality Critic. "
                 "Ready for final dual human sign-off and EnterPro automated dispatch."
             ),
             "proposed_action": {
                 "action_type": "activate_onboarding",
-                "role_title": "Staff Machine Learning Engineer",
+                "role_title": "Senior Distributed Systems Engineer",
                 "hire_date": "2026-10-15",
                 "enterpro_scope": ["it_provisioning", "id_badge", "aws_cluster_access"],
             },

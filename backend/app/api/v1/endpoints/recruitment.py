@@ -393,7 +393,7 @@ async def get_my_applications(
     ctx: AccessContext = Depends(get_current_access_context),
 ):
     """Candidate Privacy Shield: Candidate can only view sanitized status of their applications."""
-    org_id = _require_org(ctx)
+    org_id = ctx.active_organization.id if ctx.active_organization else None
     return recruitment_service.get_candidate_facing_applications(
         org_id=org_id,
         profile_id=ctx.user.id,

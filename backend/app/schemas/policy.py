@@ -13,12 +13,16 @@ class PolicyChunkResponse(BaseModel):
     policy_code: str
     policy_version_id: str
     version_number: str
+    effective_date: Optional[str] = "2026-01-01"
+    organization_id: Optional[str] = None
     page_number: int
     section_heading: str
     chunk_text: str
     chunk_index: int
     token_count: int
-    access_classification: str
+    access_classification: str = "all_employees"
+    status: Optional[str] = "active"
+    created_at: Optional[Any] = None
 
 
 class PolicyCitation(BaseModel):

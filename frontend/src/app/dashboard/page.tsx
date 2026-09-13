@@ -46,7 +46,7 @@ export default function HRDecisionDashboardPage() {
 
   return (
     <ProtectedRoute allowedRoles={["hr", "manager", "leadership", "administrator"]}>
-      <div className="space-y-6 pb-12">
+      <div className="w-full max-w-full overflow-x-clip space-y-6 pb-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
           <div>
@@ -77,7 +77,7 @@ export default function HRDecisionDashboardPage() {
             <Link href="/recommendations">
               <Button variant="primary" size="sm" className="text-xs flex items-center gap-1.5">
                 <ArrowRight className="w-3.5 h-3.5" />
-                Action Queue ({dashboardData?.active_recommendations_count || 3})
+                Action Queue ({dashboardData?.active_recommendations_count ?? 0})
               </Button>
             </Link>
           </div>
@@ -285,7 +285,7 @@ export default function HRDecisionDashboardPage() {
                         <Link
                           key={idx}
                           href="/workforce/candidates"
-                          className="block p-1.5 -mx-1.5 rounded hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors group"
+                          className="block p-1.5 rounded hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors group"
                         >
                           <div className="flex items-center justify-between text-[11px] mb-1">
                             <span className="font-semibold text-neutral-800 dark:text-neutral-200 group-hover:text-brand-primary">

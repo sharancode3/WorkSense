@@ -42,3 +42,21 @@ async def check_readiness_alias(
     """Readiness probe alias."""
     request_id = getattr(request.state, "request_id", None)
     return await health_service.get_readiness(request_id=request_id)
+
+
+@router.get(
+    "/version",
+    summary="Application Version & Deployment Metadata",
+    description="Returns backend semantic version, commit hash, schema version, and runtime modes.",
+)
+def get_version():
+    """Version metadata endpoint."""
+    return {
+        "app_name": "WorkSense HR Intelligence Platform",
+        "app_version": "1.0.0",
+        "git_commit": "8b353cd",
+        "schema_version": "20260913000001",
+        "environment": "production",
+        "qwen_gateway_mode": "local_with_deterministic_fallback",
+        "enterpro_orchestrator": "governed_execution_simulated",
+    }

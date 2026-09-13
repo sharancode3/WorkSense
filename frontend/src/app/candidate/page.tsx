@@ -60,42 +60,56 @@ export default function CandidatePortalPage() {
         </div>
 
         {/* Primary Priority / Next Action Card */}
-        <div className="bg-brand-primary/5 border border-brand-primary/30 rounded-xl p-5 sm:p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary font-mono">
-                Current Next Action
-              </span>
-              <h2 className="text-base sm:text-lg font-bold text-content-primary">
-                Technical Systems Architecture Evaluation Scheduled
-              </h2>
-              <p className="text-xs text-content-secondary">
-                Your technical discussion with the engineering team is confirmed. Please review the role guidelines below.
-              </p>
+        {applications.length > 0 ? (
+          <div className="bg-brand-primary/5 border border-brand-primary/30 rounded-xl p-5 sm:p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary font-mono">
+                  Current Next Action
+                </span>
+                <h2 className="text-base sm:text-lg font-bold text-content-primary">
+                  {applications[0].job_title}: {applications[0].status || "Evaluation in Progress"}
+                </h2>
+                <p className="text-xs text-content-secondary">
+                  Your application for {applications[0].job_title} ({applications[0].location}) is progressing through the evidence evaluation pipeline.
+                </p>
+              </div>
+              <Link href="/candidate#interview-guide">
+                <Button size="sm" className="whitespace-nowrap gap-1.5">
+                  <span>View Guidelines</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
             </div>
-            <Link href="/candidate#interview-guide">
-              <Button size="sm" className="whitespace-nowrap gap-1.5">
-                <span>View Guidelines</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-brand-primary/15 text-xs text-content-secondary">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-brand-primary" />
-              <span>Next Round: Technical 1:1</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-brand-primary" />
-              <span>Format: 45 Min Systems Discussion</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-brand-primary" />
-              <span>Resume On File: Verified</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-brand-primary/15 text-xs text-content-secondary">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-brand-primary" />
+                <span>Next Round: Technical Systems Discussion</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-brand-primary" />
+                <span>Format: 45 Min Architecture Review</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-brand-primary" />
+                <span>Resume Evidence: Verified</span>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-surface-secondary/60 border border-boundary-subtle rounded-xl p-5 sm:p-6 space-y-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-content-muted font-mono">
+              Application Status
+            </span>
+            <h2 className="text-base sm:text-lg font-bold text-content-primary">
+              No Active Requisitions in Progress
+            </h2>
+            <p className="text-xs text-content-secondary">
+              You are signed in as an external candidate. Submissions made via corporate career portals will appear here once registered.
+            </p>
+          </div>
+        )}
 
         {/* Applications Progress */}
         <div className="space-y-3">
@@ -132,7 +146,7 @@ export default function CandidatePortalPage() {
                     <div className="flex items-center gap-2">
                       <Badge variant="success" size="sm" className="gap-1 font-semibold">
                         <CheckCircle2 className="h-3 w-3" />
-                        <span>In Review</span>
+                        <span>{app.status || "In Review"}</span>
                       </Badge>
                     </div>
                   </div>
