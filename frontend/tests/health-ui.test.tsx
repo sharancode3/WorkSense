@@ -15,49 +15,35 @@ describe("OverviewPage & SystemStatusPage Health Integration", () => {
     vi.clearAllMocks();
   });
 
-  it("renders healthy backend states on OverviewPage when API succeeds", async () => {
-    vi.mocked(healthApi.fetchHealthStatus).mockResolvedValue({
-      status: "healthy",
-      timestamp: "2026-09-12T19:00:00Z",
-      environment: "test",
-      version: "1.0.0",
-      components: {
-        database: { status: "not configured", detail: "Supabase not configured" },
-        storage: { status: "not configured", detail: "Storage not configured" },
-        qwen_ai_gateway: { status: "not configured", detail: "Gateway not configured" },
-        enterpro_orchestrator: { status: "not configured", detail: "EnterPro not configured" },
-      },
-      request_id: "test-req-id-12345",
-    });
-
+  it("renders evidence-first value propositions on PublicOverviewPage", () => {
     render(
       <ToastProvider>
         <OverviewPage />
       </ToastProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("WorkSense Platform Foundation")).toBeInTheDocument();
-      expect(screen.getByText("Connected")).toBeInTheDocument();
-      expect(screen.getByText("FastAPI v1.0.0")).toBeInTheDocument();
-    });
+    expect(screen.getByText(/Evidence-First Workforce Decision Intelligence/i)).toBeInTheDocument();
+    expect(screen.getByText(/Understand your workforce/i)).toBeInTheDocument();
+    expect(screen.getByText(/The WorkSense Operating Loop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Unified Workforce Capabilities/i)).toBeInTheDocument();
   });
 
-  it("renders calm standby state on OverviewPage when backend is unreachable", async () => {
+  it("renders calm standby state on SystemStatusPage when backend is unreachable", async () => {
     vi.mocked(healthApi.fetchHealthStatus).mockRejectedValue(
       new Error("Failed to connect to backend service")
     );
 
     render(
       <ToastProvider>
-        <OverviewPage />
+        <SystemStatusPage />
       </ToastProvider>
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Standby")).toBeInTheDocument();
-      expect(screen.getByText(/Backend Service Standby:/i)).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /check connection/i })).toBeInTheDocument();
+      expect(screen.getByText("System & Subsystem Status")).toBeInTheDocument();
+      expect(screen.getByText(/Standby \/ Unreachable/i)).toBeInTheDocument();
+      expect(screen.getByText("FastAPI Standby")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /retry connection/i })).toBeInTheDocument();
     });
   });
 

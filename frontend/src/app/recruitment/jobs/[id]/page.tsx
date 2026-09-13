@@ -14,7 +14,7 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,36 +51,32 @@ export default function JobDetailPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   if (error || !job) {
     return (
-      <AppShell>
-        <div className="max-w-4xl mx-auto space-y-4">
-          <Link href="/recruitment/jobs">
-            <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Requisitions
-            </Button>
-          </Link>
-          <InlineAlert variant="danger" title="Job Opening Not Found">
-            {error || "Unable to find the specified job requisition."}
-          </InlineAlert>
-        </div>
-      </AppShell>
+      <div className="max-w-4xl mx-auto space-y-4">
+        <Link href="/recruitment/jobs">
+          <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Requisitions
+          </Button>
+        </Link>
+        <InlineAlert variant="danger" title="Job Opening Not Found">
+          {error || "Unable to find the specified job requisition."}
+        </InlineAlert>
+      </div>
     );
   }
 
   const req = job.active_requirement;
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "manager", "leadership", "administrator"]}>
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center gap-2">
           <Link href="/recruitment/jobs">
@@ -289,6 +285,6 @@ export default function JobDetailPage() {
           </div>
         </Card>
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

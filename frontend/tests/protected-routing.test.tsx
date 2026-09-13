@@ -9,6 +9,7 @@ vi.mock("next/navigation", () => ({
     push: vi.fn(),
     replace: mockReplace,
   }),
+  usePathname: () => "/",
 }));
 
 const mockUseAuth = vi.fn();

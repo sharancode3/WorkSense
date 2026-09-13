@@ -14,7 +14,7 @@ import {
   Users,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -106,11 +106,11 @@ export default function HrOnboardingPage() {
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["hr", "recruiter", "administrator"]}>
       <div className="space-y-6">
         <PageHeader
           title="Adaptive Onboarding Command Center"
-          description="Bounded multi-brain onboarding operating system with dual human review gates and EnterPro workflow handoff."
+          description="Adaptive onboarding management with dual human review gates and EnterPro workflow orchestration."
           actions={
             canManage ? (
               <Link href="/hr/onboarding/new">
@@ -450,6 +450,6 @@ export default function HrOnboardingPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

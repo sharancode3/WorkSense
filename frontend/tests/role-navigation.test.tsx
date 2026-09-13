@@ -23,7 +23,7 @@ function renderSidebar() {
 }
 
 describe("Role-Based Navigation Filtering", () => {
-  it("shows only public foundation items when user is unauthenticated", () => {
+  it("shows clean entry state with Sign In when user is unauthenticated", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
       user: null,
@@ -35,17 +35,18 @@ describe("Role-Based Navigation Filtering", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Platform Overview")).toBeInTheDocument();
-    expect(screen.getByText("System Status")).toBeInTheDocument();
-    expect(screen.getByText("Design System")).toBeInTheDocument();
+    expect(screen.getByText("Work")).toBeInTheDocument();
+    expect(screen.getByText("Sense")).toBeInTheDocument();
+    expect(screen.getByText("Sign In")).toBeInTheDocument();
 
-    // Privileged role destinations should NOT appear
-    expect(screen.queryByText("Access Management")).not.toBeInTheDocument();
+    // Privileged role workspaces should NOT appear
+    expect(screen.queryByText("Platform Administration")).not.toBeInTheDocument();
+    expect(screen.queryByText("Access & Governance")).not.toBeInTheDocument();
     expect(screen.queryByText("Talent Acquisition")).not.toBeInTheDocument();
-    expect(screen.queryByText("Executive Intelligence")).not.toBeInTheDocument();
+    expect(screen.queryByText("Candidate Journey")).not.toBeInTheDocument();
   });
 
-  it("shows candidate portal destination when candidate is authenticated", () => {
+  it("shows candidate workspace destination when candidate is authenticated", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "1", full_name: "Candidate User", email: "cand@test.com" },
@@ -57,12 +58,14 @@ describe("Role-Based Navigation Filtering", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Candidate Portal")).toBeInTheDocument();
-    expect(screen.queryByText("Access Management")).not.toBeInTheDocument();
-    expect(screen.queryByText("Talent Acquisition")).not.toBeInTheDocument();
+    expect(screen.getByText("Candidate Journey")).toBeInTheDocument();
+    expect(screen.getByText("Application Overview")).toBeInTheDocument();
+    expect(screen.getByText("My Onboarding")).toBeInTheDocument();
+    expect(screen.queryByText("Platform Administration")).not.toBeInTheDocument();
+    expect(screen.queryByText("Access & Governance")).not.toBeInTheDocument();
   });
 
-  it("shows Access Management when administrator is authenticated", () => {
+  it("shows Platform Administration workspace when administrator is authenticated", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "1", full_name: "Admin User", email: "admin@test.com" },
@@ -74,7 +77,8 @@ describe("Role-Based Navigation Filtering", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Access Management")).toBeInTheDocument();
-    expect(screen.queryByText("Candidate Portal")).not.toBeInTheDocument();
+    expect(screen.getByText("Platform Administration")).toBeInTheDocument();
+    expect(screen.getByText("Access & Governance")).toBeInTheDocument();
+    expect(screen.queryByText("Candidate Journey")).not.toBeInTheDocument();
   });
 });

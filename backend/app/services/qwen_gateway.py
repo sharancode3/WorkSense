@@ -140,7 +140,8 @@ class QwenGateway:
         }
 
         try:
-            async with httpx.AsyncClient(timeout=self._timeout) as client:
+            timeout_cfg = httpx.Timeout(self._timeout, connect=2.0)
+            async with httpx.AsyncClient(timeout=timeout_cfg) as client:
                 res = await client.post(url, json=payload)
                 if res.status_code != 200:
                     raise QwenUnavailableError(f"Ollama returned HTTP {res.status_code}: {res.text}")

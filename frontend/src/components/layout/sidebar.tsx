@@ -26,7 +26,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { NAVIGATION_GROUPS } from "@/config/navigation";
+import { getNavigationForUser } from "@/config/navigation";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utilities/cn";
@@ -59,7 +59,7 @@ export interface SidebarProps {
 
 export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: SidebarProps) {
   const pathname = usePathname();
-  const { isAuthenticated, user, roles, activeOrg, hasCapability, logout } = useAuth();
+  const { isAuthenticated, user, roles, activeOrg, logout } = useAuth();
 
   return (
     <aside
@@ -99,25 +99,10 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: Si
         )}
       </div>
 
-      {/* 2. Navigation Links */}
+      {/* 2. Navigation Links (Derived from Authenticated Role) */}
       <nav aria-label="Main Navigation" className="flex-1 px-3 py-4 space-y-4 overflow-y-auto">
-        {NAVIGATION_GROUPS.map((group) => {
-          // Filter items based on authentication & granted capability
-          const visibleItems = group.items.filter((item) => {
-            if (item.allowedRoles && item.allowedRoles.length > 0) {
-              if (!isAuthenticated) return false;
-              return roles.some((r) => item.allowedRoles?.includes(r));
-            }
-            if (item.requiredCapability) {
-              return isAuthenticated && hasCapability(item.requiredCapability);
-            }
-            if (item.id === "my-access") {
-              return isAuthenticated;
-            }
-            return true;
-          });
-
-          if (visibleItems.length === 0) return null;
+        {getNavigationForUser(roles).map((group) => {
+          if (!group.items || group.items.length === 0) return null;
 
           return (
             <div key={group.id} className="space-y-1">
@@ -126,7 +111,7 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: Si
                   {group.title}
                 </div>
               )}
-              {visibleItems.map((item) => {
+              {group.items.map((item) => {
                 const Icon = ICON_MAP[item.iconName] || LayoutDashboard;
                 const isActive = pathname === item.href;
 
@@ -138,7 +123,7 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse, className }: Si
                       "flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-colors",
                       isCollapsed ? "justify-center px-2" : "",
                       isActive
-                        ? "bg-brand-primary text-white font-semibold"
+                        ? "bg-brand-primary text-white font-semibold shadow-sm"
                         : "text-content-secondary hover:text-content-primary hover:bg-surface-secondary"
                     )}
                     title={item.title}

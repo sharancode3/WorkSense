@@ -12,7 +12,7 @@ import {
   HelpCircle,
   Shield,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -143,34 +143,30 @@ export default function InterviewKitPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   if (error || !kit) {
     return (
-      <AppShell>
-        <div className="max-w-4xl mx-auto space-y-4">
-          <Link href="/recruitment/jobs">
-            <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Recruitment
-            </Button>
-          </Link>
-          <InlineAlert variant="danger" title="Interview Kit Not Found">
-            {error || "Unable to load the requested interview kit."}
-          </InlineAlert>
-        </div>
-      </AppShell>
+      <div className="max-w-4xl mx-auto space-y-4">
+        <Link href="/recruitment/jobs">
+          <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Recruitment
+          </Button>
+        </Link>
+        <InlineAlert variant="danger" title="Interview Kit Not Found">
+          {error || "Unable to load the requested interview kit."}
+        </InlineAlert>
+      </div>
     );
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "manager", "administrator"]}>
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
@@ -474,6 +470,6 @@ export default function InterviewKitPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

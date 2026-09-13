@@ -42,7 +42,7 @@ describe("Adaptive Onboarding Navigation Role Guarding", () => {
     expect(screen.queryByText("My Onboarding Journey")).not.toBeInTheDocument();
   });
 
-  it("shows all onboarding controls for HR Specialist", () => {
+  it("shows adaptive onboarding workspace for HR Specialist", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "user-hr", full_name: "Sarah Jenkins", email: "hr@worksense.local" },
@@ -54,15 +54,13 @@ describe("Adaptive Onboarding Navigation Role Guarding", () => {
 
     renderSidebar();
 
+    expect(screen.getByText("Workforce Operations")).toBeInTheDocument();
     expect(screen.getByText("Adaptive Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("HR Onboarding Hub")).toBeInTheDocument();
-    expect(screen.getByText("Initiate Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("My Onboarding Journey")).toBeInTheDocument();
-    // Manager Onboarding is strictly for manager / leadership / administrator
-    expect(screen.queryByText("Manager Onboarding")).not.toBeInTheDocument();
+    // Team Onboarding is strictly for manager workspace
+    expect(screen.queryByText("Team Onboarding")).not.toBeInTheDocument();
   });
 
-  it("shows manager onboarding workspace for Engineering Manager", () => {
+  it("shows team onboarding workspace for Engineering Manager", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "user-mgr", full_name: "Marcus Vance", email: "manager@worksense.local" },
@@ -74,15 +72,14 @@ describe("Adaptive Onboarding Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Adaptive Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("Manager Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("My Onboarding Journey")).toBeInTheDocument();
-    // Manager cannot initiate onboarding or access HR hub
-    expect(screen.queryByText("HR Onboarding Hub")).not.toBeInTheDocument();
-    expect(screen.queryByText("Initiate Onboarding")).not.toBeInTheDocument();
+    expect(screen.getByText("Team Leadership")).toBeInTheDocument();
+    expect(screen.getByText("Team Onboarding")).toBeInTheDocument();
+    // Manager cannot access HR Adaptive Onboarding or Candidate Journey
+    expect(screen.queryByText("Adaptive Onboarding")).not.toBeInTheDocument();
+    expect(screen.queryByText("Candidate Journey")).not.toBeInTheDocument();
   });
 
-  it("shows personal onboarding journey for Employee / Candidate", () => {
+  it("shows personal onboarding track for Employee", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "user-emp", full_name: "Elena Rostova", email: "employee@worksense.local" },
@@ -94,14 +91,13 @@ describe("Adaptive Onboarding Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Adaptive Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("My Onboarding Journey")).toBeInTheDocument();
-    expect(screen.queryByText("HR Onboarding Hub")).not.toBeInTheDocument();
-    expect(screen.queryByText("Initiate Onboarding")).not.toBeInTheDocument();
-    expect(screen.queryByText("Manager Onboarding")).not.toBeInTheDocument();
+    expect(screen.getByText("Employee Workplace")).toBeInTheDocument();
+    expect(screen.getByText("My Onboarding Track")).toBeInTheDocument();
+    expect(screen.queryByText("Adaptive Onboarding")).not.toBeInTheDocument();
+    expect(screen.queryByText("Team Onboarding")).not.toBeInTheDocument();
   });
 
-  it("shows all onboarding controls for Administrator", () => {
+  it("shows platform governance controls for Administrator", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "user-admin", full_name: "Admin User", email: "admin@worksense.local" },
@@ -113,10 +109,9 @@ describe("Adaptive Onboarding Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Adaptive Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("HR Onboarding Hub")).toBeInTheDocument();
-    expect(screen.getByText("Initiate Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("Manager Onboarding")).toBeInTheDocument();
-    expect(screen.getByText("My Onboarding Journey")).toBeInTheDocument();
+    expect(screen.getByText("Platform Administration")).toBeInTheDocument();
+    expect(screen.getByText("Access & Governance")).toBeInTheDocument();
+    expect(screen.getByText("System & Model Health")).toBeInTheDocument();
+    expect(screen.queryByText("Candidate Journey")).not.toBeInTheDocument();
   });
 });

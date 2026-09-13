@@ -53,13 +53,12 @@ describe("Workforce Foundation Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Candidate Portal")).toBeInTheDocument();
-    // Candidate can see Skill Taxonomy & Graph
-    expect(screen.getByText("Skill Taxonomy & Graph")).toBeInTheDocument();
-    // But cannot see departments, candidates, employees, or data quality
+    expect(screen.getByText("Candidate Journey")).toBeInTheDocument();
+    expect(screen.getByText("Application Overview")).toBeInTheDocument();
+    expect(screen.getByText("My Onboarding")).toBeInTheDocument();
+    // But cannot see operations, departments, or data quality
+    expect(screen.queryByText("Workforce Operations")).not.toBeInTheDocument();
     expect(screen.queryByText("Departments & Org Tree")).not.toBeInTheDocument();
-    expect(screen.queryByText("Candidate Profiles & Twins")).not.toBeInTheDocument();
-    expect(screen.queryByText("Employee Directory & Twins")).not.toBeInTheDocument();
     expect(screen.queryByText("Data Quality Engine")).not.toBeInTheDocument();
   });
 
@@ -75,19 +74,18 @@ describe("Workforce Foundation Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Workforce Foundation")).toBeInTheDocument();
-    expect(screen.getByText("Departments & Org Tree")).toBeInTheDocument();
-    expect(screen.getByText("Job Role Catalog")).toBeInTheDocument();
-    expect(screen.getByText("Skill Taxonomy & Graph")).toBeInTheDocument();
-    expect(screen.getByText("Employee Directory & Twins")).toBeInTheDocument();
-    expect(screen.getByText("Policy Documents")).toBeInTheDocument();
+    expect(screen.getByText("Employee Workplace")).toBeInTheDocument();
+    expect(screen.getByText("My Workplace Overview")).toBeInTheDocument();
+    expect(screen.getByText("My Onboarding Track")).toBeInTheDocument();
+    expect(screen.getByText("Policy Assistant")).toBeInTheDocument();
 
     // HR/Recruiter/Admin exclusive items should NOT appear
-    expect(screen.queryByText("Candidate Profiles & Twins")).not.toBeInTheDocument();
+    expect(screen.queryByText("Candidate Profiles")).not.toBeInTheDocument();
     expect(screen.queryByText("Data Quality Engine")).not.toBeInTheDocument();
+    expect(screen.queryByText("Workforce Operations")).not.toBeInTheDocument();
   });
 
-  it("shows recruiter authorized items (Candidates, Job Roles, Skills, Employees)", () => {
+  it("shows recruiter authorized items (Candidates, Job Requisitions, Skill Taxonomy)", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "rec-1", full_name: "Rachel Zane", email: "recruiter@worksense.local" },
@@ -99,17 +97,18 @@ describe("Workforce Foundation Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Workforce Foundation")).toBeInTheDocument();
-    expect(screen.getByText("Job Role Catalog")).toBeInTheDocument();
-    expect(screen.getByText("Skill Taxonomy & Graph")).toBeInTheDocument();
-    expect(screen.getByText("Candidate Profiles & Twins")).toBeInTheDocument();
-    expect(screen.getByText("Employee Directory & Twins")).toBeInTheDocument();
+    expect(screen.getByText("Talent Acquisition")).toBeInTheDocument();
+    expect(screen.getByText("Talent Overview")).toBeInTheDocument();
+    expect(screen.getByText("Job Requisitions")).toBeInTheDocument();
+    expect(screen.getByText("Candidate Profiles")).toBeInTheDocument();
+    expect(screen.getByText("Skill Taxonomy")).toBeInTheDocument();
 
-    // Recruiter cannot see data-quality
+    // Recruiter cannot see data-quality or workforce operations hub
     expect(screen.queryByText("Data Quality Engine")).not.toBeInTheDocument();
+    expect(screen.queryByText("Operations Hub")).not.toBeInTheDocument();
   });
 
-  it("shows all workforce foundation modules to HR and Administrators", () => {
+  it("shows all workforce foundation modules to HR", () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       user: { id: "hr-1", full_name: "Hanna Reid", email: "hr@worksense.local" },
@@ -121,13 +120,14 @@ describe("Workforce Foundation Navigation Role Guarding", () => {
 
     renderSidebar();
 
-    expect(screen.getByText("Workforce Foundation")).toBeInTheDocument();
+    expect(screen.getByText("Workforce Operations")).toBeInTheDocument();
+    expect(screen.getByText("Workforce Data & Taxonomy")).toBeInTheDocument();
     expect(screen.getByText("Departments & Org Tree")).toBeInTheDocument();
     expect(screen.getByText("Job Role Catalog")).toBeInTheDocument();
-    expect(screen.getByText("Skill Taxonomy & Graph")).toBeInTheDocument();
-    expect(screen.getByText("Candidate Profiles & Twins")).toBeInTheDocument();
-    expect(screen.getByText("Employee Directory & Twins")).toBeInTheDocument();
-    expect(screen.getByText("Policy Documents")).toBeInTheDocument();
+    expect(screen.getByText("Skill Graph")).toBeInTheDocument();
+    expect(screen.getByText("Candidate Profiles")).toBeInTheDocument();
+    expect(screen.getByText("People & Twins")).toBeInTheDocument();
+    expect(screen.getByText("Policy Reasoning")).toBeInTheDocument();
     expect(screen.getByText("Data Quality Engine")).toBeInTheDocument();
   });
 });

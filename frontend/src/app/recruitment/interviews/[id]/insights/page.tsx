@@ -16,7 +16,7 @@ import {
   FileText,
   Scale,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -134,7 +134,7 @@ export default function InterviewInsightsPage() {
       setDecisionRecorded(true);
       setActionMessage({
         type: "success",
-        text: `Human decision "${decisionType.toUpperCase()}" committed to enterprise immutable audit ledger.`,
+        text: `Human decision "${decisionType.toUpperCase()}" committed to enterprise recorded decision history.`,
       });
     } catch (err) {
       setActionMessage({
@@ -148,34 +148,30 @@ export default function InterviewInsightsPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   if (error || !session || !kit) {
     return (
-      <AppShell>
-        <div className="max-w-4xl mx-auto space-y-4">
-          <Link href="/recruitment/jobs">
-            <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Recruitment
-            </Button>
-          </Link>
-          <InlineAlert variant="danger" title="Session Not Found">
-            {error || "Unable to load interview session."}
-          </InlineAlert>
-        </div>
-      </AppShell>
+      <div className="max-w-4xl mx-auto space-y-4">
+        <Link href="/recruitment/jobs">
+          <Button variant="ghost" size="sm" className="gap-1 text-content-muted">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Recruitment
+          </Button>
+        </Link>
+        <InlineAlert variant="danger" title="Session Not Found">
+          {error || "Unable to load interview session."}
+        </InlineAlert>
+      </div>
     );
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "manager", "administrator"]}>
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
@@ -567,7 +563,7 @@ export default function InterviewInsightsPage() {
                     className="gap-1.5"
                   >
                     <UserCheck className="h-4 w-4" />
-                    {isSubmittingDecision ? "Committing to Ledger..." : "Commit Decision to Immutable Ledger"}
+                    {isSubmittingDecision ? "Committing to History..." : "Commit Decision to Recorded History"}
                   </Button>
                 </div>
               </form>
@@ -575,6 +571,6 @@ export default function InterviewInsightsPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

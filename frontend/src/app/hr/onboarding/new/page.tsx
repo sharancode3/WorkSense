@@ -11,7 +11,7 @@ import {
   UserCheck,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -103,7 +103,7 @@ export default function NewOnboardingPage() {
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["hr", "administrator"]}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-2 text-xs text-content-muted">
           <Link href="/hr/onboarding" className="hover:text-content-primary flex items-center gap-1">
@@ -136,7 +136,7 @@ export default function NewOnboardingPage() {
                 <span>Candidate & Role Continuity</span>
               </div>
               <Badge variant="outline" className="text-[11px] font-mono">
-                Stage 4 Offer Continuity Gate
+                Recruitment Continuity Gate
               </Badge>
             </div>
 
@@ -147,7 +147,7 @@ export default function NewOnboardingPage() {
                   Elena Rostova (candidate@worksense.local)
                 </div>
                 <p className="text-[11px] text-content-muted">
-                  Offered candidate from Stage 4 recruitment intelligence pipeline.
+                  Offered candidate from calibrated recruitment pipeline.
                 </p>
               </div>
 
@@ -311,6 +311,6 @@ export default function NewOnboardingPage() {
           </div>
         </form>
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

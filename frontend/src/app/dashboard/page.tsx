@@ -4,29 +4,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Activity,
-  AlertCircle,
-  AlertTriangle,
   ArrowRight,
-  BarChart3,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  ExternalLink,
   Flame,
-  LayoutDashboard,
   RefreshCw,
-  Search,
-  Shield,
   ShieldAlert,
-  Sparkles,
-  TrendingDown,
-  TrendingUp,
-  UserCheck,
   UserPlus,
   Users,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -59,24 +45,21 @@ export default function HRDecisionDashboardPage() {
   }, [loadDashboard]);
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["hr", "manager", "leadership", "administrator"]}>
       <div className="space-y-6 pb-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                HR Executive Decision Dashboard
+                Workforce Decision Dashboard
               </h1>
-              <Badge variant="outline" className="border-neutral-300 dark:border-neutral-700 text-xs">
-                Stage 8
-              </Badge>
               <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-xs">
-                Dynamic Operational State
+                Live Enterprise Signals
               </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-              Live operational metrics computed directly from underlying Recruitment, Attendance, Onboarding, and Risk ledgers. Zero static demo values.
+              Consolidated workforce intelligence from recruitment, attendance, onboarding, and skills ledgers.
             </p>
           </div>
 
@@ -411,6 +394,6 @@ export default function HRDecisionDashboardPage() {
           </div>
         ) : null}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

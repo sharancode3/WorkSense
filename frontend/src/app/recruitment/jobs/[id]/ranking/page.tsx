@@ -20,7 +20,7 @@ import {
   X,
   BrainCircuit,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -179,16 +179,14 @@ export default function CandidateRankingPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "manager", "leadership", "administrator"]}>
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
@@ -807,6 +805,6 @@ export default function CandidateRankingPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

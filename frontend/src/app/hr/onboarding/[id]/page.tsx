@@ -16,7 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -122,26 +122,22 @@ export default function OnboardingPlanDetailPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="py-24 flex flex-col items-center justify-center gap-3">
-          <Spinner className="h-8 w-8 text-brand-primary" />
-          <p className="text-xs text-content-muted">Loading journey plan and audit review...</p>
-        </div>
-      </AppShell>
+      <div className="py-24 flex flex-col items-center justify-center gap-3">
+        <Spinner className="h-8 w-8 text-brand-primary" />
+        <p className="text-xs text-content-muted">Loading journey plan and audit review...</p>
+      </div>
     );
   }
 
   if (!onboardingCase) {
     return (
-      <AppShell>
-        <div className="max-w-3xl mx-auto py-12 text-center space-y-4">
-          <AlertCircle className="h-10 w-10 text-content-muted mx-auto" />
-          <h2 className="text-lg font-bold">Onboarding Case Not Found</h2>
-          <Link href="/hr/onboarding">
-            <Button variant="outline" size="sm">Back to Onboarding Hub</Button>
-          </Link>
-        </div>
-      </AppShell>
+      <div className="max-w-3xl mx-auto py-12 text-center space-y-4">
+        <AlertCircle className="h-10 w-10 text-content-muted mx-auto" />
+        <h2 className="text-lg font-bold">Onboarding Case Not Found</h2>
+        <Link href="/hr/onboarding">
+          <Button variant="outline" size="sm">Back to Onboarding Hub</Button>
+        </Link>
+      </div>
     );
   }
 
@@ -165,7 +161,7 @@ export default function OnboardingPlanDetailPage() {
     : tasks.filter((t) => t.phase === selectedPhase);
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["hr", "recruiter", "administrator"]}>
       <div className="space-y-6">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-content-muted">
@@ -708,6 +704,6 @@ export default function OnboardingPlanDetailPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

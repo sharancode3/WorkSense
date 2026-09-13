@@ -73,7 +73,7 @@ The current repository state is documented transparently in accordance with the 
 | Domain | Current Repository Reality | Truth Status |
 | :--- | :--- | :--- |
 | **Documentation & Specifications** | Complete 10-document canonical specification suite under `docs/` covering PRD, TRD, Workflows, UI/UX, Database/API, System Architecture, AI/ML Architecture, Deployment, Project Memory, and Implementation Details. | **Verified in repository** |
-| **Frontend Application (`frontend/`)** | Next.js 14+ App Router, TypeScript strict, Tailwind CSS flat design tokens (zero box-shadows, neutral borders), Light/Dark/System theme engine with FOUT prevention, responsive application shell, reusable component primitives, typed API client, auth context with session restoration, protected route guards, 7 role landing views, `/my-access` transparency, `/admin/access` management console, 10 workforce foundation views, 8 recruitment views, 5 adaptive onboarding views, Candidate Privacy Shield on `/candidate`, HR Policy Reasoning (`/policies`), Workforce Intelligence (`/workforce/intelligence`), HR Decision Dashboard (`/dashboard`), Recommendation-to-Action Console (`/recommendations`), Interactive Demo Hub (`/demo`), and 12 Vitest test suites (59/59 passing). | **Verified in repository** |
+| **Frontend Application (`frontend/`)** | Next.js 14+ App Router, TypeScript strict, Tailwind CSS flat design tokens (zero box-shadows, neutral borders), Light/Dark/System theme engine with FOUT prevention, responsive application shell, public overview landing page with 6-stage Operating Loop, dedicated PublicHeader and PublicFooter, persona-tailored workspace navigation (`ROLE_NAVIGATION` across all 7 user roles), reusable component primitives, typed API client, auth context with session restoration, protected route guards, 7 role landing views, `/my-access` transparency, `/admin/access` management console, 10 workforce foundation views, 8 recruitment views, 5 adaptive onboarding views, Candidate Privacy Shield on `/candidate`, HR Policy Reasoning (`/policies`), Workforce Intelligence (`/workforce/intelligence`), HR Decision Dashboard (`/dashboard`), Recommendation-to-Action Console (`/recommendations`), Interactive Demo Hub (`/demo`), and 12 Vitest test suites (59/59 passing). | **Verified in repository** |
 | **Backend Application (`backend/`)** | FastAPI modular monolith, Pydantic v2 validation, centralized settings, correlation ID middleware, structured JSON logging, standard error envelopes, cryptographic JWT engine (HS256 with Supabase compat), stateful IdentityService, WorkforceService, RecruitmentService, OnboardingService, PolicyRAGService, WorkforceIntelligenceService, DashboardService, RecommendationService, DemoService with multi-tenancy & audit logging, RBAC dependency guards (`require_permission`, `require_role`), 68 REST endpoints, and honest `/health` probe. | **Verified in repository** |
 | **HR Policy Reasoning (Stage 6)** | Hybrid Lexical-Semantic Policy RAG over authoritative Markdown documents (`POL-REM-01`, etc.); section chunking with keyword relevance scoring and stopword exclusion; precise source citations (`policy_code`, `section_title`, `citation_quote`, `freshness_timestamp`); deterministic eligibility rules checking tenure/probation; zero-hallucination abstain mechanism returning `insufficient_evidence` when relevance threshold (<0.20) is not met; actionable policy handoff proposals. | **Verified in repository** |
 | **Workforce Intelligence (Stage 7)** | **7A Ethical Attrition Risk:** Non-surveillance signals (market comp differential, promotion stagnation, role tenure, verified overtime hours); composite risk scoring with non-punitive retention guidance and confidence calibration.<br>**7B Performance Intelligence:** Multilateral synthesis of objective goals, structured peer feedback, and manager reviews; balanced strengths and growth areas.<br>**7C Internal Mobility Skill Graph:** Relational graph capability matching against open requisitions; transferability pathing, skill gap analysis, and tailored upskilling recommendations. | **Verified in repository** |
@@ -538,9 +538,10 @@ WorkSense/
     |   |   |-- workforce/                 Departments, roles, skill taxonomy, twins & data quality
     |   |   |-- workforce/intelligence/    Workforce Intelligence (Attrition, Performance, Mobility)
     |   |   |-- layout.tsx                 Root layout wrapped in AuthProvider & ThemeProvider
-    |   |   `-- page.tsx                   Landing page routing to role workspace or login
+    |   |   `-- page.tsx                   Public Landing & Operating Loop overview page
     |   |-- components/                    AppShell, Sidebar, TopBar, Dialog, Drawer, Toast, UI primitives
-    |   |-- config/                        Centralized navigation definitions & role authorization matrix
+    |   |   `-- layout/                    PublicHeader, PublicFooter, Sidebar, TopBar, MobileNav
+    |   |-- config/navigation.ts           Persona-tailored workspace navigation (ROLE_NAVIGATION across 7 roles)
     |   |-- context/auth-context.tsx       AuthContext (JWT storage, session restore, switch org, logout)
     |   |-- lib/api/                       Typed API clients (auth, workforce, recruitment, onboarding, policy, intelligence, dashboard, recommendation, demo)
     |   |-- styles/globals.css             Flat design system (zero box-shadows, neutral borders)
@@ -590,6 +591,11 @@ python -m uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000 --r
 
 # Terminal 2: Frontend Client (Next.js)
 cd frontend
+# Option A: Production server (recommended for instant pre-built route loading)
+npm run build
+npm run start -p 3000
+
+# Option B: Development server with hot module reloading
 npm run dev
 # Access http://localhost:3000
 ```

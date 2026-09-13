@@ -90,6 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const res = await loginApi(payload);
+      setAuthToken(res.access_token);
       if (typeof window !== "undefined") {
         localStorage.setItem(AUTH_TOKEN_KEY, res.access_token);
       }
@@ -104,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const res = await registerCandidateApi(payload);
+      setAuthToken(res.access_token);
       if (typeof window !== "undefined") {
         localStorage.setItem(AUTH_TOKEN_KEY, res.access_token);
       }

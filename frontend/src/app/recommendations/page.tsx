@@ -11,7 +11,7 @@ import {
   Shield,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -115,24 +115,21 @@ export default function RecommendationsWorkflowPage() {
   });
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["manager", "hr", "leadership", "administrator"]}>
       <div className="space-y-6 pb-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                Recommendation-to-Action Governance Hub
+                Recommendations & Human Approvals
               </h1>
-              <Badge variant="outline" className="border-neutral-300 dark:border-neutral-700 text-xs">
-                Stage 9
-              </Badge>
               <Badge variant="outline" className="border-purple-500/40 text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/30 text-xs">
-                EnterPro Adapter Enabled
+                EnterPro Orchestration Ready
               </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-              Cross-module human approval gateway with atomic EnterPro simulation handoff and twin continuity updates.
+              Cross-module human approval gateway with atomic EnterPro execution and twin continuity updates.
             </p>
           </div>
 
@@ -575,6 +572,6 @@ export default function RecommendationsWorkflowPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

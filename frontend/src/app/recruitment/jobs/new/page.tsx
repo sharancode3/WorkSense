@@ -4,7 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Plus, Trash2, AlertTriangle, CheckCircle2, Sliders } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -211,16 +211,14 @@ export default function NewJobOpeningPage() {
 
   if (isLoadingRefs) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "administrator"]}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-2">
           <Link href="/recruitment/jobs">
@@ -404,7 +402,7 @@ export default function NewJobOpeningPage() {
           {/* Section 3: Skill Graph Requirements */}
           <Card className="p-6 space-y-4 border border-boundary-subtle">
             <h3 className="text-base font-semibold text-content-primary">
-              3. Canonical Skill Requirements (Stage 3 Skill Graph)
+              3. Canonical Skill Requirements (Enterprise Skill Graph)
             </h3>
             <p className="text-xs text-content-muted">
               Select verified skills from the enterprise graph. Required skills evaluate exact & adjacent graph matches; preferred skills award extra coverage.
@@ -636,6 +634,6 @@ export default function NewJobOpeningPage() {
           </div>
         </form>
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

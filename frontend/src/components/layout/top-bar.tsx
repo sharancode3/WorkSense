@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Building2, User, LogOut, ChevronDown } from "lucide-react";
-import { fetchHealthStatus } from "@/lib/api/health";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utilities/cn";
@@ -16,49 +15,42 @@ export interface TopBarProps {
 
 const PAGE_TITLES: Record<string, string> = {
   "/": "Platform Overview",
-  "/status": "System Status",
+  "/status": "System & Model Health",
   "/design-system": "Design System Primitives",
   "/candidate": "Candidate Portal",
   "/employee": "Employee Self-Service",
   "/manager": "Team Leadership Workspace",
   "/recruiter": "Talent Acquisition Workspace",
-  "/hr": "Workforce Operations",
+  "/hr": "Workforce Operations Workspace",
   "/leadership": "Executive Decision Intelligence",
-  "/admin/access": "Access Management Console",
+  "/admin/access": "Platform Governance & Access",
   "/my-access": "My Access & Scope",
+  "/dashboard": "Workforce Decision Dashboard",
+  "/policies": "Policy Reasoning & Grounded Q&A",
+  "/recommendations": "Recommendations & Human Approvals",
+  "/recruitment/jobs": "Job Requisitions",
+  "/hr/onboarding": "Adaptive Onboarding Command Center",
+  "/manager/onboarding": "Manager Onboarding Workspace",
+  "/onboarding": "My Onboarding Track",
+  "/workforce/intelligence": "Workforce Intelligence",
+  "/workforce/departments": "Departments & Org Hierarchy",
+  "/workforce/roles": "Job Role Catalog",
+  "/workforce/skills": "Skill Taxonomy & Graph",
+  "/workforce/candidates": "Candidate Profiles & Twins",
+  "/workforce/employees": "Employee Directory & Digital Twins",
+  "/workforce/policies": "Policy Document Repository",
+  "/workforce/data-quality": "Data Quality Engine",
   "/auth/login": "Sign In",
   "/auth/register": "Candidate Registration",
-  "/auth/forgot-password": "Password Recovery",
-  "/auth/reset-password": "Set New Password",
-  "/auth/invite": "Accept Invitation",
   "/unauthorized": "Access Restricted",
 };
 
 export function TopBar({ onOpenMobileMenu, className }: TopBarProps) {
   const pathname = usePathname();
   const { isAuthenticated, user, roles, activeOrg, availableOrgs, switchOrganization, logout } = useAuth();
-  const [isBackendOnline, setIsBackendOnline] = useState<boolean | null>(null);
   const [isOrgDropdownOpen, setIsOrgDropdownOpen] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
-    async function checkHealth() {
-      try {
-        await fetchHealthStatus();
-        if (isMounted) setIsBackendOnline(true);
-      } catch {
-        if (isMounted) setIsBackendOnline(false);
-      }
-    }
-    checkHealth();
-    const interval = setInterval(checkHealth, 30000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  const pageTitle = PAGE_TITLES[pathname] || "WorkSense";
+  const pageTitle = PAGE_TITLES[pathname] || "WorkSense Workspace";
 
   return (
     <header
@@ -85,7 +77,7 @@ export function TopBar({ onOpenMobileMenu, className }: TopBarProps) {
         </h1>
       </div>
 
-      {/* Right: Tenant, User Role, Health Indicator, Theme Toggle */}
+      {/* Right: Tenant Selector, User Role Badge, Theme Toggle, Sign Out */}
       <div className="flex items-center gap-3">
         {/* Multi-tenant Selector / Org Badge */}
         {isAuthenticated && activeOrg && (
@@ -141,40 +133,14 @@ export function TopBar({ onOpenMobileMenu, className }: TopBarProps) {
         {isAuthenticated && user && (
           <Link
             href="/my-access"
-            className="hidden md:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary/20 transition-colors"
-            title="Click to view My Access details"
+            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary/20 transition-colors"
+            title="Click to view My Access & Capabilities"
           >
             <User className="h-3 w-3" />
             <span className="uppercase">{roles[0] || "User"}</span>
             <span className="text-content-muted font-normal">• {user.full_name}</span>
           </Link>
         )}
-
-        {/* Backend Health indicator */}
-        <Link
-          href="/status"
-          className="flex items-center gap-2 px-2 py-1 rounded-md text-xs font-medium transition-colors hover:bg-surface-secondary"
-          title="Click to view detailed system health"
-        >
-          <span
-            className={cn(
-              "h-2 w-2 rounded-full",
-              isBackendOnline === null
-                ? "bg-content-muted animate-pulse"
-                : isBackendOnline
-                ? "bg-status-success"
-                : "bg-status-warning"
-            )}
-            aria-hidden="true"
-          />
-          <span className="text-content-secondary hidden lg:inline text-[11px]">
-            {isBackendOnline === null
-              ? "Probing API"
-              : isBackendOnline
-              ? "API Connected"
-              : "API Standby"}
-          </span>
-        </Link>
 
         {/* Sign In / Sign Out Button */}
         {isAuthenticated ? (

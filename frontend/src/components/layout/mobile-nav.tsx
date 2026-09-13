@@ -25,7 +25,7 @@ import {
   LogIn,
   LogOut,
 } from "lucide-react";
-import { NAVIGATION_GROUPS } from "@/config/navigation";
+import { getNavigationForUser } from "@/config/navigation";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utilities/cn";
@@ -57,7 +57,7 @@ export interface MobileNavProps {
 
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const pathname = usePathname();
-  const { isAuthenticated, user, roles, activeOrg, hasCapability, logout } = useAuth();
+  const { isAuthenticated, user, roles, activeOrg, logout } = useAuth();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -125,31 +125,17 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
             </div>
           )}
 
-          {/* Navigation Items */}
+          {/* Navigation Items (Derived from Authenticated Role) */}
           <nav aria-label="Mobile Site Navigation" className="space-y-4">
-            {NAVIGATION_GROUPS.map((group) => {
-              const visibleItems = group.items.filter((item) => {
-                if (item.allowedRoles && item.allowedRoles.length > 0) {
-                  if (!isAuthenticated) return false;
-                  return roles.some((r) => item.allowedRoles?.includes(r));
-                }
-                if (item.requiredCapability) {
-                  return isAuthenticated && hasCapability(item.requiredCapability);
-                }
-                if (item.id === "my-access") {
-                  return isAuthenticated;
-                }
-                return true;
-              });
-
-              if (visibleItems.length === 0) return null;
+            {getNavigationForUser(roles).map((group) => {
+              if (!group.items || group.items.length === 0) return null;
 
               return (
                 <div key={group.id} className="space-y-1">
                   <div className="px-2 text-[10px] font-bold uppercase tracking-wider text-content-muted">
                     {group.title}
                   </div>
-                  {visibleItems.map((item) => {
+                  {group.items.map((item) => {
                     const Icon = ICON_MAP[item.iconName] || LayoutDashboard;
                     const isActive = pathname === item.href;
 
@@ -161,12 +147,12 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
                         className={cn(
                           "flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-colors",
                           isActive
-                            ? "bg-brand-primary text-white font-semibold"
+                            ? "bg-brand-primary text-white font-semibold shadow-sm"
                             : "text-content-secondary hover:text-content-primary hover:bg-surface-secondary"
                         )}
                       >
-                        <Icon className="h-4 w-4" aria-hidden="true" />
-                        <span>{item.title}</span>
+                        <Icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                        <span className="truncate">{item.title}</span>
                       </Link>
                     );
                   })}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -17,12 +17,14 @@ export function ProtectedRoute({
   allowedRoles,
 }: ProtectedRouteProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, isLoading, hasCapability, hasRole } = useAuth();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
-        router.replace("/auth/login");
+        const returnParam = pathname && pathname !== "/" ? `?returnUrl=${encodeURIComponent(pathname)}` : "";
+        router.replace(`/auth/login${returnParam}`);
         return;
       }
 

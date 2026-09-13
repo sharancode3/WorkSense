@@ -12,7 +12,7 @@ import {
   Users,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -179,7 +179,7 @@ export default function ManagerOnboardingPage() {
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["manager", "leadership", "administrator"]}>
       <div className="space-y-6">
         <PageHeader
           title="Manager Onboarding & Review Workspace"
@@ -676,6 +676,6 @@ export default function ManagerOnboardingPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

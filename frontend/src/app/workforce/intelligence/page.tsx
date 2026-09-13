@@ -13,7 +13,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,20 +97,17 @@ export default function WorkforceIntelligencePage() {
   }, [loadAttritionData, loadPerformanceData, loadMobilityData]);
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["hr", "manager", "leadership", "administrator"]}>
       <div className="space-y-6 pb-12">
         {/* Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                Workforce Intelligence Engine
+                Workforce Intelligence
               </h1>
-              <Badge variant="outline" className="border-neutral-300 dark:border-neutral-700 text-xs">
-                Stage 7
-              </Badge>
               <Badge variant="outline" className="border-blue-500/40 text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 text-xs">
-                Ethical Transparent Index
+                Transparent Risk Signals
               </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
@@ -532,6 +529,6 @@ export default function WorkforceIntelligencePage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

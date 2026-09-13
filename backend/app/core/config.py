@@ -1,7 +1,7 @@
 """Central application configuration using Pydantic Settings."""
 
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Optional, Union
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -24,8 +24,7 @@ class Settings(BaseSettings):
     debug: bool = Field(default=False, description="Debug mode")
     log_level: str = Field(default="INFO", description="Logging level")
 
-    # CORS Allowlist
-    cors_origins: List[str] = Field(
+    cors_origins: Union[List[str], str] = Field(
         default=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
         description="Allowed CORS origins",
     )

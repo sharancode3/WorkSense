@@ -10,7 +10,7 @@ import {
   UserCheck,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -110,29 +110,25 @@ export default function EmployeeOnboardingPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
-        <div className="py-24 flex flex-col items-center justify-center gap-3">
-          <Spinner className="h-8 w-8 text-brand-primary" />
-          <p className="text-xs text-content-muted">Loading your personalized onboarding track...</p>
-        </div>
-      </AppShell>
+      <div className="py-24 flex flex-col items-center justify-center gap-3">
+        <Spinner className="h-8 w-8 text-brand-primary" />
+        <p className="text-xs text-content-muted">Loading your personalized onboarding track...</p>
+      </div>
     );
   }
 
   if (!onboardingCase || !onboardingCase.active_plan) {
     return (
-      <AppShell>
-        <div className="max-w-2xl mx-auto py-16 text-center space-y-4">
-          <UserCheck className="h-12 w-12 text-content-muted mx-auto" />
-          <h2 className="text-lg font-bold">No Active Onboarding Journey</h2>
-          <p className="text-xs text-content-secondary max-w-md mx-auto">
-            You do not currently have an active onboarding journey assigned. If you were recently hired, HR will initiate your track shortly.
-          </p>
-          <Link href="/hr/onboarding/new">
-            <Button size="sm">Initiate Demo Journey</Button>
-          </Link>
-        </div>
-      </AppShell>
+      <div className="max-w-2xl mx-auto py-16 text-center space-y-4">
+        <UserCheck className="h-12 w-12 text-content-muted mx-auto" />
+        <h2 className="text-lg font-bold">No Active Onboarding Journey</h2>
+        <p className="text-xs text-content-secondary max-w-md mx-auto">
+          You do not currently have an active onboarding journey assigned. If you were recently hired, HR will initiate your track shortly.
+        </p>
+        <Link href="/hr/onboarding/new">
+          <Button size="sm">Initiate Onboarding</Button>
+        </Link>
+      </div>
     );
   }
 
@@ -154,7 +150,7 @@ export default function EmployeeOnboardingPage() {
     : tasks.filter((t) => t.phase === activePhase);
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["employee", "candidate", "manager", "hr", "administrator"]}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Welcome Banner */}
         <div className="bg-surface rounded-xl border border-boundary-subtle p-6 space-y-4">
@@ -488,6 +484,6 @@ export default function EmployeeOnboardingPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

@@ -11,7 +11,7 @@ import {
   ArrowRight,
   FileCheck,
 } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -127,16 +127,14 @@ export default function ResumeUploadPage() {
 
   if (isLoadingRefs) {
     return (
-      <AppShell>
-        <div className="flex justify-center items-center py-32">
-          <Spinner size="lg" />
-        </div>
-      </AppShell>
+      <div className="flex justify-center items-center py-32">
+        <Spinner size="lg" />
+      </div>
     );
   }
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "administrator"]}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-2">
           <Link href={`/recruitment/jobs/${jobId}`}>
@@ -179,7 +177,7 @@ export default function ResumeUploadPage() {
                 className="w-full"
               />
               <p className="text-[11px] text-content-muted mt-1">
-                Extracted evidence will link directly into this candidate&apos;s Stage 3 Evidence Ledger.
+                Extracted evidence will link directly into this candidate&apos;s Verified Evidence Ledger.
               </p>
             </div>
 
@@ -387,6 +385,6 @@ export default function ResumeUploadPage() {
           </Card>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

@@ -2,14 +2,8 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  AlertCircle,
   BookOpen,
-  CheckCircle2,
-  ChevronRight,
-  ExternalLink,
   FileSearch,
-  FileText,
-  HelpCircle,
   PlusCircle,
   Search,
   Send,
@@ -18,7 +12,7 @@ import {
   UploadCloud,
 } from "lucide-react";
 
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -190,20 +184,17 @@ export default function PolicyReasoningPage() {
   };
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["employee", "candidate", "manager", "recruiter", "hr", "leadership", "administrator"]}>
       <div className="space-y-6 pb-12">
         {/* Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                Policy Reasoning & Compliance RAG
+                Policy Reasoning & Grounded Q&A
               </h1>
-              <Badge variant="outline" className="border-neutral-300 dark:border-neutral-700 text-xs">
-                Stage 6
-              </Badge>
               <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-xs">
-                Local Qwen Assisted
+                Local Reasoning
               </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
@@ -782,6 +773,6 @@ export default function PolicyReasoningPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }

@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { Plus, Search, Filter, Users, FileText, ArrowRight, Sparkles } from "lucide-react";
-import { AppShell } from "@/components/layout/app-shell";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,11 +56,11 @@ export default function JobOpeningsPage() {
   }, [jobs, searchQuery, statusFilter]);
 
   return (
-    <AppShell>
+    <ProtectedRoute allowedRoles={["recruiter", "hr", "manager", "leadership", "administrator"]}>
       <div className="space-y-6">
         <PageHeader
-          title="Recruitment Intelligence"
-          description="Deterministic evidence-backed matching, rubric generation, and human decision gate"
+          title="Job Requisitions"
+          description="Manage active talent openings, review extracted candidate evidence, and inspect match rankings."
           actions={
             canCreate ? (
               <Link href="/recruitment/jobs/new">
@@ -214,6 +214,6 @@ export default function JobOpeningsPage() {
           </div>
         )}
       </div>
-    </AppShell>
+    </ProtectedRoute>
   );
 }
