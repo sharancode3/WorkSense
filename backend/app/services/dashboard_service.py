@@ -56,9 +56,6 @@ class DashboardService:
 
         if match_scores:
             avg_score = round(sum(match_scores) / len(match_scores), 1)
-        elif org_candidates:
-            # Sourced from verified candidate evaluation records (e.g. Elena Rostova 92%)
-            avg_score = 92.0
         else:
             avg_score = 0.0
 

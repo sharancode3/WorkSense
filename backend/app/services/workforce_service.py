@@ -72,6 +72,42 @@ from app.schemas.workforce import (
     TimelineEvent,
 )
 from app.services.identity_service import identity_service
+from app.data.canonical_demo import (
+    ORG_TECHCORP_ID,
+    DEPT_ENG_ID,
+    DEPT_ENG_CODE,
+    DEPT_ENG_NAME,
+    DEPT_INFRA_ID,
+    DEPT_INFRA_CODE,
+    DEPT_INFRA_NAME,
+    DEPT_AI_ID,
+    DEPT_AI_CODE,
+    DEPT_AI_NAME,
+    DEPT_PEOPLE_ID,
+    DEPT_PEOPLE_CODE,
+    DEPT_PEOPLE_NAME,
+    ROLE_ELENA_APPLIED_ID,
+    ROLE_ELENA_APPLIED_CODE,
+    ROLE_ELENA_APPLIED_TITLE,
+    ROLE_MARCUS_CURRENT_ID,
+    ROLE_MARCUS_CURRENT_CODE,
+    ROLE_MARCUS_CURRENT_TITLE,
+    ROLE_TA_LEAD_ID,
+    ROLE_TA_LEAD_CODE,
+    ROLE_TA_LEAD_TITLE,
+    ROLE_HRBP_SR_ID,
+    ROLE_HRBP_SR_CODE,
+    ROLE_HRBP_SR_TITLE,
+    ROLE_MARCUS_TARGET_ID,
+    ROLE_MARCUS_TARGET_CODE,
+    ROLE_MARCUS_TARGET_TITLE,
+    MARCUS_VANCE_EMPLOYEE_ID,
+    MARCUS_VANCE_PROFILE_ID,
+    MARCUS_VANCE_EMPLOYEE_CODE,
+    MARCUS_CHEN_EMPLOYEE_ID,
+    MARCUS_CHEN_PROFILE_ID,
+    MARCUS_CHEN_EMPLOYEE_CODE,
+)
 
 logger = logging.getLogger("worksense.workforce")
 
@@ -110,51 +146,51 @@ class WorkforceService:
 
     def _seed_workforce_data(self) -> None:
         """Seed repeatable demonstration workforce dataset for TechCorp."""
-        org_techcorp_id = "00000000-0000-0000-0000-000000000001"
+        org_techcorp_id = ORG_TECHCORP_ID
         now_iso = datetime.now(timezone.utc).isoformat()
 
         # 1. Departments
         d_eng = {
-            "id": "60000000-0000-0000-0000-000000000001",
+            "id": DEPT_ENG_ID,
             "organization_id": org_techcorp_id,
-            "code": "ENG",
-            "name": "Engineering Division",
+            "code": DEPT_ENG_CODE,
+            "name": DEPT_ENG_NAME,
             "description": "Core technology research, development, and infrastructure",
             "parent_department_id": None,
-            "head_profile_id": "30000000-0000-0000-0000-000000000003",
+            "head_profile_id": MARCUS_VANCE_PROFILE_ID,
             "is_active": True,
             "created_at": now_iso,
             "updated_at": now_iso,
         }
         d_infra = {
-            "id": "60000000-0000-0000-0000-000000000002",
+            "id": DEPT_INFRA_ID,
             "organization_id": org_techcorp_id,
-            "code": "ENG-INFRA",
-            "name": "Platform Infrastructure",
+            "code": DEPT_INFRA_CODE,
+            "name": DEPT_INFRA_NAME,
             "description": "Cloud platforms, distributed systems, and reliability engineering",
-            "parent_department_id": "60000000-0000-0000-0000-000000000001",
-            "head_profile_id": "30000000-0000-0000-0000-000000000003",
+            "parent_department_id": DEPT_ENG_ID,
+            "head_profile_id": MARCUS_VANCE_PROFILE_ID,
             "is_active": True,
             "created_at": now_iso,
             "updated_at": now_iso,
         }
         d_ai = {
-            "id": "60000000-0000-0000-0000-000000000003",
+            "id": DEPT_AI_ID,
             "organization_id": org_techcorp_id,
-            "code": "ENG-AI",
-            "name": "AI Research & Fraud Detection",
+            "code": DEPT_AI_CODE,
+            "name": DEPT_AI_NAME,
             "description": "Applied machine learning models, inference accelerators, and fraud mitigation",
-            "parent_department_id": "60000000-0000-0000-0000-000000000001",
+            "parent_department_id": DEPT_ENG_ID,
             "head_profile_id": "30000000-0000-0000-0000-000000000006",
             "is_active": True,
             "created_at": now_iso,
             "updated_at": now_iso,
         }
         d_people = {
-            "id": "60000000-0000-0000-0000-000000000004",
+            "id": DEPT_PEOPLE_ID,
             "organization_id": org_techcorp_id,
-            "code": "PEOPLE",
-            "name": "People Operations",
+            "code": DEPT_PEOPLE_CODE,
+            "name": DEPT_PEOPLE_NAME,
             "description": "Human resources, talent acquisition, and workforce governance",
             "parent_department_id": None,
             "head_profile_id": "30000000-0000-0000-0000-000000000005",
@@ -221,11 +257,11 @@ class WorkforceService:
 
         # 3. Job Roles
         roles_data = [
-            ("61000000-0000-0000-0000-000000000001", "60000000-0000-0000-0000-000000000001", "ROLE-DIST-SR", "Senior Distributed Systems Engineer", "Engineering", "L5", "Architects high-throughput distributed state stores and resilient backend services"),
-            ("61000000-0000-0000-0000-000000000002", "60000000-0000-0000-0000-000000000002", "ROLE-INFRA-SR", "Senior Infrastructure Engineer", "Infrastructure", "L5", "Builds resilient Kubernetes platforms and multi-region failover"),
-            ("61000000-0000-0000-0000-000000000003", "60000000-0000-0000-0000-000000000004", "ROLE-TA-LEAD", "Lead Talent Acquisition Specialist", "Talent Acquisition", "L4", "Drives technical recruiting and rubric-grounded evaluations"),
-            ("61000000-0000-0000-0000-000000000004", "60000000-0000-0000-0000-000000000004", "ROLE-HRBP-SR", "Senior People Partner (HRBP)", "Human Resources", "L5", "Guides internal mobility, workforce risk mitigation, and org health"),
-            ("61000000-0000-0000-0000-000000000005", "60000000-0000-0000-0000-000000000002", "ROLE-ARCH-PRIN", "Principal Distributed Systems Architect — AI Fraud Detection Initiative", "Infrastructure", "L6", "Leads distributed architecture and AI fraud detection platform scalability"),
+            (ROLE_ELENA_APPLIED_ID, DEPT_ENG_ID, ROLE_ELENA_APPLIED_CODE, ROLE_ELENA_APPLIED_TITLE, "Engineering", "L5", "Architects high-throughput distributed state stores and resilient backend services"),
+            (ROLE_MARCUS_CURRENT_ID, DEPT_INFRA_ID, ROLE_MARCUS_CURRENT_CODE, ROLE_MARCUS_CURRENT_TITLE, "Infrastructure", "L5", "Builds resilient Kubernetes platforms and multi-region failover"),
+            (ROLE_TA_LEAD_ID, DEPT_PEOPLE_ID, ROLE_TA_LEAD_CODE, ROLE_TA_LEAD_TITLE, "Talent Acquisition", "L4", "Drives technical recruiting and rubric-grounded evaluations"),
+            (ROLE_HRBP_SR_ID, DEPT_PEOPLE_ID, ROLE_HRBP_SR_CODE, ROLE_HRBP_SR_TITLE, "Human Resources", "L5", "Guides internal mobility, workforce risk mitigation, and org health"),
+            (ROLE_MARCUS_TARGET_ID, DEPT_INFRA_ID, ROLE_MARCUS_TARGET_CODE, ROLE_MARCUS_TARGET_TITLE, "Infrastructure", "L6", "Leads distributed architecture and AI fraud detection platform scalability"),
         ]
         for jid, dept_id, jcode, jtitle, jfam, jsen, jsum in roles_data:
             self._job_roles[jid] = {
@@ -352,14 +388,14 @@ class WorkforceService:
         # 7. Employees
         # Marcus Vance (Manager)
         emp_vance = {
-            "id": "69000000-0000-0000-0000-000000000001",
+            "id": MARCUS_VANCE_EMPLOYEE_ID,
             "organization_id": org_techcorp_id,
-            "profile_id": "30000000-0000-0000-0000-000000000003",
+            "profile_id": MARCUS_VANCE_PROFILE_ID,
             "candidate_id": None,
-            "employee_code": "EMP-10021",
+            "employee_code": MARCUS_VANCE_EMPLOYEE_CODE,
             "hire_date": "2021-01-15",
-            "department_id": "60000000-0000-0000-0000-000000000002",
-            "job_role_id": "61000000-0000-0000-0000-000000000002",
+            "department_id": DEPT_INFRA_ID,
+            "job_role_id": ROLE_MARCUS_CURRENT_ID,
             "employment_status": "active",
             "work_location": "Bengaluru HQ",
             "employment_type": "full_time",
@@ -368,14 +404,14 @@ class WorkforceService:
         }
         # Marcus Chen (Senior Infrastructure Engineer)
         emp_chen = {
-            "id": "69000000-0000-0000-0000-000000000002",
+            "id": MARCUS_CHEN_EMPLOYEE_ID,
             "organization_id": org_techcorp_id,
-            "profile_id": "30000000-0000-0000-0000-000000000002",
+            "profile_id": MARCUS_CHEN_PROFILE_ID,
             "candidate_id": None,
-            "employee_code": "EMP-10492",
+            "employee_code": MARCUS_CHEN_EMPLOYEE_CODE,
             "hire_date": "2023-03-20",
-            "department_id": "60000000-0000-0000-0000-000000000002",
-            "job_role_id": "61000000-0000-0000-0000-000000000002",
+            "department_id": DEPT_INFRA_ID,
+            "job_role_id": ROLE_MARCUS_CURRENT_ID,
             "employment_status": "active",
             "work_location": "Remote - Pune",
             "employment_type": "full_time",

@@ -51,6 +51,23 @@ from app.services.identity_service import identity_service
 from app.services.qwen_gateway import QwenError, qwen_gateway
 from app.services.recruitment_service import recruitment_service
 from app.services.workforce_service import workforce_service
+from app.data.canonical_demo import (
+    ORG_TECHCORP_ID,
+    DEPT_ENG_ID,
+    DEPT_ENG_NAME,
+    ROLE_ELENA_APPLIED_ID,
+    ROLE_ELENA_APPLIED_TITLE,
+    ELENA_CANDIDATE_ID,
+    ELENA_EMPLOYEE_ID,
+    ELENA_EMPLOYEE_CODE,
+    ELENA_FULL_NAME,
+    ELENA_PERSONAL_EMAIL,
+    ELENA_JOB_OPENING_ID,
+    ELENA_ONBOARDING_CASE_ID,
+    ELENA_ONBOARDING_PLAN_ID,
+    MARCUS_VANCE_EMPLOYEE_ID,
+    MARCUS_VANCE_FULL_NAME,
+)
 
 logger = logging.getLogger("worksense.onboarding_service")
 
@@ -79,7 +96,7 @@ class OnboardingService:
 
     def _seed_onboarding_fixtures(self) -> None:
         """Seed default task definitions, templates, learning resources, and candidate offer states."""
-        org_id = "00000000-0000-0000-0000-000000000001"
+        org_id = ORG_TECHCORP_ID
         now = datetime.now(timezone.utc).isoformat()
 
         # 1. Standard Task Definitions
@@ -354,8 +371,8 @@ class OnboardingService:
             }
 
         # 4. Ensure Elena Rostova has an approved recruitment offer decision ready for conversion
-        elena_cand = "30000000-0000-0000-0000-000000000001"
-        job_id = "40000000-0000-0000-0000-000000000001"
+        elena_cand = ELENA_CANDIDATE_ID
+        job_id = ELENA_JOB_OPENING_ID
         dec_key = f"{job_id}:{elena_cand}"
 
         if dec_key not in recruitment_service._decisions:
@@ -381,10 +398,11 @@ class OnboardingService:
             cand["record_status"] = "converted"
 
         # 5. Seed Golden Demo Elena Rostova Onboarding Journey (Active 90-day plan)
-        case_id = "55000000-0000-0000-0000-000000000001"
-        plan_id = "56000000-0000-0000-0000-000000000001"
-        elena_emp_id = "69000000-0000-0000-0000-000000000003"
-        mgr_id = "69000000-0000-0000-0000-000000000001"
+        case_id = ELENA_ONBOARDING_CASE_ID
+        plan_id = ELENA_ONBOARDING_PLAN_ID
+        elena_emp_id = ELENA_EMPLOYEE_ID
+        mgr_id = MARCUS_VANCE_EMPLOYEE_ID
+        eng_dept_id = DEPT_ENG_ID
 
         # Ensure Elena has an employee record in workforce service
         if elena_emp_id not in workforce_service._employees:
@@ -393,10 +411,10 @@ class OnboardingService:
                 "organization_id": org_id,
                 "profile_id": elena_cand,
                 "candidate_id": elena_cand,
-                "employee_code": "EMP-10550",
+                "employee_code": ELENA_EMPLOYEE_CODE,
                 "hire_date": "2026-10-01",
                 "department_id": eng_dept_id,
-                "job_role_id": "61000000-0000-0000-0000-000000000001",
+                "job_role_id": ROLE_ELENA_APPLIED_ID,
                 "employment_status": "active",
                 "work_location": "hybrid",
                 "employment_type": "full_time",
@@ -409,18 +427,18 @@ class OnboardingService:
             "id": case_id,
             "organization_id": org_id,
             "candidate_id": elena_cand,
-            "candidate_name": "Elena Rostova",
-            "candidate_email": "elena.rostova@example.com",
+            "candidate_name": ELENA_FULL_NAME,
+            "candidate_email": ELENA_PERSONAL_EMAIL,
             "employee_id": elena_emp_id,
-            "employee_code": "EMP-10550",
+            "employee_code": ELENA_EMPLOYEE_CODE,
             "job_opening_id": job_id,
-            "job_title": "Senior Distributed Systems Engineer",
+            "job_title": ROLE_ELENA_APPLIED_TITLE,
             "department_id": eng_dept_id,
-            "department_name": "Engineering",
-            "job_role_id": "61000000-0000-0000-0000-000000000001",
-            "role_title": "Senior Distributed Systems Engineer",
+            "department_name": DEPT_ENG_NAME,
+            "job_role_id": ROLE_ELENA_APPLIED_ID,
+            "role_title": ROLE_ELENA_APPLIED_TITLE,
             "manager_employee_id": mgr_id,
-            "manager_name": "Marcus Vance",
+            "manager_name": MARCUS_VANCE_FULL_NAME,
             "hire_date": "2026-10-01",
             "work_location": "hybrid",
             "status": "in_review",

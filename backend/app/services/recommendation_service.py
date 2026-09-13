@@ -19,6 +19,20 @@ from app.schemas.recommendation import (
     RecommendationExecutionResponse,
 )
 from app.services.workforce_service import workforce_service
+from app.data.canonical_demo import (
+    ORG_TECHCORP_ID,
+    DEPT_AI_NAME,
+    ROLE_ELENA_APPLIED_TITLE,
+    ROLE_MARCUS_TARGET_TITLE,
+    ELENA_CANDIDATE_ID,
+    ELENA_FULL_NAME,
+    ELENA_INTERVIEW_SCORE,
+    ELENA_RECOMMENDATION_ID,
+    MARCUS_CHEN_EMPLOYEE_ID,
+    MARCUS_CHEN_EMPLOYEE_CODE,
+    MARCUS_CHEN_FULL_NAME,
+    MARCUS_CHEN_RECOMMENDATION_ID,
+)
 
 logger = logging.getLogger("worksense.recommendations")
 
@@ -43,36 +57,37 @@ class RecommendationService:
     def _seed_canonical_recommendations(self):
         """Seeds canonical cross-module recommendations for the Golden Demo story."""
         employees = [workforce_service._build_employee_response(e) for e in workforce_service._employees.values()]
-        marcus = next((e for e in employees if "chen" in e.full_name.lower()), None)
+        marcus_emp_raw = workforce_service._employees.get(MARCUS_CHEN_EMPLOYEE_ID)
+        marcus = workforce_service._build_employee_response(marcus_emp_raw) if marcus_emp_raw else None
         if not marcus:
-            marcus = next((e for e in employees if getattr(e, "employee_code", "") == "EMP-10492"), None)
+            marcus = next((e for e in employees if getattr(e, "employee_code", "") == MARCUS_CHEN_EMPLOYEE_CODE), None)
         if not marcus:
-            marcus = next((e for e in employees if "marcus" in e.full_name.lower()), employees[0] if employees else None)
+            marcus = next((e for e in employees if "chen" in e.full_name.lower() or "marcus" in e.full_name.lower()), None)
 
         elena = next((e for e in employees if "elena" in e.full_name.lower()), None)
-        org_id = marcus.organization_id if marcus else "00000000-0000-0000-0000-000000000001"
+        org_id = marcus.organization_id if marcus else ORG_TECHCORP_ID
 
         # 1. Marcus Chen: Internal Mobility Transfer to AI Fraud Detection Team Lead
         if marcus:
-            rec_id_1 = "80000000-0000-0000-0000-000000000001"
+            rec_id_1 = MARCUS_CHEN_RECOMMENDATION_ID
             self._recommendations[rec_id_1] = {
                 "id": rec_id_1,
                 "organization_id": org_id,
-                "subject_id": marcus.id,
-                "subject_name": marcus.full_name,
+                "subject_id": marcus.id or MARCUS_CHEN_EMPLOYEE_ID,
+                "subject_name": marcus.full_name or MARCUS_CHEN_FULL_NAME,
                 "subject_type": "employee",
                 "recommendation_type": "internal_mobility",
                 "source_module": "attrition_intel",
-                "title": "Strategic Internal Mobility: Transfer to Principal Distributed Systems Architect — AI Fraud Detection Initiative",
+                "title": f"Strategic Internal Mobility: Transfer to {ROLE_MARCUS_TARGET_TITLE}",
                 "summary": (
                     f"Mitigate 6-month attrition risk (72% index driven by 3.5 years tenure stagnation in band L5) by "
-                    f"transferring {marcus.full_name} to Principal Distributed Systems Architect — AI Fraud Detection Initiative role for the urgent "
+                    f"transferring {marcus.full_name} to {ROLE_MARCUS_TARGET_TITLE} role for the urgent "
                     f"high-throughput streaming and inference infrastructure initiative."
                 ),
                 "proposed_action": {
                     "action_type": "internal_transfer",
-                    "target_role_title": "Principal Distributed Systems Architect — AI Fraud Detection Initiative",
-                    "target_department_name": "Artificial Intelligence & Fraud Detection",
+                    "target_role_title": ROLE_MARCUS_TARGET_TITLE,
+                    "target_department_name": DEPT_AI_NAME,
                     "effective_date": "2026-11-01",
                     "promotion_band": "L6",
                 },
@@ -93,24 +108,24 @@ class RecommendationService:
             }
 
         # 2. Elena Rostova: Onboarding Plan Activation and EnterPro Dispatch
-        rec_id_2 = "80000000-0000-0000-0000-000000000002"
+        rec_id_2 = ELENA_RECOMMENDATION_ID
         self._recommendations[rec_id_2] = {
             "id": rec_id_2,
             "organization_id": org_id,
-            "subject_id": elena.id if elena else "30000000-0000-0000-0000-000000000001",
-            "subject_name": elena.full_name if elena else "Elena Rostova",
+            "subject_id": elena.id if elena else ELENA_CANDIDATE_ID,
+            "subject_name": elena.full_name if elena else ELENA_FULL_NAME,
             "subject_type": "candidate",
             "recommendation_type": "recruitment_offer",
             "source_module": "onboarding",
             "title": "Onboarding Journey Activation & EnterPro IT Provisioning",
             "summary": (
-                "Elena Rostova has accepted the Senior Distributed Systems Engineer offer (92% interview score). "
+                f"{ELENA_FULL_NAME} has accepted the {ROLE_ELENA_APPLIED_TITLE} offer ({int(ELENA_INTERVIEW_SCORE)}% interview score). "
                 "The multi-brain onboarding journey is fully planned and validated by the Plan Quality Critic. "
                 "Ready for final dual human sign-off and EnterPro automated dispatch."
             ),
             "proposed_action": {
                 "action_type": "activate_onboarding",
-                "role_title": "Senior Distributed Systems Engineer",
+                "role_title": ROLE_ELENA_APPLIED_TITLE,
                 "hire_date": "2026-10-15",
                 "enterpro_scope": ["it_provisioning", "id_badge", "aws_cluster_access"],
             },

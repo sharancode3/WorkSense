@@ -12,6 +12,13 @@ from typing import Any, Dict, List
 from uuid import uuid4
 
 from app.core.errors import NotFoundError
+from app.data.canonical_demo import (
+    MARCUS_CHEN_EMPLOYEE_ID,
+    MARCUS_CHEN_RETENTION_RISK_SCORE,
+    MARCUS_CHEN_TENURE_YEARS,
+    ROLE_MARCUS_CURRENT_TITLE,
+    ROLE_MARCUS_TARGET_TITLE,
+)
 from app.schemas.intelligence import (
     AttritionAggregateOverview,
     AttritionDepartmentAggregate,
@@ -63,9 +70,9 @@ class WorkforceIntelligenceService:
                 "organization_id": marcus.organization_id,
                 "employee_id": marcus.id,
                 "employee_name": marcus.full_name,
-                "current_role_title": marcus.job_role_title or "Senior Infrastructure Engineer",
+                "current_role_title": marcus.job_role_title or ROLE_MARCUS_CURRENT_TITLE,
                 "target_job_role_id": ai_lead_role["id"],
-                "target_role_title": "Principal Distributed Systems Architect — AI Fraud Detection Initiative",
+                "target_role_title": ROLE_MARCUS_TARGET_TITLE,
                 "target_department_name": "Platform & Distributed Infrastructure",
                 "fit_score": 0.880,
                 "fit_percentage": 88,
@@ -105,13 +112,13 @@ class WorkforceIntelligenceService:
 
         # Signal 1: Tenure Stagnation (Time in Band/Role without Mobility)
         # Golden demo: Marcus Chen has ~3.5 years tenure in band L5
-        if "chen" in name.lower():
+        if "chen" in name.lower() or employee_id == MARCUS_CHEN_EMPLOYEE_ID:
             factors.append(
                 RiskFactorDetail(
                     signal_name="Tenure in Band L5 without Mobility",
                     signal_category="career_progression",
                     weight=0.35,
-                    raw_value="3.5 years in current L5 band",
+                    raw_value=f"{MARCUS_CHEN_TENURE_YEARS} years in current L5 band",
                     score_contribution=0.28,
                     direction="increases_risk",
                     evidence_source="workforce_tenure_ledger",
@@ -223,8 +230,8 @@ class WorkforceIntelligenceService:
             score_accumulator += 0.12
 
         # Final Deterministic Score Calculation (bounded 0.00 to 1.00)
-        if "chen" in name.lower():
-            final_risk_score = 0.720
+        if "chen" in name.lower() or employee_id == MARCUS_CHEN_EMPLOYEE_ID:
+            final_risk_score = MARCUS_CHEN_RETENTION_RISK_SCORE
         else:
             final_risk_score = min(1.0, max(0.0, round(score_accumulator, 3)))
 
@@ -232,11 +239,11 @@ class WorkforceIntelligenceService:
             risk_band = "priority_review"
             interventions = [
                 "Schedule Manager 1:1 Career Alignment Discussion",
-                "Explore Strategic Internal Mobility to Principal Distributed Systems Architect — AI Fraud Detection Initiative",
+                f"Explore Strategic Internal Mobility to {ROLE_MARCUS_TARGET_TITLE}",
                 "Conduct Technical Scope and Band L6 Promotion Review",
             ]
             explanation = (
-                f"{name} is flagged for priority review due to tenure stagnation in band L5 (3.5 years without mobility) "
+                f"{name} is flagged for priority review due to tenure stagnation in band L5 ({MARCUS_CHEN_TENURE_YEARS} years without mobility) "
                 f"combined with expressed desire for architectural leadership in recent peer feedback. Supportive intervention "
                 f"via internal transfer to the high-priority AI Fraud initiative is strongly recommended."
             )

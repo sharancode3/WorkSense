@@ -59,6 +59,23 @@ from app.schemas.recruitment import (
 from app.services.identity_service import identity_service
 from app.services.qwen_gateway import QwenError, qwen_gateway
 from app.services.workforce_service import workforce_service
+from app.data.canonical_demo import (
+    ORG_TECHCORP_ID,
+    DEPT_ENG_ID,
+    ROLE_ELENA_APPLIED_ID,
+    ROLE_ELENA_APPLIED_TITLE,
+    ELENA_CANDIDATE_ID,
+    ELENA_FULL_NAME,
+    ELENA_EMAIL,
+    ELENA_PERSONAL_EMAIL,
+    ELENA_INTERVIEW_SCORE,
+    ELENA_JOB_OPENING_ID,
+    ELENA_REQUIREMENT_VERSION_ID,
+    ELENA_RESUME_ID,
+    ELENA_INTERVIEW_KIT_ID,
+    ELENA_INTERVIEW_SESSION_ID,
+    MARCUS_VANCE_PROFILE_ID,
+)
 
 logger = logging.getLogger("worksense.recruitment_service")
 
@@ -1715,10 +1732,10 @@ class RecruitmentService:
 
     def _seed_recruitment_fixtures(self) -> None:
         """Seed realistic Stage 4 recruitment scenario for TechCorp."""
-        techcorp_id = "00000000-0000-0000-0000-000000000001"
-        eng_dept = "60000000-0000-0000-0000-000000000001"
-        staff_role = "61000000-0000-0000-0000-000000000001"  # Staff ML / Distributed Systems Engineer
-        elena_cand = "30000000-0000-0000-0000-000000000001"
+        techcorp_id = ORG_TECHCORP_ID
+        eng_dept = DEPT_ENG_ID
+        staff_role = ROLE_ELENA_APPLIED_ID
+        elena_cand = ELENA_CANDIDATE_ID
         now = datetime.now(timezone.utc).isoformat()
 
         # Ensure Elena Rostova candidate profile exists in workforce service
@@ -1729,7 +1746,7 @@ class RecruitmentService:
                 "profile_id": elena_cand,
                 "first_name": "Elena",
                 "last_name": "Rostova",
-                "email": "candidate@worksense.local",
+                "email": ELENA_EMAIL,
                 "phone": "+1 555 019 2834",
                 "location": "San Francisco, CA (Remote)",
                 "current_title": "Lead Distributed Systems Engineer",
@@ -1743,8 +1760,8 @@ class RecruitmentService:
                 "updated_at": now,
             }
 
-        job_id = "40000000-0000-0000-0000-000000000001"
-        req_id = "40000000-0000-0000-0000-000000000002"
+        job_id = ELENA_JOB_OPENING_ID
+        req_id = ELENA_REQUIREMENT_VERSION_ID
 
         # Find Python, Distributed Systems, Kubernetes skills
         py_skill = next((s for s in workforce_service._skills.values() if s["code"] == "skill_fastapi" or "python" in s["name"].lower()), None)
@@ -1787,11 +1804,11 @@ class RecruitmentService:
             "department_id": eng_dept,
             "job_role_id": staff_role,
             "requisition_code": "REQ-2026-DIST-SR",
-            "title": "Senior Distributed Systems Engineer",
+            "title": ROLE_ELENA_APPLIED_TITLE,
             "location": "Remote / Hybrid Bengaluru",
             "employment_type": "full_time",
             "target_headcount": 2,
-            "hiring_manager_profile_id": "00000000-0000-0000-0000-000000000003",  # Marcus Vance
+            "hiring_manager_profile_id": MARCUS_VANCE_PROFILE_ID,
             "recruiter_profile_id": "00000000-0000-0000-0000-000000000004",  # Rachel Zane
             "status": "active",
             "current_requirement_version": 1,
@@ -1800,13 +1817,13 @@ class RecruitmentService:
         }
 
         # Seed sample resume for Elena Rostova
-        resume_id = "40000000-0000-0000-0000-000000000010"
+        resume_id = ELENA_RESUME_ID
         sample_resume_text = (
-            "Elena Rostova — Senior Distributed Systems Engineer\n"
-            "Email: elena.rostova@example.com | Bengaluru, India\n\n"
+            f"{ELENA_FULL_NAME} — {ROLE_ELENA_APPLIED_TITLE}\n"
+            f"Email: {ELENA_PERSONAL_EMAIL} | Bengaluru, India\n\n"
             "Summary: 8+ years architecting high-throughput distributed state stores, Raft consensus protocols, and Python microservices.\n\n"
             "Experience:\n"
-            "- Senior Distributed Systems Engineer at CloudStream (2022 - Present):\n"
+            f"- {ROLE_ELENA_APPLIED_TITLE} at CloudStream (2022 - Present):\n"
             "  * Implemented multi-region Raft cluster in Python and Go, handling 150k QPS with <5ms p99 latency.\n"
             "  * Engineered Kubernetes deployment operator reducing node failover recovery time by 60%.\n\n"
             "Skills: Distributed Systems, Python, Kubernetes, Linux, High Concurrency, Database Internals."
@@ -1832,14 +1849,14 @@ class RecruitmentService:
         }
 
         # Seed an approved interview kit and in-progress session for Elena Rostova
-        kit_id = "50000000-0000-0000-0000-000000000001"
-        kit_questions = self._build_deterministic_interview_questions("Staff Distributed Systems Engineer", self._requirement_versions[req_id])
+        kit_id = ELENA_INTERVIEW_KIT_ID
+        kit_questions = self._build_deterministic_interview_questions(ROLE_ELENA_APPLIED_TITLE, self._requirement_versions[req_id])
         self._interview_kits[kit_id] = {
             "id": kit_id,
             "organization_id": techcorp_id,
             "job_opening_id": job_id,
             "candidate_id": elena_cand,
-            "title": "Staff Distributed Systems Assessment Kit",
+            "title": "Senior Distributed Systems Assessment Kit",
             "stage": "technical_round_1",
             "questions": kit_questions,
             "status": "approved",
@@ -1849,13 +1866,13 @@ class RecruitmentService:
             "updated_at": now,
         }
 
-        session_id = "50000000-0000-0000-0000-000000000002"
+        session_id = ELENA_INTERVIEW_SESSION_ID
         self._interview_sessions[session_id] = {
             "id": session_id,
             "organization_id": techcorp_id,
             "interview_kit_id": kit_id,
             "candidate_id": elena_cand,
-            "interviewer_profile_id": "00000000-0000-0000-0000-000000000003",
+            "interviewer_profile_id": MARCUS_VANCE_PROFILE_ID,
             "scheduled_at": now,
             "session_status": "in_progress",
             "completed_at": None,
@@ -1876,6 +1893,29 @@ class RecruitmentService:
                 "recorded_at": now,
             }
         ]
+
+        # Seed Elena's verified match evaluation record
+        eval_key = f"{job_id}:{req_id}:{elena_cand}"
+        self._match_evaluations[eval_key] = {
+            "id": "50000000-0000-0000-0000-000000000004",
+            "organization_id": techcorp_id,
+            "job_opening_id": job_id,
+            "requirement_version_id": req_id,
+            "candidate_id": elena_cand,
+            "candidate_name": ELENA_FULL_NAME,
+            "candidate_email": ELENA_EMAIL,
+            "rank_position": 1,
+            "overall_match_score": ELENA_INTERVIEW_SCORE,
+            "required_skill_coverage": 100.0,
+            "preferred_skill_coverage": 80.0,
+            "evidence_strength_score": 95.0,
+            "experience_alignment_score": 90.0,
+            "criterion_breakdown": {},
+            "qwen_explanation": "Verified evidence in distributed consensus, Raft protocol implementation, and high-throughput low-latency streaming pipelines.",
+            "explanation_grounding_status": "grounded",
+            "is_stale": False,
+            "calculated_at": now,
+        }
 
 
 # Global singleton instance

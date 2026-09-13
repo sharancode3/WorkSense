@@ -25,16 +25,20 @@ ORG_ACMECORP_SLUG = "acmecorp"
 # 2. Canonical Departments
 # ==============================================================================
 DEPT_ENG_ID = "60000000-0000-0000-0000-000000000001"
-DEPT_ENG_NAME = "Engineering"
+DEPT_ENG_CODE = "ENG"
+DEPT_ENG_NAME = "Engineering Division"
 
 DEPT_INFRA_ID = "60000000-0000-0000-0000-000000000002"
-DEPT_INFRA_NAME = "Infrastructure & Platform Services"
+DEPT_INFRA_CODE = "ENG-INFRA"
+DEPT_INFRA_NAME = "Platform Infrastructure"
 
 DEPT_AI_ID = "60000000-0000-0000-0000-000000000003"
-DEPT_AI_NAME = "Artificial Intelligence & Fraud Detection"
+DEPT_AI_CODE = "ENG-AI"
+DEPT_AI_NAME = "AI Research & Fraud Detection"
 
 DEPT_PEOPLE_ID = "60000000-0000-0000-0000-000000000004"
-DEPT_PEOPLE_NAME = "People Operations & HR"
+DEPT_PEOPLE_CODE = "PEOPLE"
+DEPT_PEOPLE_NAME = "People Operations"
 
 # ==============================================================================
 # 3. Canonical Job Roles & Requisitions
@@ -49,15 +53,23 @@ ROLE_MARCUS_CURRENT_ID = "61000000-0000-0000-0000-000000000002"
 ROLE_MARCUS_CURRENT_CODE = "ROLE-INFRA-SR"
 ROLE_MARCUS_CURRENT_TITLE = "Senior Infrastructure Engineer"
 
-# Marcus Vance's Manager Role
-ROLE_VANCE_MANAGER_ID = "61000000-0000-0000-0000-000000000003"
-ROLE_VANCE_MANAGER_CODE = "ROLE-ENG-MGR"
-ROLE_VANCE_MANAGER_TITLE = "Engineering Manager"
+# Lead Talent Acquisition Specialist
+ROLE_TA_LEAD_ID = "61000000-0000-0000-0000-000000000003"
+ROLE_TA_LEAD_CODE = "ROLE-TA-LEAD"
+ROLE_TA_LEAD_TITLE = "Lead Talent Acquisition Specialist"
+
+# Senior People Partner
+ROLE_HRBP_SR_ID = "61000000-0000-0000-0000-000000000004"
+ROLE_HRBP_SR_CODE = "ROLE-HRBP-SR"
+ROLE_HRBP_SR_TITLE = "Senior People Partner (HRBP)"
 
 # Marcus Chen's Target Mobility Role (Exact string everywhere)
 ROLE_MARCUS_TARGET_ID = "61000000-0000-0000-0000-000000000005"
 ROLE_MARCUS_TARGET_CODE = "ROLE-ARCH-PRIN"
 ROLE_MARCUS_TARGET_TITLE = "Principal Distributed Systems Architect — AI Fraud Detection Initiative"
+
+# Marcus Vance's Manager Title
+ROLE_VANCE_MANAGER_TITLE = "Engineering Manager"
 
 # ==============================================================================
 # 4. Canonical Personas & Identifiers
@@ -75,9 +87,16 @@ ELENA_APPLIED_ROLE_TITLE = ROLE_ELENA_APPLIED_TITLE
 ELENA_APPLICATION_STATUS = "offer_accepted"
 ELENA_LIFECYCLE_STATE = "preboarding"
 ELENA_INTERVIEW_SCORE = 92.0
+ELENA_JOB_OPENING_ID = "40000000-0000-0000-0000-000000000001"
+ELENA_REQUIREMENT_VERSION_ID = "40000000-0000-0000-0000-000000000002"
+ELENA_RESUME_ID = "40000000-0000-0000-0000-000000000010"
+ELENA_INTERVIEW_KIT_ID = "50000000-0000-0000-0000-000000000001"
+ELENA_INTERVIEW_SESSION_ID = "50000000-0000-0000-0000-000000000002"
 ELENA_APPLICATION_ID = "50000000-0000-0000-0000-000000000001"
-ELENA_ONBOARDING_CASE_ID = "90000000-0000-0000-0000-000000000001"
-ELENA_ONBOARDING_PLAN_ID = "91000000-0000-0000-0000-000000000001"
+ELENA_ONBOARDING_CASE_ID = "55000000-0000-0000-0000-000000000001"
+ELENA_ONBOARDING_PLAN_ID = "56000000-0000-0000-0000-000000000001"
+ELENA_RECOMMENDATION_ID = "80000000-0000-0000-0000-000000000002"
+ELENA_ONBOARDING_RECOMMENDATION_ID = ELENA_RECOMMENDATION_ID
 
 # --- Marcus Chen (Key Person Retention & Internal Mobility) ---
 MARCUS_CHEN_PROFILE_ID = "30000000-0000-0000-0000-000000000002"
@@ -88,7 +107,8 @@ MARCUS_CHEN_EMAIL = "employee@techcorp.local"
 MARCUS_CHEN_CURRENT_ROLE = ROLE_MARCUS_CURRENT_TITLE
 MARCUS_CHEN_TENURE_YEARS = 3.5
 MARCUS_CHEN_SENIORITY_BAND = "L5"
-MARCUS_CHEN_RETENTION_RISK_SCORE = 72.0
+MARCUS_CHEN_RETENTION_RISK_SCORE = 0.720
+MARCUS_CHEN_RETENTION_RISK_PERCENT = 72.0
 MARCUS_CHEN_RISK_BAND = "priority_review"
 MARCUS_CHEN_TARGET_ROLE = ROLE_MARCUS_TARGET_TITLE
 MARCUS_CHEN_MOBILITY_MATCH_SCORE = 88.0
@@ -126,9 +146,15 @@ def get_canonical_elena() -> Dict[str, Any]:
         "status": ELENA_APPLICATION_STATUS,
         "lifecycle_state": ELENA_LIFECYCLE_STATE,
         "interview_score": ELENA_INTERVIEW_SCORE,
+        "job_opening_id": ELENA_JOB_OPENING_ID,
+        "requirement_version_id": ELENA_REQUIREMENT_VERSION_ID,
+        "resume_id": ELENA_RESUME_ID,
+        "interview_kit_id": ELENA_INTERVIEW_KIT_ID,
+        "interview_session_id": ELENA_INTERVIEW_SESSION_ID,
         "application_id": ELENA_APPLICATION_ID,
         "onboarding_case_id": ELENA_ONBOARDING_CASE_ID,
         "onboarding_plan_id": ELENA_ONBOARDING_PLAN_ID,
+        "recommendation_id": ELENA_RECOMMENDATION_ID,
         "manager_profile_id": MARCUS_VANCE_PROFILE_ID,
         "manager_name": MARCUS_VANCE_FULL_NAME,
     }
@@ -146,6 +172,7 @@ def get_canonical_marcus_chen() -> Dict[str, Any]:
         "tenure_years": MARCUS_CHEN_TENURE_YEARS,
         "seniority_band": MARCUS_CHEN_SENIORITY_BAND,
         "retention_risk_score": MARCUS_CHEN_RETENTION_RISK_SCORE,
+        "retention_risk_percent": MARCUS_CHEN_RETENTION_RISK_PERCENT,
         "risk_band": MARCUS_CHEN_RISK_BAND,
         "target_role": MARCUS_CHEN_TARGET_ROLE,
         "mobility_match_score": MARCUS_CHEN_MOBILITY_MATCH_SCORE,

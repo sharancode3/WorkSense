@@ -11,6 +11,16 @@ from typing import Any, Dict, List
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from app.data.canonical_demo import (
+    ELENA_FULL_NAME,
+    ELENA_INTERVIEW_SCORE,
+    MARCUS_CHEN_FULL_NAME,
+    MARCUS_CHEN_TENURE_YEARS,
+    ORG_TECHCORP_ID,
+    ROLE_ELENA_APPLIED_TITLE,
+    ROLE_MARCUS_CURRENT_TITLE,
+    ROLE_MARCUS_TARGET_TITLE,
+)
 from app.services.onboarding_service import onboarding_service
 from app.services.policy_rag_service import policy_rag_service
 from app.services.recommendation_service import recommendation_service
@@ -66,10 +76,10 @@ def list_demo_personas() -> List[PersonaItem]:
         ),
         PersonaItem(
             id="persona-employee",
-            name="Marcus Chen",
+            name=MARCUS_CHEN_FULL_NAME,
             email="employee@worksense.local",
             role="employee",
-            title="Senior Distributed Systems Engineer",
+            title=ROLE_MARCUS_CURRENT_TITLE,
             department="Engineering",
             narrative_focus="Stages 6, 7, 9: Remote policy queries, transparent attrition factor transparency, career mobility match.",
             avatar_color="#059669",
@@ -143,24 +153,24 @@ def get_marcus_chen_golden_path() -> Dict[str, Any]:
     return {
         "persona": {
             "name": marcus["full_name"],
-            "title": marcus.get("job_title", "Senior Infrastructure Engineer"),
-            "tenure_years": 3.5,
+            "title": marcus.get("job_title", ROLE_MARCUS_CURRENT_TITLE),
+            "tenure_years": MARCUS_CHEN_TENURE_YEARS,
             "department": marcus.get("department_name", "Infrastructure & Platform Services"),
         },
         "stage_7a_attrition_risk": risk.model_dump(),
         "stage_7b_performance_insights": perf.model_dump(),
         "stage_7c_internal_mobility": {
-            "recommended_target_role": "Principal Distributed Systems Architect — AI Fraud Detection Initiative",
+            "recommended_target_role": ROLE_MARCUS_TARGET_TITLE,
             "skill_match_percentage": 88.0,
             "transferable_skills": ["Kubernetes", "High-Throughput Streaming", "Go", "Database Internals"],
             "growth_areas": ["Triton Inference Server", "Distributed ML Serving"],
         },
         "stage_9_canonical_recommendation": marcus_rec.model_dump() if marcus_rec else None,
         "narrative_summary": (
-            "Marcus Chen is an exceptional performer facing tenure stagnation (L5 for 3.5 years). "
-            "Rather than allowing unmitigated attrition, WorkSense identifies high skill transferability (88%) "
-            "to the open Principal Distributed Systems Architect — AI Fraud Detection Initiative role, generating an evidence-backed "
-            "recommendation that HR approves and dispatches to EnterPro in under 2 minutes."
+            f"Marcus Chen is an exceptional performer facing tenure stagnation (L5 for {MARCUS_CHEN_TENURE_YEARS} years). "
+            f"Rather than allowing unmitigated attrition, WorkSense identifies high skill transferability (88%) "
+            f"to the open {ROLE_MARCUS_TARGET_TITLE} role, generating an evidence-backed "
+            f"recommendation that HR approves and dispatches to EnterPro in under 2 minutes."
         ),
     }
 
@@ -171,20 +181,20 @@ def get_elena_rostova_golden_path() -> Dict[str, Any]:
     cands = list(workforce_service._candidate_profiles.values())
     elena = next((c for c in cands if "elena" in f"{c.get('first_name', '')} {c.get('last_name', '')}".lower()), None)
 
-    onb_cases = onboarding_service.list_cases(org_id="00000000-0000-0000-0000-000000000001")
+    onb_cases = onboarding_service.list_cases(org_id=ORG_TECHCORP_ID)
     elena_case = next((c for c in onb_cases.cases if "elena" in c.candidate_name.lower()), None)
 
     return {
         "persona": {
-            "name": f"{elena.get('first_name', 'Elena')} {elena.get('last_name', 'Rostova')}" if elena else "Elena Rostova",
-            "target_role": "Senior Distributed Systems Engineer",
+            "name": f"{elena.get('first_name', 'Elena')} {elena.get('last_name', 'Rostova')}" if elena else ELENA_FULL_NAME,
+            "target_role": ROLE_ELENA_APPLIED_TITLE,
             "department": "Engineering",
             "hire_date": "2026-10-01",
         },
         "stage_4_recruitment": {
-            "match_score": 92.0,
+            "match_score": ELENA_INTERVIEW_SCORE,
             "interview_stage": "Technical Architecture & Fairness Rubrics",
-            "decision": "Offer Accepted (Preboarding Active - 92% Interview Rubric Score)",
+            "decision": f"Offer Accepted (Preboarding Active - {int(ELENA_INTERVIEW_SCORE)}% Interview Rubric Score)",
         },
         "stage_5_adaptive_onboarding": elena_case.model_dump() if elena_case else None,
         "narrative_summary": (
