@@ -1180,11 +1180,11 @@ CREATE TABLE IF NOT EXISTS onboarding_cases (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
     candidate_id UUID NOT NULL REFERENCES candidate_profiles(id) ON DELETE RESTRICT,
-    employee_id UUID NOT NULL REFERENCES employee_profiles(id) ON DELETE RESTRICT,
+    employee_id UUID NOT NULL REFERENCES employees(id) ON DELETE RESTRICT,
     job_opening_id UUID REFERENCES job_openings(id) ON DELETE SET NULL,
     department_id UUID NOT NULL REFERENCES departments(id) ON DELETE RESTRICT,
     job_role_id UUID NOT NULL REFERENCES job_roles(id) ON DELETE RESTRICT,
-    manager_employee_id UUID REFERENCES employee_profiles(id) ON DELETE SET NULL,
+    manager_employee_id UUID REFERENCES employees(id) ON DELETE SET NULL,
     start_date DATE NOT NULL,
     work_mode TEXT NOT NULL DEFAULT 'remote' CHECK (work_mode IN ('remote', 'hybrid', 'onsite')),
     current_phase TEXT NOT NULL DEFAULT 'preboarding' CHECK (current_phase IN (
