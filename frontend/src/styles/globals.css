@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==============================================================================
+   WorkSense Design System — Strict Flat Design Tokens
+   - Zero drop shadows, zero glow, zero artificial depth
+   - Hierarchy driven by solid color blocks, scale, and geometric typography (Outfit)
+   - WCAG 2.1 AA compliant contrast in both Light and Dark themes
+   ============================================================================== */
+
+:root {
+  /* Canvas & Surfaces (Light Mode) */
+  --color-canvas: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-secondary: #F3F4F6;
+  --color-surface-tertiary: #E5E7EB;
+
+  /* Typography */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #6B7280;
+
+  /* Brand Primary (Solid Digital Blue) */
+  --color-brand-primary: #2563EB;
+  --color-brand-primary-hover: #1D4ED8;
+  --color-brand-primary-soft: #EFF6FF;
+
+  /* Brand Accent (Emerald & Restrained Lime) */
+  --color-brand-accent: #10B981;
+  --color-brand-accent-hover: #059669;
+  --color-brand-accent-soft: #ECFDF5;
+
+  /* Borders & Dividers (Used sparingly for structural definition) */
+  --color-border-subtle: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+
+  /* Status Colors */
+  --color-success: #10B981;
+  --color-success-bg: #ECFDF5;
+  --color-success-border: #A7F3D0;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FFFBEB;
+  --color-warning-border: #FDE68A;
+
+  --color-danger: #EF4444;
+  --color-danger-bg: #FEF2F2;
+  --color-danger-border: #FECACA;
+
+  --color-info: #3B82F6;
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+
+  /* Flat Focus Ring (Solid accessible outline, no shadow blur) */
+  --focus-ring: 0 0 0 2px #FFFFFF, 0 0 0 4px #2563EB;
+}
+
+[data-theme="dark"] {
+  /* Canvas & Surfaces (Dark Mode: Deep Navy / Charcoal) */
+  --color-canvas: #0B1020;
+  --color-surface: #111827;
+  --color-surface-secondary: #182234;
+  --color-surface-tertiary: #1F2E47;
+
+  /* Typography */
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #D1D5DB;
+  --color-text-muted: #9CA3AF;
+
+  /* Brand Primary (High-Contrast Digital Blue) */
+  --color-brand-primary: #3B82F6;
+  --color-brand-primary-hover: #60A5FA;
+  --color-brand-primary-soft: #1E293B;
+
+  /* Brand Accent (Emerald) */
+  --color-brand-accent: #10B981;
+  --color-brand-accent-hover: #34D399;
+  --color-brand-accent-soft: #064E3B;
+
+  /* Borders & Dividers */
+  --color-border-subtle: #1F2937;
+  --color-border-strong: #374151;
+
+  /* Status Colors */
+  --color-success: #10B981;
+  --color-success-bg: #064E3B;
+  --color-success-border: #047857;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: #78350F;
+  --color-warning-border: #B45309;
+
+  --color-danger: #EF4444;
+  --color-danger-bg: #7F1D1D;
+  --color-danger-border: #B91C1C;
+
+  --color-info: #38BDF8;
+  --color-info-bg: #0C4A6E;
+  --color-info-border: #0284C7;
+
+  /* Flat Focus Ring (Solid accessible outline, no shadow blur) */
+  --focus-ring: 0 0 0 2px #0B1020, 0 0 0 4px #3B82F6;
+}
+
+/* Global Reset & Hygiene */
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular Numerals for Metrics and Dates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Flat Design: Zero Shadows Enforced Globally */
+*, ::before, ::after {
+  box-shadow: none !important;
+}
+
+/* Accessible Focus States using Solid Outlines */
+:focus-visible {
+  outline: 2px solid var(--color-brand-primary) !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
