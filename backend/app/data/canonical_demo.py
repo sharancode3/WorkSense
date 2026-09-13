@@ -72,7 +72,38 @@ ROLE_MARCUS_TARGET_TITLE = "Principal Distributed Systems Architect — AI Fraud
 ROLE_VANCE_MANAGER_TITLE = "Engineering Manager"
 
 # ==============================================================================
-# 4. Canonical Personas & Identifiers
+# 4. Authoritative Candidate-to-Employee Lifecycle State Machine
+# ==============================================================================
+LIFECYCLE_APPLICATION_SUBMITTED = "application_submitted"
+LIFECYCLE_EVALUATION_COMPLETE = "evaluation_complete"
+LIFECYCLE_OFFER_EXTENDED = "offer_extended"
+LIFECYCLE_OFFER_ACCEPTED = "offer_accepted"
+LIFECYCLE_PREBOARDING_ACTIVE = "preboarding_active"
+LIFECYCLE_EMPLOYEE_CONVERTED = "employee_converted"
+LIFECYCLE_ONBOARDING_ACTIVE = "onboarding_active"
+
+LIFECYCLE_SEQUENCE = [
+    LIFECYCLE_APPLICATION_SUBMITTED,
+    LIFECYCLE_EVALUATION_COMPLETE,
+    LIFECYCLE_OFFER_EXTENDED,
+    LIFECYCLE_OFFER_ACCEPTED,
+    LIFECYCLE_PREBOARDING_ACTIVE,
+    LIFECYCLE_EMPLOYEE_CONVERTED,
+    LIFECYCLE_ONBOARDING_ACTIVE,
+]
+
+LIFECYCLE_DISPLAY_LABELS = {
+    LIFECYCLE_APPLICATION_SUBMITTED: "Application Submitted",
+    LIFECYCLE_EVALUATION_COMPLETE: "Evaluation Complete",
+    LIFECYCLE_OFFER_EXTENDED: "Offer Extended",
+    LIFECYCLE_OFFER_ACCEPTED: "Offer Accepted",
+    LIFECYCLE_PREBOARDING_ACTIVE: "Preboarding Active",
+    LIFECYCLE_EMPLOYEE_CONVERTED: "Employee Converted",
+    LIFECYCLE_ONBOARDING_ACTIVE: "Onboarding Active",
+}
+
+# ==============================================================================
+# 5. Canonical Personas & Identifiers
 # ==============================================================================
 
 # --- Elena Rostova (Candidate -> Employee Twin) ---
@@ -85,7 +116,9 @@ ELENA_EMAIL = "candidate@worksense.local"
 ELENA_PERSONAL_EMAIL = "elena.rostova@example.com"
 ELENA_APPLIED_ROLE_TITLE = ROLE_ELENA_APPLIED_TITLE
 ELENA_APPLICATION_STATUS = "offer_accepted"
-ELENA_LIFECYCLE_STATE = "preboarding"
+ELENA_RECORD_STATUS = "offer_accepted"
+ELENA_LIFECYCLE_STATE = LIFECYCLE_PREBOARDING_ACTIVE
+ELENA_CANDIDATE_FACING_STATUS = "Preboarding Active"
 ELENA_INTERVIEW_SCORE = 92.0
 ELENA_JOB_OPENING_ID = "40000000-0000-0000-0000-000000000001"
 ELENA_REQUIREMENT_VERSION_ID = "40000000-0000-0000-0000-000000000002"
@@ -128,7 +161,7 @@ SUSPENDED_USER_EMAIL = "suspended@techcorp.local"
 SUSPENDED_USER_FULL_NAME = "David Wallace"
 
 # ==============================================================================
-# 5. Accessor Functions
+# 6. Accessor Functions
 # ==============================================================================
 
 
@@ -144,7 +177,9 @@ def get_canonical_elena() -> Dict[str, Any]:
         "personal_email": ELENA_PERSONAL_EMAIL,
         "applied_role_title": ELENA_APPLIED_ROLE_TITLE,
         "status": ELENA_APPLICATION_STATUS,
+        "record_status": ELENA_RECORD_STATUS,
         "lifecycle_state": ELENA_LIFECYCLE_STATE,
+        "candidate_facing_status": ELENA_CANDIDATE_FACING_STATUS,
         "interview_score": ELENA_INTERVIEW_SCORE,
         "job_opening_id": ELENA_JOB_OPENING_ID,
         "requirement_version_id": ELENA_REQUIREMENT_VERSION_ID,

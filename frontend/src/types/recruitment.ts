@@ -299,5 +299,6 @@ export interface CandidateApplication {
   job_title: string;
   location: string;
   status: string;
+  lifecycle_state?: string | null;
   applied_at: string;
 }

@@ -75,6 +75,10 @@ from app.data.canonical_demo import (
     ELENA_INTERVIEW_KIT_ID,
     ELENA_INTERVIEW_SESSION_ID,
     MARCUS_VANCE_PROFILE_ID,
+    ELENA_APPLICATION_STATUS,
+    ELENA_RECORD_STATUS,
+    ELENA_LIFECYCLE_STATE,
+    ELENA_CANDIDATE_FACING_STATUS,
 )
 
 logger = logging.getLogger("worksense.recruitment_service")
@@ -1580,12 +1584,14 @@ class RecruitmentService:
                     dec = self._decisions.get(dec_key) if dec_key else None
 
                     status = dec["candidate_facing_status"] if dec else "Application Under Review"
+                    lifecycle_state = dec.get("lifecycle_state") if dec else ("preboarding_active" if cand.get("email") in ["candidate@worksense.local", "elena.rostova@example.com"] else "application_submitted")
                     results.append({
                         "application_id": resume["id"],
                         "job_id": job_id,
                         "job_title": job["title"] if job else "Technical Requisition",
                         "location": job["location"] if job else "Remote",
                         "status": status,
+                        "lifecycle_state": lifecycle_state,
                         "applied_at": resume["uploaded_at"],
                     })
         return results
@@ -1755,7 +1761,9 @@ class RecruitmentService:
                 "summary": "Distributed systems engineer with 8+ years designing consensus systems and low-latency streaming pipelines.",
                 "target_role_id": staff_role,
                 "consent_given": True,
-                "record_status": "active",
+                "status": ELENA_APPLICATION_STATUS,
+                "record_status": ELENA_RECORD_STATUS,
+                "lifecycle_state": ELENA_LIFECYCLE_STATE,
                 "created_at": now,
                 "updated_at": now,
             }
@@ -1915,6 +1923,25 @@ class RecruitmentService:
             "explanation_grounding_status": "grounded",
             "is_stale": False,
             "calculated_at": now,
+        }
+
+        # Seed Elena's authoritative recruitment decision (offer accepted, preboarding active)
+        dec_key = f"{job_id}:{elena_cand}"
+        self._decisions[dec_key] = {
+            "id": "50000000-0000-0000-0000-000000000005",
+            "organization_id": techcorp_id,
+            "job_opening_id": job_id,
+            "candidate_id": elena_cand,
+            "decided_by": "00000000-0000-0000-0000-000000000004",  # Recruiter
+            "decision": "offer_accepted",
+            "ai_recommendation": "Advance to Technical Evaluation & Extend Offer",
+            "is_override": False,
+            "override_reason": None,
+            "rationale": "Candidate demonstrated exceptional mastery in distributed consensus algorithms during interview rounds.",
+            "evidence_references": [f"job:{job_id}", f"candidate:{elena_cand}"],
+            "candidate_facing_status": ELENA_CANDIDATE_FACING_STATUS,
+            "lifecycle_state": ELENA_LIFECYCLE_STATE,
+            "created_at": now,
         }
 
 

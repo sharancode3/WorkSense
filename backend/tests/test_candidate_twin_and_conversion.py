@@ -79,43 +79,59 @@ async def test_candidate_to_employee_idempotent_conversion(app):
         res_roles = await client.get("/api/v1/workforce/job-roles", headers=headers)
         role = res_roles.json()[0]
 
-        # 2. Execute conversion
-        conversion_payload = {
-            "department_id": eng_dept["id"],
-            "job_role_id": role["id"],
-            "employee_code": "TC-ENG-991",
-            "hire_date": "2026-10-01",
-        }
+        from copy import deepcopy
+        from app.services.workforce_service import workforce_service
 
-        res_convert = await client.post(
-            f"/api/v1/workforce/candidates/{candidate_id}/convert",
-            headers=headers,
-            json=conversion_payload,
-        )
-        assert res_convert.status_code == 200
-        conv_data = res_convert.json()
-        assert conv_data["success"] is True
-        assert conv_data["employee_id"] is not None
-        emp_id = conv_data["employee_id"]
-        assert conv_data["carried_skill_count"] >= 1
-        assert conv_data["carried_evidence_count"] >= 1
+        saved_cand = deepcopy(workforce_service._candidate_profiles.get(candidate_id))
+        saved_conv = deepcopy(workforce_service._candidate_conversions.get(candidate_id))
+        saved_emps = deepcopy(workforce_service._employees)
 
-        # 3. Test Idempotency: Re-submitting conversion for the same candidate returns existing record
-        res_convert_again = await client.post(
-            f"/api/v1/workforce/candidates/{candidate_id}/convert",
-            headers=headers,
-            json=conversion_payload,
-        )
-        assert res_convert_again.status_code == 200
-        conv_again_data = res_convert_again.json()
-        assert conv_again_data["success"] is True
-        assert conv_again_data["employee_id"] == emp_id
-        assert "already converted" in conv_again_data["message"].lower()
+        try:
+            # 2. Execute conversion
+            conversion_payload = {
+                "department_id": eng_dept["id"],
+                "job_role_id": role["id"],
+                "employee_code": "TC-ENG-991",
+                "hire_date": "2026-10-01",
+            }
 
-        # 4. Verify candidate status updated
-        res_cand = await client.get(f"/api/v1/workforce/candidates/{candidate_id}", headers=headers)
-        assert res_cand.status_code == 200
-        assert res_cand.json()["record_status"] == "converted"
+            res_convert = await client.post(
+                f"/api/v1/workforce/candidates/{candidate_id}/convert",
+                headers=headers,
+                json=conversion_payload,
+            )
+            assert res_convert.status_code == 200
+            conv_data = res_convert.json()
+            assert conv_data["success"] is True
+            assert conv_data["employee_id"] is not None
+            emp_id = conv_data["employee_id"]
+            assert conv_data["carried_skill_count"] >= 1
+            assert conv_data["carried_evidence_count"] >= 1
+
+            # 3. Test Idempotency: Re-submitting conversion for the same candidate returns existing record
+            res_convert_again = await client.post(
+                f"/api/v1/workforce/candidates/{candidate_id}/convert",
+                headers=headers,
+                json=conversion_payload,
+            )
+            assert res_convert_again.status_code == 200
+            conv_again_data = res_convert_again.json()
+            assert conv_again_data["success"] is True
+            assert conv_again_data["employee_id"] == emp_id
+            assert "already converted" in conv_again_data["message"].lower()
+
+            # 4. Verify candidate status updated
+            res_cand = await client.get(f"/api/v1/workforce/candidates/{candidate_id}", headers=headers)
+            assert res_cand.status_code == 200
+            assert res_cand.json()["record_status"] == "converted"
+        finally:
+            if saved_cand:
+                workforce_service._candidate_profiles[candidate_id] = saved_cand
+            if saved_conv is not None:
+                workforce_service._candidate_conversions[candidate_id] = saved_conv
+            else:
+                workforce_service._candidate_conversions.pop(candidate_id, None)
+            workforce_service._employees = saved_emps
 
 
 @pytest.mark.asyncio

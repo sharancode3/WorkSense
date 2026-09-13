@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { UserSearch, ChevronRight, ArrowRight, CheckCircle2 } from "lucide-react";
 import { listCandidatesApi } from "@/lib/api/workforce";
@@ -17,7 +17,7 @@ export default function CandidatesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCandidates = async () => {
+  const fetchCandidates = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -31,11 +31,11 @@ export default function CandidatesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchCandidates();
-  }, [statusFilter]);
+  }, [fetchCandidates]);
 
   const filteredCandidates = candidates.filter((c) => {
     if (!searchQuery) return true;
@@ -43,15 +43,18 @@ export default function CandidatesPage() {
     return c.full_name?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q);
   });
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status?: string) => {
     switch (status) {
+      case "preboarding_active":
       case "offer_accepted":
         return "bg-brand-primary/10 text-brand-primary border-brand-primary/20";
       case "converted":
+      case "employee_converted":
         return "bg-green-100 text-green-800 border-green-200";
       case "interviewing":
         return "bg-blue-100 text-blue-800 border-blue-200";
       case "offered":
+      case "offer_extended":
         return "bg-purple-100 text-purple-800 border-purple-200";
       default:
         return "bg-surface-secondary text-content-secondary border-boundary-subtle";
@@ -139,10 +142,10 @@ export default function CandidatesPage() {
                     <h3 className="text-base font-bold text-content-primary">{candidate.full_name}</h3>
                     <span
                       className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${getStatusBadge(
-                        candidate.status
+                        candidate.lifecycle_state || candidate.status || candidate.record_status || undefined
                       )}`}
                     >
-                      {candidate.status?.replace("_", " ")}
+                      {(candidate.lifecycle_state || candidate.status || candidate.record_status || "active").replace(/_/g, " ")}
                     </span>
                   </div>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-content-secondary mt-1">
@@ -163,7 +166,7 @@ export default function CandidatesPage() {
                   View Digital Twin
                 </Link>
 
-                {canConvert && candidate.status !== "converted" && (
+                {canConvert && candidate.status !== "converted" && candidate.record_status !== "converted" && candidate.lifecycle_state !== "employee_converted" && (
                   <Link
                     href={`/workforce/candidates/${candidate.id}/convert`}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-brand-primary text-white text-xs font-semibold rounded hover:bg-opacity-90 transition-colors"
@@ -173,7 +176,7 @@ export default function CandidatesPage() {
                   </Link>
                 )}
 
-                {candidate.status === "converted" && (
+                {(candidate.status === "converted" || candidate.record_status === "converted" || candidate.lifecycle_state === "employee_converted") && (
                   <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded border border-green-200">
                     <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
                     Converted

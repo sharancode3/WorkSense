@@ -33,9 +33,16 @@ from app.data.canonical_demo import (
     ROLE_ELENA_APPLIED_ID,
     ROLE_ELENA_APPLIED_TITLE,
     ROLE_MARCUS_TARGET_TITLE,
+    LIFECYCLE_SEQUENCE,
+    LIFECYCLE_PREBOARDING_ACTIVE,
+    ELENA_RECORD_STATUS,
+    ELENA_LIFECYCLE_STATE,
+    ELENA_CANDIDATE_FACING_STATUS,
 )
+from app.schemas.workforce import CandidateConversionRequest
 from app.main import app
 from app.services.dashboard_service import dashboard_service
+from app.services.identity_service import identity_service
 from app.services.onboarding_service import onboarding_service
 from app.services.recommendation_service import recommendation_service
 from app.services.recruitment_service import recruitment_service
@@ -159,3 +166,111 @@ def test_dashboard_score_derives_from_evaluations_and_zeros_when_absent():
     # Verify restored state
     summary_restored = dashboard_service.get_dashboard_summary(organization_id=ORG_TECHCORP_ID)
     assert summary_restored.recruitment_funnel.average_candidate_score == ELENA_INTERVIEW_SCORE
+
+
+def test_elena_lifecycle_state_machine_and_funnel_consistency():
+    """Verifies that Elena's lifecycle state, candidate view, dashboard funnel, and alert completely agree."""
+    # 1. State machine order must be strictly preserved
+    expected_order = [
+        "application_submitted",
+        "evaluation_complete",
+        "offer_extended",
+        "offer_accepted",
+        "preboarding_active",
+        "employee_converted",
+        "onboarding_active",
+    ]
+    assert LIFECYCLE_SEQUENCE == expected_order
+
+    # 2. Canonical demo baseline truth: Elena is in preboarding_active (offer accepted, not converted yet)
+    assert ELENA_LIFECYCLE_STATE == "preboarding_active"
+    assert ELENA_RECORD_STATUS == "offer_accepted"
+    assert ELENA_CANDIDATE_FACING_STATUS == "Preboarding Active"
+
+    # 3. Candidate portal view must NOT say 'Offer Extended'
+    cand_apps = recruitment_service.get_candidate_facing_applications(
+        org_id=ORG_TECHCORP_ID,
+        profile_id="30000000-0000-0000-0000-000000000001",
+        email="candidate@worksense.local",
+    )
+    assert len(cand_apps) >= 1
+    elena_app = cand_apps[0]
+    assert elena_app["status"] == "Preboarding Active"
+    assert elena_app["status"] != "Offer Extended"
+    assert elena_app["lifecycle_state"] == "preboarding_active"
+
+    # 4. HR Dashboard funnel counts must be completely consistent:
+    # Offered/Preboarding must be 1, Converted must be 0 (since she is in preboarding, not converted yet)
+    summary = dashboard_service.get_dashboard_summary(organization_id=ORG_TECHCORP_ID)
+    funnel = summary.recruitment_funnel
+    assert funnel.offered_total == 1, f"Expected offered_total == 1, got {funnel.offered_total}"
+    assert funnel.converted_total == 0, f"Expected converted_total == 0 before conversion, got {funnel.converted_total}"
+    assert funnel.interviewed_total >= 1
+    assert funnel.average_candidate_score == ELENA_INTERVIEW_SCORE
+
+    # 5. Dashboard Priority Alert must specifically reference preboarding/offer accepted
+    elena_alerts = [a for a in summary.priority_alerts if "Elena" in a.title]
+    assert len(elena_alerts) >= 1
+    alert = elena_alerts[0]
+    assert "Preboarding" in alert.title or "Offered" in alert.title
+    assert "92%" in alert.evidence_snippet
+    assert alert.target_route == "/manager/onboarding"
+
+    # 6. Manager Onboarding case must be in review
+    case = onboarding_service._cases[ELENA_ONBOARDING_CASE_ID]
+    assert case["status"] == "in_review"
+
+
+def test_lifecycle_state_transitions_and_dashboard_counts():
+    """Verifies that transitioning from preboarding to employee_converted cleanly updates dashboard funnel counts."""
+    # Baseline state: Offered = 1, Converted = 0
+    s_before = dashboard_service.get_dashboard_summary(organization_id=ORG_TECHCORP_ID)
+    assert s_before.recruitment_funnel.offered_total == 1
+    assert s_before.recruitment_funnel.converted_total == 0
+
+    # Save state
+    saved_cand = deepcopy(workforce_service._candidate_profiles[ELENA_CANDIDATE_ID])
+    saved_conversions = deepcopy(workforce_service._candidate_conversions)
+    saved_employees = deepcopy(workforce_service._employees)
+    saved_memberships = deepcopy(identity_service._memberships)
+    saved_user_roles = deepcopy(identity_service._user_roles)
+    try:
+        # Simulate HR conversion of candidate to employee
+        req = CandidateConversionRequest(
+            employee_code="EMP-10550-TEST",
+            department_id=DEPT_ENG_ID,
+            job_role_id=ROLE_ELENA_APPLIED_ID,
+            hire_date="2026-10-01",
+            work_location="hybrid",
+            employment_type="full_time",
+        )
+        res = workforce_service.convert_candidate_to_employee(
+            org_id=ORG_TECHCORP_ID,
+            cand_id=ELENA_CANDIDATE_ID,
+            data=req,
+            actor_id="00000000-0000-0000-0000-000000000004",
+        )
+        assert res.success is True
+
+        # Candidate profile must now reflect converted lifecycle state
+        cand_after = workforce_service._candidate_profiles[ELENA_CANDIDATE_ID]
+        assert cand_after["record_status"] == "converted"
+        assert cand_after["lifecycle_state"] == "employee_converted"
+
+        # Dashboard funnel must now immediately reflect: Offered = 0, Converted = 1
+        s_after = dashboard_service.get_dashboard_summary(organization_id=ORG_TECHCORP_ID)
+        assert s_after.recruitment_funnel.offered_total == 0
+        assert s_after.recruitment_funnel.converted_total == 1
+    finally:
+        # Restore baseline state
+        workforce_service._candidate_profiles[ELENA_CANDIDATE_ID] = saved_cand
+        workforce_service._candidate_conversions = saved_conversions
+        workforce_service._employees = saved_employees
+        identity_service._memberships = saved_memberships
+        identity_service._user_roles = saved_user_roles
+
+    # Verify restoration
+    s_restored = dashboard_service.get_dashboard_summary(organization_id=ORG_TECHCORP_ID)
+    assert s_restored.recruitment_funnel.offered_total == 1
+    assert s_restored.recruitment_funnel.converted_total == 0
+

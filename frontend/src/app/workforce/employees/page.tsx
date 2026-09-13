@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Users, ChevronRight, Filter, Search } from "lucide-react";
 import { listEmployeesApi, listDepartmentsApi } from "@/lib/api/workforce";
@@ -14,7 +14,7 @@ export default function EmployeesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -32,11 +32,11 @@ export default function EmployeesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDept]);
 
   useEffect(() => {
     loadData();
-  }, [selectedDept]);
+  }, [loadData]);
 
   const filteredEmployees = employees.filter((e) => {
     if (!searchQuery) return true;

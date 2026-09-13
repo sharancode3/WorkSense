@@ -99,14 +99,14 @@ export default function HrPortalPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-bold text-content-primary">
-                    HR Gate Sign-off Ready: Marcus Chen (Senior Distributed Systems Engineer)
+                    Preboarding Active: Elena Rostova (Senior Distributed Systems Engineer)
                   </h2>
                   <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 border-blue-200">
-                    Manager Approved
+                    Offer Accepted
                   </Badge>
                 </div>
                 <p className="text-xs text-content-secondary mt-1 max-w-2xl leading-relaxed">
-                  Manager Alex Rivera has signed off on Marcus Chen&apos;s Day 30 milestones. Complete final HR review to dispatch automated IT asset and role permission provisioning to the EnterPro enterprise gateway.
+                  Elena Rostova accepted the offer with a 92% evaluation score. Complete final HR review to initiate IT asset provisioning and role permission setup via the EnterPro enterprise gateway.
                 </p>
               </div>
             </div>

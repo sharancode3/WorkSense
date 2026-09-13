@@ -45,21 +45,29 @@ class QwenGateway:
     def __init__(self):
         self._settings = get_settings()
         self._semaphore = asyncio.Semaphore(1)
-        self._ollama_url = self._settings.ollama_url.rstrip("/")
+        # Normalize localhost to 127.0.0.1 to avoid Windows IPv6 ::1 connect timeout delays
+        self._ollama_url = self._settings.ollama_url.rstrip("/").replace("://localhost", "://127.0.0.1")
         self._model = self._settings.qwen_model
         self._timeout = self._settings.ollama_timeout_seconds
+        self._is_available_cached: Optional[bool] = None
 
-    async def is_available(self) -> bool:
+    async def is_available(self, force_refresh: bool = False) -> bool:
         """Check if local Ollama daemon is running and model is loaded."""
+        if not force_refresh and self._is_available_cached is not None:
+            return self._is_available_cached
         try:
-            async with httpx.AsyncClient(timeout=3.0) as client:
+            timeout_cfg = httpx.Timeout(0.4, connect=0.2)
+            async with httpx.AsyncClient(timeout=timeout_cfg) as client:
                 res = await client.get(f"{self._ollama_url}/api/tags")
                 if res.status_code == 200:
                     data = res.json()
                     models = [m.get("name") or m.get("model") for m in data.get("models", [])]
-                    return any(self._model in m for m in models if m)
+                    self._is_available_cached = any(self._model in m for m in models if m)
+                    return self._is_available_cached
+                self._is_available_cached = False
                 return False
         except Exception:
+            self._is_available_cached = False
             return False
 
     async def generate_structured(
@@ -80,6 +88,8 @@ class QwenGateway:
         - Automatic one-shot repair prompt upon schema validation failure.
         - Raises QwenUnavailableError or QwenSchemaValidationError on failure.
         """
+        if not await self.is_available():
+            raise QwenUnavailableError(f"Local Ollama daemon is offline or model '{self._model}' is not loaded")
         prompt = (
             f"{system_instruction}\n\n"
             f"### BOUNDED UNTRUSTED DATA INPUT:\n"

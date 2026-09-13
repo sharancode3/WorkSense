@@ -35,16 +35,55 @@ class DashboardService:
         is_leadership: bool = False,
     ) -> DashboardSummaryResponse:
         """Calculates live dashboard overview from underlying operational services."""
-        # 1. Recruitment Funnel Calculation
+        # 1. Recruitment Funnel Calculation based on authoritative lifecycle states
         candidates = list(workforce_service._candidate_profiles.values())
         org_candidates = [c for c in candidates if c.get("organization_id") == organization_id]
 
         applications_total = len(org_candidates)
-        processing_total = len([c for c in org_candidates if c.get("status") == "applied"])
-        shortlisted_total = len([c for c in org_candidates if c.get("status") == "shortlisted"])
-        interviewed_total = len([c for c in org_candidates if c.get("status") == "interviewing"])
-        offered_total = len([c for c in org_candidates if c.get("status") in ["offered", "offer_accepted"]])
-        converted_total = len([c for c in org_candidates if c.get("status") == "hired" or c.get("record_status") == "converted"])
+        processing_total = len([
+            c for c in org_candidates
+            if c.get("lifecycle_state") == "application_submitted"
+            or c.get("status") in ["applied", "screening"]
+        ])
+        shortlisted_total = len([
+            c for c in org_candidates
+            if c.get("lifecycle_state") == "evaluation_complete"
+            or c.get("status") == "shortlisted"
+        ])
+        interviewed_total = len([
+            c for c in org_candidates
+            if c.get("lifecycle_state") in [
+                "evaluation_complete",
+                "offer_extended",
+                "offer_accepted",
+                "preboarding_active",
+                "employee_converted",
+                "onboarding_active",
+            ]
+            or c.get("status") in ["interviewing", "interviewed", "offered", "offer_accepted", "hired", "converted"]
+        ])
+
+        # Mutually exclusive partition for terminal stages:
+        converted_candidates = [
+            c for c in org_candidates
+            if c.get("lifecycle_state") in ["employee_converted", "onboarding_active"]
+            or c.get("status") in ["hired", "converted"]
+            or c.get("record_status") == "converted"
+        ]
+        converted_ids = {c["id"] for c in converted_candidates}
+
+        offered_candidates = [
+            c for c in org_candidates
+            if c["id"] not in converted_ids
+            and (
+                c.get("lifecycle_state") in ["offer_extended", "offer_accepted", "preboarding_active"]
+                or c.get("status") in ["offered", "offer_accepted"]
+                or c.get("record_status") in ["offered", "offer_accepted"]
+            )
+        ]
+
+        offered_total = len(offered_candidates)
+        converted_total = len(converted_candidates)
 
         # Average match score calculation across active job requirements
         match_scores = []
@@ -218,11 +257,11 @@ class DashboardService:
                 PriorityAlert(
                     id=str(uuid4()),
                     category="recruitment_sla",
-                    title="Offered Candidate Ready for Onboarding: Elena Rostova",
+                    title="Offered Candidate in Preboarding: Elena Rostova",
                     severity="info",
-                    evidence_snippet="Offer accepted with 92% Stage 4 interview score. Lineage verified.",
-                    recommended_action="Review onboarding milestones and authorize provisioning dispatch.",
-                    target_route="/hr/onboarding",
+                    evidence_snippet="Offer accepted with 92% Stage 4 interview score. Preboarding plan under manager review.",
+                    recommended_action="Review onboarding milestones and complete employee conversion upon start date.",
+                    target_route="/manager/onboarding",
                 )
             )
 

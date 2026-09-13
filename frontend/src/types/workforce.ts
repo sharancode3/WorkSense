@@ -155,6 +155,8 @@ export interface CandidateProfile {
   applied_role_id?: string | null;
   applied_role_title?: string | null;
   created_at?: string;
+  record_status?: string | null;
+  lifecycle_state?: string | null;
 }
 
 export interface CandidateListResponse {

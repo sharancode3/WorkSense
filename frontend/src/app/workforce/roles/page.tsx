@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { BookOpen, ChevronRight, Plus, Filter, CheckCircle2 } from "lucide-react";
 import { listJobRolesApi, listDepartmentsApi, createJobRoleApi, getJobRoleApi } from "@/lib/api/workforce";
@@ -35,7 +35,7 @@ export default function JobRolesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -51,11 +51,11 @@ export default function JobRolesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDept]);
 
   useEffect(() => {
     loadData();
-  }, [selectedDept]);
+  }, [loadData]);
 
   const handleSelectRole = async (role: JobRole) => {
     try {

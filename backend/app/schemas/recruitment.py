@@ -414,4 +414,5 @@ class CandidateApplicationResponse(BaseModel):
     job_title: str
     location: str
     status: str
+    lifecycle_state: Optional[str] = None
     applied_at: str

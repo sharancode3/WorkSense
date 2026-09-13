@@ -67,6 +67,10 @@ from app.data.canonical_demo import (
     ELENA_ONBOARDING_PLAN_ID,
     MARCUS_VANCE_EMPLOYEE_ID,
     MARCUS_VANCE_FULL_NAME,
+    ELENA_APPLICATION_STATUS,
+    ELENA_RECORD_STATUS,
+    ELENA_LIFECYCLE_STATE,
+    ELENA_CANDIDATE_FACING_STATUS,
 )
 
 logger = logging.getLogger("worksense.onboarding_service")
@@ -382,29 +386,35 @@ class OnboardingService:
                 "job_opening_id": job_id,
                 "candidate_id": elena_cand,
                 "decided_by": "00000000-0000-0000-0000-000000000004",  # Recruiter
-                "decision": "offer",
+                "decision": "offer_accepted",
                 "ai_recommendation": "Advance to Technical Evaluation & Extend Offer",
                 "is_override": False,
                 "override_reason": None,
                 "rationale": "Candidate demonstrated exceptional mastery in distributed consensus algorithms during interview rounds.",
                 "evidence_references": [f"job:{job_id}", f"candidate:{elena_cand}"],
-                "candidate_facing_status": "Offer Extended",
+                "candidate_facing_status": ELENA_CANDIDATE_FACING_STATUS,
+                "lifecycle_state": ELENA_LIFECYCLE_STATE,
                 "created_at": now,
             }
+        else:
+            recruitment_service._decisions[dec_key]["candidate_facing_status"] = ELENA_CANDIDATE_FACING_STATUS
+            recruitment_service._decisions[dec_key]["lifecycle_state"] = ELENA_LIFECYCLE_STATE
 
-        # Update candidate status to offered or converted
+        # Update candidate status to offer_accepted / preboarding_active (provisional preboarding, not converted yet)
         if elena_cand in workforce_service._candidate_profiles:
             cand = workforce_service._candidate_profiles[elena_cand]
-            cand["record_status"] = "converted"
+            cand["status"] = ELENA_APPLICATION_STATUS
+            cand["record_status"] = ELENA_RECORD_STATUS
+            cand["lifecycle_state"] = ELENA_LIFECYCLE_STATE
 
-        # 5. Seed Golden Demo Elena Rostova Onboarding Journey (Active 90-day plan)
+        # 5. Seed Golden Demo Elena Rostova Onboarding Journey (Preboarding Review / Active 90-day plan)
         case_id = ELENA_ONBOARDING_CASE_ID
         plan_id = ELENA_ONBOARDING_PLAN_ID
         elena_emp_id = ELENA_EMPLOYEE_ID
         mgr_id = MARCUS_VANCE_EMPLOYEE_ID
         eng_dept_id = DEPT_ENG_ID
 
-        # Ensure Elena has an employee record in workforce service
+        # Ensure Elena has a provisional prehire employee record in workforce service
         if elena_emp_id not in workforce_service._employees:
             workforce_service._employees[elena_emp_id] = {
                 "id": elena_emp_id,
@@ -415,7 +425,7 @@ class OnboardingService:
                 "hire_date": "2026-10-01",
                 "department_id": eng_dept_id,
                 "job_role_id": ROLE_ELENA_APPLIED_ID,
-                "employment_status": "active",
+                "employment_status": "prehire",
                 "work_location": "hybrid",
                 "employment_type": "full_time",
                 "created_at": now,

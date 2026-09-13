@@ -54,8 +54,8 @@ export default function HRDecisionDashboardPage() {
               <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
                 Workforce Decision Dashboard
               </h1>
-              <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-xs">
-                Live Enterprise Signals
+              <Badge variant="outline" className="border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 text-xs">
+                Current Workforce Signals
               </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
@@ -88,7 +88,7 @@ export default function HRDecisionDashboardPage() {
         {isLoading ? (
           <Card className="p-12 text-center border-neutral-200 dark:border-neutral-800">
             <Spinner className="mx-auto mb-3" />
-            <p className="text-xs text-neutral-500">Aggregating live organizational signals across 5 modules...</p>
+            <p className="text-xs text-neutral-500">Aggregating organizational signals across 5 workforce modules...</p>
           </Card>
         ) : dashboardData ? (
           <div className="space-y-6">
@@ -264,7 +264,7 @@ export default function HRDecisionDashboardPage() {
                       color: "bg-purple-400 dark:bg-purple-700",
                     },
                     {
-                      label: "5. Offered",
+                      label: "5. Offered / Preboarding",
                       val: dashboardData.recruitment_funnel.offered_total,
                       pct: Math.min(100, Math.round((dashboardData.recruitment_funnel.offered_total / totalApps) * 100)),
                       conversion: `${dashboardData.recruitment_funnel.interviewed_total > 0 ? Math.round((dashboardData.recruitment_funnel.offered_total / dashboardData.recruitment_funnel.interviewed_total) * 100) : 0}% offer rate`,
@@ -274,7 +274,7 @@ export default function HRDecisionDashboardPage() {
                       label: "6. Hired & Converted",
                       val: dashboardData.recruitment_funnel.converted_total,
                       pct: Math.min(100, Math.round((dashboardData.recruitment_funnel.converted_total / totalApps) * 100)),
-                      conversion: `${dashboardData.recruitment_funnel.offered_total > 0 ? Math.round((dashboardData.recruitment_funnel.converted_total / dashboardData.recruitment_funnel.offered_total) * 100) : 0}% acceptance`,
+                      conversion: `${dashboardData.recruitment_funnel.offered_total > 0 ? Math.round((dashboardData.recruitment_funnel.converted_total / dashboardData.recruitment_funnel.offered_total) * 100) : 0}% converted`,
                       color: "bg-emerald-500 dark:bg-emerald-600",
                     },
                   ];
@@ -391,8 +391,8 @@ export default function HRDecisionDashboardPage() {
                     <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
                       Retention Health & Support Distribution
                     </h3>
-                    <Badge variant="outline" className="text-[10px] text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-                      Signal Freshness: Live Telemetry
+                    <Badge variant="outline" className="text-[10px] text-neutral-600 dark:text-neutral-400 border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
+                      Signal Freshness: Current Dataset Snapshot
                     </Badge>
                   </div>
                   <p className="text-[11px] text-neutral-500">

@@ -61,22 +61,24 @@ export default function CandidatePortalPage() {
 
         {/* Primary Priority / Next Action Card */}
         {applications.length > 0 ? (
-          <div className="bg-brand-primary/5 border border-brand-primary/30 rounded-xl p-5 sm:p-6 space-y-4">
+        <div className="bg-brand-primary/5 border border-brand-primary/30 rounded-xl p-5 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary font-mono">
-                  Current Next Action
+                  Current Application Status
                 </span>
                 <h2 className="text-base sm:text-lg font-bold text-content-primary">
-                  {applications[0].job_title}: {applications[0].status || "Evaluation in Progress"}
+                  {applications[0].job_title}: {applications[0].status || "Preboarding Active"}
                 </h2>
                 <p className="text-xs text-content-secondary">
-                  Your application for {applications[0].job_title} ({applications[0].location}) is progressing through the evidence evaluation pipeline.
+                  {(applications[0].lifecycle_state === "preboarding_active" || applications[0].status === "Preboarding Active")
+                    ? `Offer accepted for ${applications[0].job_title} (${applications[0].location}). Your personalized onboarding plan and hardware provisioning are in active review.`
+                    : `Your application for ${applications[0].job_title} (${applications[0].location}) is progressing through the evidence evaluation pipeline.`}
                 </p>
               </div>
-              <Link href="/candidate#interview-guide">
+              <Link href="/candidate#journey">
                 <Button size="sm" className="whitespace-nowrap gap-1.5">
-                  <span>View Guidelines</span>
+                  <span>{(applications[0].lifecycle_state === "preboarding_active" || applications[0].status === "Preboarding Active") ? "View Preboarding Steps" : "View Guidelines"}</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>
@@ -85,15 +87,27 @@ export default function CandidatePortalPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-brand-primary/15 text-xs text-content-secondary">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-brand-primary" />
-                <span>Next Round: Technical Systems Discussion</span>
+                <span>
+                  {(applications[0].lifecycle_state === "preboarding_active" || applications[0].status === "Preboarding Active")
+                    ? "Target Start Date: Oct 1, 2026"
+                    : "Next Round: Technical Systems Discussion"}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-brand-primary" />
-                <span>Format: 45 Min Architecture Review</span>
+                <span>
+                  {(applications[0].lifecycle_state === "preboarding_active" || applications[0].status === "Preboarding Active")
+                    ? "Preboarding Review: Manager In Review"
+                    : "Format: 45 Min Architecture Review"}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-brand-primary" />
-                <span>Resume Evidence: Verified</span>
+                <span>
+                  {(applications[0].lifecycle_state === "preboarding_active" || applications[0].status === "Preboarding Active")
+                    ? "Offer Decision: Accepted (92% Score)"
+                    : "Resume Evidence: Verified"}
+                </span>
               </div>
             </div>
           </div>
@@ -156,18 +170,29 @@ export default function CandidatePortalPage() {
                     <div className="text-[11px] font-semibold text-content-muted uppercase tracking-wider">
                       Application Progression
                     </div>
-                    <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                      <div className="p-2 rounded bg-status-success/15 border border-status-success/30 text-status-success font-semibold">
+                    <div className="grid grid-cols-5 gap-1.5 text-center text-[10px]">
+                      <div className="p-1.5 rounded bg-status-success/15 border border-status-success/30 text-status-success font-semibold">
                         1. Submitted
                       </div>
-                      <div className="p-2 rounded bg-status-success/15 border border-status-success/30 text-status-success font-semibold">
-                        2. Verification
+                      <div className="p-1.5 rounded bg-status-success/15 border border-status-success/30 text-status-success font-semibold">
+                        2. Verified
                       </div>
-                      <div className="p-2 rounded bg-brand-primary/15 border border-brand-primary/30 text-brand-primary font-bold">
-                        3. Evaluation
+                      <div className="p-1.5 rounded bg-status-success/15 border border-status-success/30 text-status-success font-semibold">
+                        3. Evaluated
                       </div>
-                      <div className="p-2 rounded bg-surface-secondary text-content-muted border border-boundary-subtle">
-                        4. Final Gate
+                      <div className={`p-1.5 rounded font-bold ${
+                        (app.lifecycle_state === "preboarding_active" || app.status === "Preboarding Active")
+                          ? "bg-brand-primary/15 border border-brand-primary/30 text-brand-primary"
+                          : "bg-status-success/15 border border-status-success/30 text-status-success"
+                      }`}>
+                        4. Offer Accepted
+                      </div>
+                      <div className={`p-1.5 rounded font-bold ${
+                        (app.lifecycle_state === "preboarding_active" || app.status === "Preboarding Active")
+                          ? "bg-brand-primary/15 border border-brand-primary/30 text-brand-primary animate-pulse"
+                          : "bg-surface-secondary text-content-muted border border-boundary-subtle"
+                      }`}>
+                        5. Preboarding
                       </div>
                     </div>
                   </div>

@@ -163,7 +163,7 @@ export default function NewOnboardingPage() {
             </div>
           </Card>
 
-          {/* Live Skill Gap & Template Preview */}
+          {/* Skill Gap Analysis & Template Preview */}
           {isPreviewLoading ? (
             <Card className="p-8 border-boundary-subtle flex flex-col items-center justify-center gap-2">
               <Spinner className="h-6 w-6 text-brand-primary" />

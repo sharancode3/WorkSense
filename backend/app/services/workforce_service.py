@@ -1565,6 +1565,8 @@ class WorkforceService:
         # Update candidate status to converted
         cand_dict = self._candidate_profiles[cand_id]
         cand_dict["record_status"] = "converted"
+        cand_dict["status"] = "hired"
+        cand_dict["lifecycle_state"] = "employee_converted"
         cand_dict["profile_id"] = profile_id
         cand_dict["updated_at"] = now_iso
 

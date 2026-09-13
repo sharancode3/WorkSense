@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { Share2, ChevronRight, Plus, Search, Filter, Grid, ArrowRight } from "lucide-react";
 import { listSkillsApi, getSkillGraphApi, createSkillApi, addSkillRelationshipApi } from "@/lib/api/workforce";
 import { Skill, SkillGraphResponse } from "@/types/workforce";
@@ -36,16 +36,17 @@ export default function SkillsPage() {
   const [weight, setWeight] = useState(0.8);
   const [submittingRel, setSubmittingRel] = useState(false);
 
-  const loadData = async () => {
+  const loadData = useCallback(async (queryOverride?: string) => {
     try {
       setLoading(true);
       setError(null);
+      const query = queryOverride !== undefined ? queryOverride : searchQuery;
       const [sData, gData] = await Promise.all([
         listSkillsApi({
           category: selectedCategory || undefined,
-          search: searchQuery || undefined,
+          search: query || undefined,
         }),
-        getSkillGraphApi({ query: searchQuery || undefined }),
+        getSkillGraphApi({ query: query || undefined }),
       ]);
       setSkills(sData);
       setGraphData(gData);
@@ -55,11 +56,11 @@ export default function SkillsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, searchQuery]);
 
   useEffect(() => {
     loadData();
-  }, [selectedCategory]);
+  }, [loadData]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
