@@ -274,41 +274,41 @@ ALTER TABLE multi_brain_runs ENABLE ROW LEVEL SECURITY;
 
 -- Job Openings: Authenticated org members can read active jobs; Recruiters/HR/Admin can manage
 CREATE POLICY job_openings_select ON job_openings FOR SELECT TO authenticated
-    USING (organization_id IN (SELECT organization_id FROM organization_memberships WHERE profile_id = auth.uid() AND membership_status = 'active'));
+    USING (is_member_of_org(organization_id));
 
 CREATE POLICY job_openings_all ON job_openings FOR ALL TO authenticated
     USING (organization_id IN (
         SELECT organization_id FROM user_roles ur JOIN roles r ON ur.role_id = r.id
-        WHERE ur.profile_id = auth.uid() AND r.name IN ('recruiter', 'hr', 'administrator')
+        WHERE ur.user_id = auth_user_id() AND r.name IN ('recruiter', 'hr', 'administrator')
     ));
 
 -- Candidate Resumes: Candidate can view own resume; Recruiters/HR/Admin can manage
 CREATE POLICY candidate_resumes_candidate_select ON candidate_resumes FOR SELECT TO authenticated
-    USING (candidate_id IN (SELECT id FROM candidate_profiles WHERE profile_id = auth.uid()));
+    USING (candidate_id IN (SELECT id FROM candidate_profiles WHERE profile_id = auth_user_id()));
 
 CREATE POLICY candidate_resumes_staff_all ON candidate_resumes FOR ALL TO authenticated
     USING (organization_id IN (
         SELECT organization_id FROM user_roles ur JOIN roles r ON ur.role_id = r.id
-        WHERE ur.profile_id = auth.uid() AND r.name IN ('recruiter', 'hr', 'administrator')
+        WHERE ur.user_id = auth_user_id() AND r.name IN ('recruiter', 'hr', 'administrator')
     ));
 
 -- Candidate Match Evaluations: Strictly forbidden to candidate role; Recruiters/HR/Admin can view/manage
 CREATE POLICY match_eval_staff_all ON candidate_match_evaluations FOR ALL TO authenticated
     USING (organization_id IN (
         SELECT organization_id FROM user_roles ur JOIN roles r ON ur.role_id = r.id
-        WHERE ur.profile_id = auth.uid() AND r.name IN ('recruiter', 'hr', 'administrator', 'manager')
+        WHERE ur.user_id = auth_user_id() AND r.name IN ('recruiter', 'hr', 'administrator', 'manager')
     ));
 
 -- Interview Kits & Sessions: Strictly forbidden to candidates; Accessible by assigned interviewers and HR/Recruiters
 CREATE POLICY interview_kits_staff_all ON interview_kits FOR ALL TO authenticated
     USING (organization_id IN (
         SELECT organization_id FROM user_roles ur JOIN roles r ON ur.role_id = r.id
-        WHERE ur.profile_id = auth.uid() AND r.name IN ('recruiter', 'hr', 'administrator', 'manager')
+        WHERE ur.user_id = auth_user_id() AND r.name IN ('recruiter', 'hr', 'administrator', 'manager')
     ));
 
 -- Recruitment Decisions: Candidate can view ONLY public status; full decision details restricted to staff
 CREATE POLICY decisions_staff_all ON recruitment_decisions FOR ALL TO authenticated
     USING (organization_id IN (
         SELECT organization_id FROM user_roles ur JOIN roles r ON ur.role_id = r.id
-        WHERE ur.profile_id = auth.uid() AND r.name IN ('recruiter', 'hr', 'administrator')
+        WHERE ur.user_id = auth_user_id() AND r.name IN ('recruiter', 'hr', 'administrator')
     ));

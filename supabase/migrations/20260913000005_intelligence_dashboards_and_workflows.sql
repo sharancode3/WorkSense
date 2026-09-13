@@ -219,47 +219,47 @@ ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
 -- Tenant Isolation RLS Policies
 CREATE POLICY rls_policy_chunks_tenant ON policy_document_chunks
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 CREATE POLICY rls_policy_queries_tenant ON policy_queries
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 CREATE POLICY rls_action_requests_tenant ON policy_action_requests
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 -- HR-Restricted Individual Attrition Risk Access
 CREATE POLICY rls_risk_hr_restricted ON attrition_risk_assessments
     FOR SELECT USING (
-        organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1)
+        is_member_of_org(organization_id)
         AND EXISTS (
             SELECT 1 FROM user_roles ur
             JOIN roles r ON ur.role_id = r.id
-            WHERE ur.user_id = auth.uid() AND r.name IN ('hr', 'administrator')
+            WHERE ur.user_id = auth_user_id() AND r.name IN ('hr', 'administrator')
         )
     );
 
 CREATE POLICY rls_perf_syntheses_tenant ON performance_syntheses
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 CREATE POLICY rls_mobility_tenant ON internal_mobility_matches
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 CREATE POLICY rls_recommendations_tenant ON canonical_recommendations
-    FOR ALL USING (organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1));
+    FOR ALL USING (is_member_of_org(organization_id));
 
 CREATE POLICY rls_rec_approvals_tenant ON recommendation_approvals
     FOR ALL USING (EXISTS (
         SELECT 1 FROM canonical_recommendations cr
         WHERE cr.id = recommendation_id
-        AND cr.organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1)
+        AND is_member_of_org(cr.organization_id)
     ));
 
 CREATE POLICY rls_rec_exec_tenant ON recommendation_execution_logs
     FOR ALL USING (EXISTS (
         SELECT 1 FROM canonical_recommendations cr
         WHERE cr.id = recommendation_id
-        AND cr.organization_id = (SELECT organization_id FROM user_organizations WHERE user_id = auth.uid() LIMIT 1)
+        AND is_member_of_org(cr.organization_id)
     ));
 
 CREATE POLICY rls_notifications_recipient ON notifications
-    FOR ALL USING (recipient_id = auth.uid());
+    FOR ALL USING (recipient_id = auth_user_id());
