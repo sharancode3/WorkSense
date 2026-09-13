@@ -53,9 +53,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # Register custom error handlers
     register_error_handlers(app, debug=settings.debug)
 
-    # Root process liveness check (for container orchestrators)
-    @app.get(
+    # Root process liveness check (for container orchestrators & UptimeRobot)
+    @app.api_route(
+        "/",
+        methods=["GET", "HEAD"],
+        response_model=LivenessResponse,
+        tags=["System Health & Diagnostics"],
+        summary="Root Liveness Probe",
+        description="Fast HTTP 200 response for uptime monitors pinging the root domain.",
+    )
+    @app.api_route(
         "/health",
+        methods=["GET", "HEAD"],
         response_model=LivenessResponse,
         tags=["System Health & Diagnostics"],
         summary="Process Liveness Probe",
