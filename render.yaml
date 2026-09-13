@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: worksense-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_NAME
+        value: WorkSense API
+      - key: APP_VERSION
+        value: 1.0.0
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: SUPABASE_URL
+        value: https://rhgwqqpwfhsreimmgpcp.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZ3dxcXB3ZmhzcmVpbW1ncGNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyOTUyNzAsImV4cCI6MjEwNDg3MTI3MH0.Pjvc4j5SyyFDiOKbRhmiQqNTjD-in2Wo4KuRnvw9SaM
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
