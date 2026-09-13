@@ -60,7 +60,7 @@ function buildUrl(base: string, path: string, params?: Record<string, string | n
  * Core WorkSense API client.
  */
 export async function apiClient<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { timeoutMs = 10000, params, signal: callerSignal, headers: customHeaders, ...fetchOptions } = options;
+  const { timeoutMs = 30000, params, signal: callerSignal, headers: customHeaders, ...fetchOptions } = options;
 
   const url = buildUrl(env.apiBaseUrl, path, params);
 
