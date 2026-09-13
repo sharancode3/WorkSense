@@ -163,7 +163,6 @@ async def get_my_onboarding_case(
     """Returns the onboarding case for the currently logged-in user (as employee or candidate)."""
     user_id = ctx.user.id
     user_email = ctx.user.email.lower()
-    org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"
 
     # Match by employee profile_id
     for emp in workforce_service._employees.values():

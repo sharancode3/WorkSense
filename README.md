@@ -73,7 +73,7 @@ The current repository state is documented transparently in accordance with the 
 | Domain | Current Repository Reality | Truth Status |
 | :--- | :--- | :--- |
 | **Documentation & Specifications** | Complete 10-document canonical specification suite under `docs/` covering PRD, TRD, Workflows, UI/UX, Database/API, System Architecture, AI/ML Architecture, Deployment, Project Memory, and Implementation Details. | **Verified in repository** |
-| **Frontend Application (`frontend/`)** | Next.js 14+ App Router, TypeScript strict, Tailwind CSS flat design tokens (zero box-shadows, neutral borders), Light/Dark/System theme engine with FOUT prevention, responsive application shell, public overview landing page with 6-stage Operating Loop, dedicated PublicHeader and PublicFooter, persona-tailored workspace navigation (`ROLE_NAVIGATION` across all 7 user roles), reusable component primitives, typed API client, auth context with session restoration, protected route guards, 7 role landing views, `/my-access` transparency, `/admin/access` management console, 10 workforce foundation views, 8 recruitment views, 5 adaptive onboarding views, Candidate Privacy Shield on `/candidate`, HR Policy Reasoning (`/policies`), Workforce Intelligence (`/workforce/intelligence`), HR Decision Dashboard (`/dashboard`), Recommendation-to-Action Console (`/recommendations`), Interactive Demo Hub (`/demo`), and 12 Vitest test suites (59/59 passing). | **Verified in repository** |
+| **Frontend Application (`frontend/`)** | Next.js 14+ App Router, TypeScript strict, Tailwind CSS flat design tokens (zero box-shadows, neutral borders), Light/Dark/System theme engine with FOUT prevention, responsive application shell, public overview landing page with 6-stage Operating Loop, dedicated PublicHeader and PublicFooter, persona-tailored workspace navigation (`ROLE_NAVIGATION` across all 7 user roles), reusable component primitives, typed API client, auth context with session restoration, protected route guards, 7 role landing views, `/my-access` transparency, `/admin/access` management console, 10 workforce foundation views, 8 recruitment views, 5 adaptive onboarding views, Candidate Privacy Shield on `/candidate`, HR Policy Reasoning (`/policies`), Workforce Intelligence (`/workforce/intelligence`), HR Decision Dashboard (`/dashboard`), Recommendation-to-Action Console (`/recommendations`), Interactive Demo Hub (`/demo`), and 13 Vitest test suites (63/63 passing). | **Verified in repository** |
 | **Backend Application (`backend/`)** | FastAPI modular monolith, Pydantic v2 validation, centralized settings, correlation ID middleware, structured JSON logging, standard error envelopes, cryptographic JWT engine (HS256 with Supabase compat), stateful IdentityService, WorkforceService, RecruitmentService, OnboardingService, PolicyRAGService, WorkforceIntelligenceService, DashboardService, RecommendationService, DemoService with multi-tenancy & audit logging, RBAC dependency guards (`require_permission`, `require_role`), 68 REST endpoints, and honest `/health` probe. | **Verified in repository** |
 | **HR Policy Reasoning (Stage 6)** | Hybrid Lexical-Semantic Policy RAG over authoritative Markdown documents (`POL-REM-01`, etc.); section chunking with keyword relevance scoring and stopword exclusion; precise source citations (`policy_code`, `section_title`, `citation_quote`, `freshness_timestamp`); deterministic eligibility rules checking tenure/probation; zero-hallucination abstain mechanism returning `insufficient_evidence` when relevance threshold (<0.20) is not met; actionable policy handoff proposals. | **Verified in repository** |
 | **Workforce Intelligence (Stage 7)** | **7A Ethical Attrition Risk:** Non-surveillance signals (market comp differential, promotion stagnation, role tenure, verified overtime hours); composite risk scoring with non-punitive retention guidance and confidence calibration.<br>**7B Performance Intelligence:** Multilateral synthesis of objective goals, structured peer feedback, and manager reviews; balanced strengths and growth areas.<br>**7C Internal Mobility Skill Graph:** Relational graph capability matching against open requisitions; transferability pathing, skill gap analysis, and tailored upskilling recommendations. | **Verified in repository** |
@@ -85,12 +85,12 @@ The current repository state is documented transparently in accordance with the 
 | **Core Workforce Data Layer & Twin Continuity** | Complete workforce data model: departments tree with cycle prevention, job role catalog, skill taxonomy with aliases and relational graph edges (`PREREQUISITE_OF`, `ADJACENT_TO`, etc.), sources and evidence ledger, Candidate Profile & Candidate Twin, transactional & idempotent candidate-to-employee conversion preserving evidence lineage, Employee Profile & temporal Employee Twin, manager reporting hierarchy, goals, multi-tier visibility feedback, attendance aggregates, governed policy versions & supersession, and automated rules-based data quality engine. | **Verified in repository** |
 | **Authentication & RBAC** | Supabase Auth JWT compatible token generator/decoder, 7 canonical roles (`candidate`, `employee`, `manager`, `recruiter`, `hr`, `leadership`, `administrator`), 15 granular permissions, zero client-side role trust, public candidate self-registration (strictly locked to candidate role), internal staff invitations, last-admin demotion protection, and tenant isolation (`TechCorp` vs `AcmeCorp`). | **Verified in repository** |
 | **Database Migrations (`supabase/`)** | Supabase PostgreSQL DDL migrations: `20260913000001_identity_and_organizations.sql` (identity & RBAC), `20260913000002_core_workforce_data_layer.sql` (14 workforce tables), `20260913000003_recruitment_and_interviews.sql` (12 recruitment & interview tables), `20260913000004_adaptive_onboarding.sql` (11 adaptive onboarding tables), and `20260913000005_intelligence_dashboards_and_workflows.sql` (10 intelligence, dashboard & workflow tables); deterministic seed script `seed.sql` with TechCorp & AcmeCorp personas and workforce fixtures. Total: 56 relational tables. | **Verified in repository** |
-| **Automated Test Suites (Stage 11)** | 87/87 backend pytest tests passing (100%); 59/59 frontend Vitest component, auth, navigation, and API tests passing across 12 test files; flake8 clean (0 warnings); strict TypeScript typecheck clean (0 errors); Next.js production build passing (38/38 static/prerendered/dynamic routes). Total: 146 automated tests passing across frontend and backend. | **Verified in repository** |
+| **Automated Test Suites (Stage 11)** | 91/91 backend pytest tests passing (100%) across 16 test files; 63/63 frontend Vitest component, auth, navigation, and API tests passing across 13 test files; flake8 clean (0 warnings); strict TypeScript typecheck clean (0 errors); Next.js production build passing (38/38 static/prerendered/dynamic routes). Total: 154 automated tests passing across frontend and backend. | **Verified in repository** |
 | **Continuous Integration (`.github/`)** | GitHub Actions workflow (`ci.yml`) independently verifying frontend install/lint/typecheck/test/build and backend install/lint/test/import. | **Verified in repository** |
 | **EnterPro Integration** | Labeled demonstration adapter (`EnterProAdapter`) with correlation ID tracking (`EP-ACT-...`), deterministic payload serialization, and simulated acknowledgement. Full cloud sandbox integration scheduled for Stage 7. | **Verified (Simulated Demonstration Adapter)** |
 
 > **Prototype Verification Note:**  
-> Stages 1 through 11 are physically implemented, integrated, and verified in the repository. All 146 automated tests across frontend (59) and backend (87) pass cleanly with zero failures. Bounded multi-brain execution ensures Qwen acts strictly as a creative narrative advisor under the governance of deterministic rule engines: policy tasks are immutable, schedule deadlines are topologically computed, retention signals avoid punitive surveillance, and all consequential workforce actions require human review before EnterPro workflow execution.
+> Stages 1 through 11 are physically implemented, integrated, and verified in the repository. All 154 automated tests across frontend (63) and backend (91) pass cleanly with zero failures. Bounded multi-brain execution ensures Qwen acts strictly as a creative narrative advisor under the governance of deterministic rule engines: policy tasks are immutable, schedule deadlines are topologically computed, retention signals avoid punitive surveillance, and all consequential workforce actions require human review before EnterPro workflow execution.
 
 ---
 
@@ -434,7 +434,7 @@ npm run typecheck
 # 4. Execute ESLint check (0 errors, 0 warnings)
 npm run lint
 
-# 5. Execute component and auth tests (Vitest - 59/59 passing across 12 suites)
+# 5. Execute component and auth tests (Vitest - 63/63 passing across 13 suites)
 npx vitest run
 
 # 6. Execute production build (Standalone static + SSR bundle - 38 routes generated)
@@ -508,7 +508,18 @@ WorkSense/
 |   |   |   |-- workforce_intelligence_service.py Ethical attrition, performance & skill graph mobility
 |   |   |   `-- workforce_service.py       Workforce twins, graph traversal & data quality audit
 |   |   `-- main.py                        FastAPI application factory with CORS and request ID
-|   |-- tests/                             Pytest suite (14 test files, 87/87 tests passing 100%)
+|   |   |   |-- demo_service.py            Persona switching, state reset & golden path execution
+|   |   |   |-- enterpro_adapter.py        Simulated EnterPro workflow dispatch (`EP-ACT-...`)
+|   |   |   |-- identity_service.py        Stateful RBAC & audit logging
+|   |   |   |-- onboarding_service.py      Multi-brain adaptive onboarding OS & topological scheduler
+|   |   |   |-- policy_rag_service.py      Hybrid lexical-semantic policy RAG with citation grounding
+|   |   |   |-- qwen_gateway.py            Local Qwen LLM bounded conduit with Semaphore(1) lock
+|   |   |   |-- recommendation_service.py  Canonical recommendation state machine & human gate
+|   |   |   |-- recruitment_service.py     Deterministic matching & interview evidence analyst
+|   |   |   |-- workforce_intelligence_service.py Ethical attrition, performance & skill graph mobility
+|   |   |   `-- workforce_service.py       Workforce twins, graph traversal & data quality audit
+|   |   `-- main.py                        FastAPI application factory with CORS and request ID
+|   |-- tests/                             Pytest suite (16 test files, 91/91 tests passing 100%)
 |   |-- .env.example                       Safe environment template with server-only variables
 |   |-- .flake8                            Flake8 configuration (max-line-length = 160)
 |   |-- pytest.ini                         Pytest test runner configuration
@@ -546,7 +557,7 @@ WorkSense/
     |   |-- lib/api/                       Typed API clients (auth, workforce, recruitment, onboarding, policy, intelligence, dashboard, recommendation, demo)
     |   |-- styles/globals.css             Flat design system (zero box-shadows, neutral borders)
     |   `-- types/                         TypeScript definitions across all modules
-    |-- tests/                             Vitest test suite (12 test files, 59/59 tests passing 100%)
+    |-- tests/                             Vitest test suite (13 test files, 63/63 tests passing 100%)
     |-- next.config.mjs                    Next.js production configuration
     |-- package.json                       Scripts and dependencies
     |-- tailwind.config.ts                 Semantic flat design token mapping
@@ -567,11 +578,11 @@ WorkSense/
 ### 15.1 Quick Verification Commands
 
 ```bash
-# 1. Run all backend tests (87 tests, 100% passing)
+# 1. Run all backend tests (91 tests, 100% passing)
 cd backend
 python -m pytest
 
-# 2. Run all frontend tests (59 tests across 12 suites, 100% passing)
+# 2. Run all frontend tests (63 tests across 13 suites, 100% passing)
 cd ../frontend
 npx vitest run
 
