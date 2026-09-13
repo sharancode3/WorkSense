@@ -37,11 +37,16 @@ router = APIRouter()
 
 def _require_org(ctx: AccessContext) -> str:
     """Ensure caller has active organization context."""
-    if not ctx.active_organization:
-        raise ForbiddenError("Active organization context required for recruitment operations")
-    if ctx.membership_status == "suspended":
-        raise ForbiddenError("Your membership in this organization is suspended")
-    return ctx.active_organization.id
+    if ctx.active_organization:
+        if ctx.membership_status == "suspended":
+            raise ForbiddenError("Your membership in this organization is suspended")
+        return ctx.active_organization.id
+
+    # Fallback to default demo organization for prospective candidate accounts
+    if "candidate" in ctx.active_roles:
+        return "00000000-0000-0000-0000-000000000001"
+
+    raise ForbiddenError("Active organization context required for recruitment operations")
 
 
 def _require_recruitment_staff(ctx: AccessContext) -> None:

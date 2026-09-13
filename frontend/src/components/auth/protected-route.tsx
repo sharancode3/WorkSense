@@ -18,13 +18,19 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isLoading, hasCapability, hasRole } = useAuth();
+  const { isAuthenticated, isLoading, membershipStatus, hasCapability, hasRole } = useAuth();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
         const returnParam = pathname && pathname !== "/" ? `?returnUrl=${encodeURIComponent(pathname)}` : "";
         router.replace(`/auth/login${returnParam}`);
+        return;
+      }
+
+      // Suspended membership must never access normal workspace routes
+      if (membershipStatus === "suspended") {
+        router.replace("/unauthorized");
         return;
       }
 
@@ -41,7 +47,7 @@ export function ProtectedRoute({
         }
       }
     }
-  }, [isAuthenticated, isLoading, requiredCapability, allowedRoles, hasCapability, hasRole, router]);
+  }, [isAuthenticated, isLoading, membershipStatus, requiredCapability, allowedRoles, hasCapability, hasRole, router, pathname]);
 
   if (isLoading) {
     return (
@@ -54,7 +60,7 @@ export function ProtectedRoute({
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || membershipStatus === "suspended") {
     return null;
   }
 

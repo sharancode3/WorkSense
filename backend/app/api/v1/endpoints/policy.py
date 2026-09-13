@@ -3,7 +3,11 @@
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
-from app.api.v1.dependencies import get_current_access_context, require_role
+from app.api.v1.dependencies import (
+    get_current_access_context,
+    require_active_membership,
+    require_role,
+)
 from app.schemas.auth import AccessContext
 from app.schemas.policy import (
     PolicyActionRequestResponse,
@@ -23,7 +27,7 @@ router = APIRouter()
 def list_policy_chunks(
     policy_code: Optional[str] = None,
     limit: int = 50,
-    ctx: AccessContext = Depends(get_current_access_context),
+    ctx: AccessContext = Depends(require_active_membership),
 ):
     """Lists pre-indexed policy chunks for transparent citation inspection."""
     org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"
@@ -38,7 +42,7 @@ def list_policy_chunks(
 @router.get("", response_model=List[Dict[str, Any]], summary="List policy documents")
 def list_policies(
     category: Optional[str] = None,
-    ctx: AccessContext = Depends(get_current_access_context),
+    ctx: AccessContext = Depends(require_active_membership),
 ):
     """Lists published policy documents accessible to the current tenant."""
     org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"
@@ -78,7 +82,7 @@ async def upload_policy_document(
 @router.post("/query", response_model=PolicyQueryResponse, summary="Query policy with grounded Qwen citations")
 async def query_policy(
     payload: PolicyQueryRequest,
-    ctx: AccessContext = Depends(get_current_access_context),
+    ctx: AccessContext = Depends(require_active_membership),
 ):
     """Answers employee policy queries using strictly grounded citations from the authoritative policy library."""
     org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"
@@ -96,7 +100,7 @@ async def query_policy(
 @router.post("/actions", response_model=PolicyActionRequestResponse, status_code=status.HTTP_201_CREATED, summary="Submit proposed policy action")
 def submit_policy_action(
     payload: PolicyActionSubmitRequest,
-    ctx: AccessContext = Depends(get_current_access_context),
+    ctx: AccessContext = Depends(require_active_membership),
 ):
     """Submits a proposed policy workflow action (e.g. remote work request) for human review."""
     org_id = ctx.active_organization.id if ctx.active_organization else "00000000-0000-0000-0000-000000000001"

@@ -74,18 +74,16 @@ export default function ManagerOnboardingPage() {
       setError(null);
       const data = await listOnboardingCasesApi();
       setCases(data.cases);
-      if (data.cases.length > 0 && !selectedCase) {
-        setSelectedCase(data.cases[0]);
-      } else if (selectedCase) {
-        const updated = data.cases.find((c) => c.id === selectedCase.id);
-        if (updated) setSelectedCase(updated);
-      }
+      setSelectedCase((previous) => {
+        if (!data.cases.length) return null;
+        return data.cases.find((c) => c.id === previous?.id) ?? data.cases[0];
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load team onboarding journeys");
     } finally {
       setIsLoading(false);
     }
-  }, [selectedCase]);
+  }, []);
 
   useEffect(() => {
     loadCases();
@@ -200,6 +198,20 @@ export default function ManagerOnboardingPage() {
           <div className="py-20 flex flex-col items-center justify-center gap-2">
             <Spinner className="h-6 w-6 text-brand-primary" />
             <p className="text-xs text-content-muted">Loading team onboarding journeys...</p>
+          </div>
+        ) : error && cases.length === 0 ? (
+          <div className="py-12 flex flex-col items-center justify-center gap-4 text-center">
+            <div className="p-3 bg-red-50 dark:bg-red-950/30 text-red-600 rounded-full">
+              <AlertCircle className="h-8 w-8" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-content-primary">Failed to load team journeys</h3>
+              <p className="text-xs text-content-secondary max-w-sm">{error}</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => loadCases()}>
+              <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+              <span>Retry</span>
+            </Button>
           </div>
         ) : cases.length === 0 ? (
           <EmptyState

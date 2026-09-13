@@ -163,7 +163,7 @@ export default function PublicOverviewPage() {
             </div>
             <div className="font-bold text-sm text-content-primary">EnterPro Dispatch</div>
             <p className="text-xs text-content-secondary leading-relaxed">
-              Handoff to EnterPro workflows and record the full decision history for immutable governance.
+              Handoff to EnterPro workflows and record the full decision history for transparent governance.
             </p>
           </div>
         </div>
@@ -274,10 +274,10 @@ export default function PublicOverviewPage() {
           <div className="p-4 rounded-xl bg-surface border border-boundary-subtle space-y-1.5">
             <div className="flex items-center gap-2 text-content-primary font-bold text-xs">
               <Database className="h-4 w-4 text-brand-primary" />
-              <span>Immutable Decision Audit Trail</span>
+              <span>Auditable Decision Activity History</span>
             </div>
             <p className="text-xs text-content-secondary leading-relaxed">
-              Every approval, modification, and EnterPro workflow dispatch is recorded in an append-oriented Postgres ledger.
+              Every approval, modification, and EnterPro workflow dispatch is recorded in an auditable decision activity history ledger.
             </p>
           </div>
 

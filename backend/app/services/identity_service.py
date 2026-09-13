@@ -315,7 +315,13 @@ class IdentityService:
         active_org: Optional[SafeOrganization] = None
         active_membership: Optional[Dict[str, Any]] = None
 
-        if not is_candidate_only:
+        if is_candidate_only:
+            # Candidate associated with the default tenant organization for application context
+            default_org = self._organizations.get("00000000-0000-0000-0000-000000000001")
+            if default_org:
+                active_org = SafeOrganization(id=default_org["id"], name=default_org["name"], slug=default_org["slug"])
+                available_orgs = [active_org]
+        else:
             if preferred_org_id:
                 # Find matching membership
                 matched = next((m for m in user_memberships if m["organization_id"] == preferred_org_id), None)
@@ -348,20 +354,21 @@ class IdentityService:
 
         # Aggregate capabilities
         granted_capabilities: List[str] = []
-        membership_status = active_membership["status"] if active_membership else (None if is_candidate_only else "suspended")
+        membership_status = active_membership["status"] if active_membership else ("active" if is_candidate_only else "suspended")
 
-        # If membership is suspended, zero out sensitive capabilities
+        # If membership is suspended, zero out roles and capabilities, redirect to /unauthorized
         if membership_status == "suspended":
-            granted_capabilities = ["profile.self.read"]
+            active_roles = []
+            granted_capabilities = []
+            default_destination = "/unauthorized"
         else:
             for role in active_roles:
                 for cap in CANONICAL_ROLE_PERMISSIONS.get(role, []):
                     if cap not in granted_capabilities:
                         granted_capabilities.append(cap)
 
-        # Destination determination
-        primary_role = active_roles[0] if active_roles else "candidate"
-        default_destination = ROLE_DEFAULT_DESTINATIONS.get(primary_role, "/employee")
+            primary_role = active_roles[0] if active_roles else "candidate"
+            default_destination = ROLE_DEFAULT_DESTINATIONS.get(primary_role, "/employee")
 
         return AccessContext(
             user=safe_user,

@@ -123,7 +123,7 @@ class PerformanceInsightResponse(BaseModel):
     manager_discussion_prompts: List[str] = Field(default_factory=list)
     development_recommendations: List[str] = Field(default_factory=list)
     qwen_synthesis: Optional[str] = None
-    is_qwen_assisted: bool = True
+    is_qwen_assisted: bool = False
     last_evaluated_at: datetime
 
 

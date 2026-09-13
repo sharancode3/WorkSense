@@ -77,7 +77,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 md:hidden flex">
+    <div className="fixed inset-0 z-50 md:hidden flex overflow-hidden">
       {/* Flat Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 transition-opacity"
@@ -90,7 +90,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Mobile navigation"
-        className="relative z-50 w-72 max-w-[80vw] h-full bg-surface border-r border-boundary-subtle p-4 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-150"
+        className="relative z-50 w-72 max-w-[calc(100vw-3rem)] h-full bg-surface border-r border-boundary-subtle p-4 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-150"
       >
         <div className="space-y-4">
           {/* Header */}

@@ -70,6 +70,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         summary="Process Liveness Probe",
         description="Fast HTTP 200 process liveness check for Render and Docker health checks.",
     )
+    @app.api_route(
+        "/health/liveness",
+        methods=["GET", "HEAD"],
+        response_model=LivenessResponse,
+        tags=["System Health & Diagnostics"],
+        summary="Process Liveness Probe Alias",
+        description="Fast HTTP 200 process liveness check alias.",
+    )
     async def process_liveness() -> LivenessResponse:
         return LivenessResponse(
             status="healthy",

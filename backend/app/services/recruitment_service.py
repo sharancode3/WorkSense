@@ -1786,8 +1786,8 @@ class RecruitmentService:
             "organization_id": techcorp_id,
             "department_id": eng_dept,
             "job_role_id": staff_role,
-            "requisition_code": "REQ-2026-STAFF-ENG",
-            "title": "Staff Distributed Systems Engineer",
+            "requisition_code": "REQ-2026-DIST-SR",
+            "title": "Senior Distributed Systems Engineer",
             "location": "Remote / Hybrid Bengaluru",
             "employment_type": "full_time",
             "target_headcount": 2,
@@ -1802,7 +1802,7 @@ class RecruitmentService:
         # Seed sample resume for Elena Rostova
         resume_id = "40000000-0000-0000-0000-000000000010"
         sample_resume_text = (
-            "Elena Rostova — Staff Distributed Systems Engineer\n"
+            "Elena Rostova — Senior Distributed Systems Engineer\n"
             "Email: elena.rostova@example.com | Bengaluru, India\n\n"
             "Summary: 8+ years architecting high-throughput distributed state stores, Raft consensus protocols, and Python microservices.\n\n"
             "Experience:\n"

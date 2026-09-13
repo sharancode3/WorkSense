@@ -63,15 +63,15 @@ class RecommendationService:
                 "subject_type": "employee",
                 "recommendation_type": "internal_mobility",
                 "source_module": "attrition_intel",
-                "title": "Strategic Internal Mobility: Transfer to Principal Architect",
+                "title": "Strategic Internal Mobility: Transfer to Principal Distributed Systems Architect — AI Fraud Detection Initiative",
                 "summary": (
                     f"Mitigate 6-month attrition risk (72% index driven by 3.5 years tenure stagnation in band L5) by "
-                    f"transferring {marcus.full_name} to Principal Distributed Systems Architect role for the urgent "
+                    f"transferring {marcus.full_name} to Principal Distributed Systems Architect — AI Fraud Detection Initiative role for the urgent "
                     f"high-throughput streaming and inference infrastructure initiative."
                 ),
                 "proposed_action": {
                     "action_type": "internal_transfer",
-                    "target_role_title": "AI Fraud Detection Infrastructure Lead",
+                    "target_role_title": "Principal Distributed Systems Architect — AI Fraud Detection Initiative",
                     "target_department_name": "Artificial Intelligence & Fraud Detection",
                     "effective_date": "2026-11-01",
                     "promotion_band": "L6",

@@ -88,4 +88,23 @@ describe("ProtectedRoute Guard Component", () => {
 
     expect(screen.getByText("Admin Dashboard")).toBeInTheDocument();
   });
+
+  it("redirects suspended user to /unauthorized regardless of roles or capabilities", () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      membershipStatus: "suspended",
+      hasCapability: () => true,
+      hasRole: () => true,
+    });
+
+    render(
+      <ProtectedRoute>
+        <div>Employee Policy Documents</div>
+      </ProtectedRoute>
+    );
+
+    expect(mockReplace).toHaveBeenCalledWith("/unauthorized");
+    expect(screen.queryByText("Employee Policy Documents")).not.toBeInTheDocument();
+  });
 });

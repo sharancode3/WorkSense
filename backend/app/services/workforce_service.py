@@ -221,10 +221,11 @@ class WorkforceService:
 
         # 3. Job Roles
         roles_data = [
-            ("61000000-0000-0000-0000-000000000001", "60000000-0000-0000-0000-000000000003", "ROLE-ML-STAFF", "Staff Machine Learning Engineer", "Machine Learning", "L5", "Leads distributed ML model deployment and GPU kernel optimization"),
+            ("61000000-0000-0000-0000-000000000001", "60000000-0000-0000-0000-000000000001", "ROLE-DIST-SR", "Senior Distributed Systems Engineer", "Engineering", "L5", "Architects high-throughput distributed state stores and resilient backend services"),
             ("61000000-0000-0000-0000-000000000002", "60000000-0000-0000-0000-000000000002", "ROLE-INFRA-SR", "Senior Infrastructure Engineer", "Infrastructure", "L5", "Builds resilient Kubernetes platforms and multi-region failover"),
             ("61000000-0000-0000-0000-000000000003", "60000000-0000-0000-0000-000000000004", "ROLE-TA-LEAD", "Lead Talent Acquisition Specialist", "Talent Acquisition", "L4", "Drives technical recruiting and rubric-grounded evaluations"),
             ("61000000-0000-0000-0000-000000000004", "60000000-0000-0000-0000-000000000004", "ROLE-HRBP-SR", "Senior People Partner (HRBP)", "Human Resources", "L5", "Guides internal mobility, workforce risk mitigation, and org health"),
+            ("61000000-0000-0000-0000-000000000005", "60000000-0000-0000-0000-000000000002", "ROLE-ARCH-PRIN", "Principal Distributed Systems Architect — AI Fraud Detection Initiative", "Infrastructure", "L6", "Leads distributed architecture and AI fraud detection platform scalability"),
         ]
         for jid, dept_id, jcode, jtitle, jfam, jsen, jsum in roles_data:
             self._job_roles[jid] = {

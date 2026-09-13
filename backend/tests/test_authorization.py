@@ -85,3 +85,37 @@ async def test_administrator_can_access_admin_endpoints(app):
         data = res.json()
         assert "members" in data
         assert len(data["members"]) > 0
+
+
+@pytest.mark.asyncio
+async def test_suspended_user_cannot_access_policy_or_staff_endpoints(app):
+    """Suspended user has zero active roles, destination /unauthorized, and is rejected from policies & staff endpoints."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        login_res = await client.post(
+            "/api/v1/auth/login",
+            json={"email": "suspended@techcorp.local", "password": "DemoPassword123!"},
+        )
+        assert login_res.status_code == 200
+        data = login_res.json()
+        assert data["context"]["membership_status"] == "suspended"
+        assert data["context"]["default_destination"] == "/unauthorized"
+        assert data["context"]["active_roles"] == []
+
+        token = data["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # Cannot access policies
+        res_pol = await client.get("/api/v1/policies", headers=headers)
+        assert res_pol.status_code == 403
+        assert res_pol.json()["error"]["code"] == "FORBIDDEN"
+
+        # Cannot access policy chunks
+        res_chunks = await client.get("/api/v1/policies/chunks", headers=headers)
+        assert res_chunks.status_code == 403
+        assert res_chunks.json()["error"]["code"] == "FORBIDDEN"
+
+        # Cannot access employee directory
+        res_emp = await client.get("/api/v1/workforce/employees", headers=headers)
+        assert res_emp.status_code == 403
+        assert res_emp.json()["error"]["code"] == "FORBIDDEN"

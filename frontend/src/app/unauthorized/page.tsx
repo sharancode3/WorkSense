@@ -2,12 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldAlert, ArrowRight, UserCheck } from "lucide-react";
+import { ShieldAlert, ArrowRight, UserCheck, LogOut } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 
 export default function UnauthorizedPage() {
-  const { user, roles, activeOrg, defaultDestination } = useAuth();
+  const { user, roles, activeOrg, defaultDestination, membershipStatus, logout } = useAuth();
+  const isSuspended = membershipStatus === "suspended";
 
   return (
     <div className="min-h-[70vh] flex flex-col justify-center max-w-lg mx-auto py-12 px-4 text-center">
@@ -18,10 +19,12 @@ export default function UnauthorizedPage() {
 
         <div className="space-y-2">
           <h1 className="text-2xl font-extrabold font-display text-content-primary">
-            Access Restricted
+            {isSuspended ? "Organizational Access Suspended" : "Access Restricted"}
           </h1>
           <p className="text-sm text-content-secondary leading-relaxed">
-            Your authenticated identity does not possess the explicit permissions or organizational scope required to access this resource.
+            {isSuspended
+              ? "Your organizational access is suspended. Contact your administrator or HR partner."
+              : "Your authenticated identity does not possess the explicit permissions or organizational scope required to access this resource."}
           </p>
         </div>
 
@@ -31,12 +34,19 @@ export default function UnauthorizedPage() {
               <span className="text-content-muted">Authenticated User:</span>
               <span className="font-semibold text-content-primary">{user.email}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-content-muted">Active Role(s):</span>
-              <span className="font-semibold text-brand-primary capitalize">
-                {roles.join(", ") || "None"}
-              </span>
-            </div>
+            {isSuspended ? (
+              <div className="flex justify-between">
+                <span className="text-content-muted">Account Status:</span>
+                <span className="font-semibold text-status-danger uppercase">Suspended</span>
+              </div>
+            ) : (
+              <div className="flex justify-between">
+                <span className="text-content-muted">Active Role(s):</span>
+                <span className="font-semibold text-brand-primary capitalize">
+                  {roles.join(", ") || "None"}
+                </span>
+              </div>
+            )}
             {activeOrg && (
               <div className="flex justify-between">
                 <span className="text-content-muted">Organization Boundary:</span>
@@ -47,18 +57,31 @@ export default function UnauthorizedPage() {
         )}
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <Link href={defaultDestination || "/"} className="w-full sm:w-auto">
-            <Button variant="primary" className="w-full justify-center">
-              <span>Go to My Workspace</span>
-              <ArrowRight className="h-4 w-4 ml-1.5" />
+          {isSuspended ? (
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto justify-center text-status-danger border-status-danger/30 hover:bg-status-danger/10"
+              onClick={() => logout()}
+            >
+              <LogOut className="h-4 w-4 mr-1.5" />
+              <span>Sign Out</span>
             </Button>
-          </Link>
-          <Link href="/my-access" className="w-full sm:w-auto">
-            <Button variant="outline" className="w-full justify-center">
-              <UserCheck className="h-4 w-4 mr-1.5" />
-              <span>View My Access</span>
-            </Button>
-          </Link>
+          ) : (
+            <>
+              <Link href={defaultDestination || "/"} className="w-full sm:w-auto">
+                <Button variant="primary" className="w-full justify-center">
+                  <span>Go to My Workspace</span>
+                  <ArrowRight className="h-4 w-4 ml-1.5" />
+                </Button>
+              </Link>
+              <Link href="/my-access" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full justify-center">
+                  <UserCheck className="h-4 w-4 mr-1.5" />
+                  <span>View My Access</span>
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

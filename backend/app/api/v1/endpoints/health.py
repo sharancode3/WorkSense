@@ -45,6 +45,21 @@ async def check_readiness_alias(
 
 
 @router.get(
+    "/health/liveness",
+    summary="Liveness Probe",
+    description="Fast HTTP 200 response for liveness health checking.",
+)
+@router.get(
+    "/liveness",
+    summary="Liveness Probe Alias",
+    description="Fast HTTP 200 response for liveness health checking alias.",
+)
+def check_liveness():
+    """Liveness probe returning basic alive status."""
+    return {"status": "alive"}
+
+
+@router.get(
     "/version",
     summary="Application Version & Deployment Metadata",
     description="Returns backend semantic version, commit hash, schema version, and runtime modes.",

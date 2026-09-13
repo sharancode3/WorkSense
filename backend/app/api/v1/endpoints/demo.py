@@ -143,23 +143,23 @@ def get_marcus_chen_golden_path() -> Dict[str, Any]:
     return {
         "persona": {
             "name": marcus["full_name"],
-            "title": marcus.get("job_title", "Senior Distributed Systems Engineer"),
-            "tenure_years": 3.8,
-            "department": marcus.get("department_name", "Core Infrastructure"),
+            "title": marcus.get("job_title", "Senior Infrastructure Engineer"),
+            "tenure_years": 3.5,
+            "department": marcus.get("department_name", "Infrastructure & Platform Services"),
         },
         "stage_7a_attrition_risk": risk.model_dump(),
         "stage_7b_performance_insights": perf.model_dump(),
         "stage_7c_internal_mobility": {
-            "recommended_target_role": "Principal Distributed Systems Architect",
-            "skill_match_percentage": 94.0,
-            "transferable_skills": ["Go", "Distributed Systems", "Kubernetes", "Kafka"],
-            "growth_areas": ["Cloud Economics", "Enterprise Architecture Governance"],
+            "recommended_target_role": "Principal Distributed Systems Architect — AI Fraud Detection Initiative",
+            "skill_match_percentage": 88.0,
+            "transferable_skills": ["Kubernetes", "High-Throughput Streaming", "Go", "Database Internals"],
+            "growth_areas": ["Triton Inference Server", "Distributed ML Serving"],
         },
         "stage_9_canonical_recommendation": marcus_rec.model_dump() if marcus_rec else None,
         "narrative_summary": (
-            "Marcus Chen is an exceptional performer facing tenure stagnation (L5 for 3.8 years). "
-            "Rather than allowing unmitigated attrition, WorkSense identifies high skill transferability (94%) "
-            "to the open Principal Distributed Systems Architect role, generating an evidence-backed "
+            "Marcus Chen is an exceptional performer facing tenure stagnation (L5 for 3.5 years). "
+            "Rather than allowing unmitigated attrition, WorkSense identifies high skill transferability (88%) "
+            "to the open Principal Distributed Systems Architect — AI Fraud Detection Initiative role, generating an evidence-backed "
             "recommendation that HR approves and dispatches to EnterPro in under 2 minutes."
         ),
     }
@@ -177,19 +177,19 @@ def get_elena_rostova_golden_path() -> Dict[str, Any]:
     return {
         "persona": {
             "name": f"{elena.get('first_name', 'Elena')} {elena.get('last_name', 'Rostova')}" if elena else "Elena Rostova",
-            "target_role": "Senior Fraud Detection ML Engineer",
-            "department": "Risk & Trust Engineering",
+            "target_role": "Senior Distributed Systems Engineer",
+            "department": "Engineering",
             "hire_date": "2026-10-01",
         },
         "stage_4_recruitment": {
-            "match_score": 88.5,
+            "match_score": 92.0,
             "interview_stage": "Technical Architecture & Fairness Rubrics",
-            "decision": "Hired (Strong Hire - Approved by David Kim)",
+            "decision": "Offer Accepted (Preboarding Active - 92% Interview Rubric Score)",
         },
         "stage_5_adaptive_onboarding": elena_case.model_dump() if elena_case else None,
         "narrative_summary": (
             "Elena Rostova's Candidate Twin transitions seamlessly into an Employee Twin. "
-            "Her verified ML and Python skills are retained, while WorkSense dynamically schedules "
+            "Her verified Distributed Systems and Python skills are retained, while WorkSense dynamically schedules "
             "targeted learning modules for corporate Zero-Trust VPN setup and Go microservices standards."
         ),
     }

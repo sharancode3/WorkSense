@@ -11,6 +11,7 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { ToastProvider } from "@/components/feedback/toast";
 import { ErrorBoundary } from "@/components/feedback/error-boundary";
+import { useAuth } from "@/context/auth-context";
 
 // Context to prevent any duplicate shell rendering if a nested page wraps in <AppShell>
 const InAppShellContext = createContext<boolean>(false);
@@ -22,6 +23,7 @@ export interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const isAlreadyInShell = useContext(InAppShellContext);
   const pathname = usePathname();
+  const { membershipStatus } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -48,8 +50,9 @@ export function AppShell({ children }: AppShellProps) {
     );
   }
 
-  // 2. Standalone Authentication Experience
-  const isAuthRoute = pathname?.startsWith("/auth") || pathname === "/unauthorized";
+  // 2. Standalone Authentication or Suspended Experience (Zero Staff Navigation)
+  const isSuspended = membershipStatus === "suspended";
+  const isAuthRoute = pathname?.startsWith("/auth") || pathname === "/unauthorized" || isSuspended;
   if (isAuthRoute) {
     return (
       <ToastProvider>

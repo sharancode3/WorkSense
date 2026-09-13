@@ -96,13 +96,13 @@ async def test_job_roles_catalog_and_skill_requirements(app):
         roles = res.json()
         assert len(roles) >= 4
 
-        # Verify Staff Machine Learning Engineer exists
-        ml_role = next((r for r in roles if r["code"] == "ROLE-ML-STAFF"), None)
-        assert ml_role is not None
-        assert ml_role["department_id"] is not None
+        # Verify Senior Distributed Systems Engineer exists
+        dist_role = next((r for r in roles if r["code"] == "ROLE-DIST-SR"), None)
+        assert dist_role is not None
+        assert dist_role["department_id"] is not None
 
         # Fetch detail by ID with skill requirements
-        res_detail = await client.get(f"/api/v1/workforce/job-roles/{ml_role['id']}", headers=headers)
+        res_detail = await client.get(f"/api/v1/workforce/job-roles/{dist_role['id']}", headers=headers)
         assert res_detail.status_code == 200
         detail = res_detail.json()
         assert "required_skills" in detail

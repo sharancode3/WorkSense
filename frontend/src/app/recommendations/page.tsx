@@ -156,7 +156,7 @@ export default function RecommendationsWorkflowPage() {
             <span className="font-semibold text-neutral-800 dark:text-neutral-200">
               Human Oversight Requirement:
             </span>{" "}
-            AI models (Local Qwen / heuristic matchers) only generate candidate proposals. No employment actions, role transfers, or provisioning workflows execute without explicit, authenticated human approval.
+            AI models (Grounded Synthesis / heuristic matchers) only generate candidate proposals. No employment actions, role transfers, or provisioning workflows execute without explicit, authenticated human approval.
           </div>
         </div>
 
@@ -385,7 +385,7 @@ export default function RecommendationsWorkflowPage() {
               <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800 pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
                   <Bell className="w-3.5 h-3.5 text-neutral-500" />
-                  Audit Notification Feed ({notifications.length})
+                  Decision Activity History (Prototype Session Store) ({notifications.length})
                 </h3>
               </div>
 

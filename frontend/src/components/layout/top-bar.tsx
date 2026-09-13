@@ -61,25 +61,25 @@ export function TopBar({ onOpenMobileMenu, className }: TopBarProps) {
       )}
     >
       {/* Left: Mobile hamburger & Current Page Title */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         {onOpenMobileMenu && (
           <button
             type="button"
             onClick={onOpenMobileMenu}
-            className="md:hidden p-2 rounded-md text-content-secondary hover:text-content-primary hover:bg-surface-secondary focus-visible:outline-none"
+            className="md:hidden p-2 shrink-0 rounded-md text-content-secondary hover:text-content-primary hover:bg-surface-secondary focus-visible:outline-none"
             aria-label="Open navigation menu"
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
         )}
 
-        <h1 className="text-base sm:text-lg font-bold font-display text-content-primary tracking-tight">
+        <h1 className="text-sm sm:text-lg font-bold font-display text-content-primary tracking-tight truncate min-w-0">
           {pageTitle}
         </h1>
       </div>
 
       {/* Right: Tenant Selector, User Role Badge, Theme Toggle, Sign Out */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Multi-tenant Selector / Org Badge */}
         {isAuthenticated && activeOrg && (
           <div className="relative hidden sm:block">

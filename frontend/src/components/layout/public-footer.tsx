@@ -25,7 +25,7 @@ export function PublicFooter() {
             <div className="flex items-center gap-4 text-xs pt-1 text-content-muted">
               <span className="flex items-center gap-1">
                 <Cpu className="h-3.5 w-3.5 text-brand-primary" />
-                Local Qwen Reasoning
+                Grounded AI & Evidence Synthesis
               </span>
               <span className="flex items-center gap-1">
                 <Lock className="h-3.5 w-3.5 text-status-success" />
