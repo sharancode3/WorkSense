@@ -3,7 +3,7 @@
 **Hackathon Track:** Track 1: Human Resources (HR) - Build Bengaluru Hackathon  
 **Primary Repository:** [github.com/sharancode3/WorkSense](https://github.com/sharancode3/WorkSense)  
 **Documentation Suite:** [`docs/`](./docs/) (Canonical Specifications 01 through 10)  
-**System Status:** Stages 1 through 11 Fully Implemented and Verified | 157 Automated Tests Passing | Live Browser Verified
+**System Status:** Stages 1 through 11 Fully Implemented and Verified | 159 Automated Tests Passing | Live Browser Verified
 
 ---
 
@@ -132,7 +132,7 @@ flowchart TD
 | **Backend Framework** | FastAPI | 0.110+ | Asynchronous Python framework with OpenAPI documentation, dependency injection, and Pydantic validation. |
 | **Backend Language** | Python | 3.10+ / 3.11+ | Business logic, graph algorithms, DAG schedulers, and asynchronous route handlers. |
 | **Contract Validation**| Pydantic v2 | 2.6+ | High-throughput data validation, serialization, and JSON schema generation for LLM output enforcement. |
-| **Backend Testing** | Pytest & pytest-asyncio | 8.4.2 | Full async integration test coverage via ASGI transport across 17 test suites (94 tests). |
+| **Backend Testing** | Pytest & pytest-asyncio | 8.4.2 | Full async integration test coverage via ASGI transport across 17 test suites (96 tests). |
 | **Code Linter** | Flake8 | 7.0+ | Strict PEP 8 enforcement, line length controls, and unused import prevention. |
 | **Primary Database** | PostgreSQL via Supabase | 15.x | Relational DDL migrations defining 56 tables, foreign keys, cascade rules, and check constraints. |
 | **Vector Engine** | pgvector Extension | 0.5+ | Cosine distance indexing over document embeddings for hybrid semantic policy search. |
@@ -278,7 +278,7 @@ flowchart TD
     end
 
     subgraph S11["Stage 11: Verification"]
-        PYTEST["94 Backend Pytest Tests"]
+        PYTEST["96 Backend Pytest Tests"]
         VITEST["63 Frontend Vitest Tests"]
         BROWSER_RUN["Live Browser Role Verification"]
     end
@@ -336,7 +336,7 @@ flowchart TD
 * **Golden Paths:** Pre-computed narrative journeys for Marcus Chen (retention to mobility) and Elena Rostova (recruitment to onboarding).
 
 ### Stage 11: Enterprise Testing, Code Quality, and CI/CD
-* **94 Pytest Tests:** Comprehensive backend test coverage across all domain services.
+* **96 Pytest Tests:** Comprehensive backend test coverage across all domain services.
 * **63 Vitest Tests:** Complete frontend testing covering components, routing, and auth context.
 * **Flake8 & TypeScript Checks:** 0 lint warnings and 0 type errors.
 * **Next.js Production Build:** 38 static and dynamic routes compiled successfully.
@@ -550,12 +550,12 @@ WorkSense maintains a 100% passing test record across unit, integration, and end
 
 ```text
 ================================== TEST EXECUTION MATRIX ==================================
-Backend Pytest Suite:     94 passed, 0 failed, 6 warnings (100% pass rate)
+Backend Pytest Suite:     96 passed, 0 failed, 6 warnings (100% pass rate)
 Frontend Vitest Suite:    63 passed, 0 failed across 13 test files (100% pass rate)
 TypeScript Typecheck:     0 errors (tsc --noEmit clean)
 Python Flake8 Linter:     0 errors, 0 warnings (flake8 app tests --max-line-length=130)
 Next.js Production Build: 38/38 static and dynamic routes compiled successfully
-Total Automated Tests:    157 PASSED
+Total Automated Tests:    159 PASSED
 ===========================================================================================
 ```
 
@@ -564,6 +564,7 @@ To eliminate data drift across the stack, [backend/tests/test_canonical_truth.py
 1. `test_canonical_demo_constants_consumed_by_services`: Asserts that `canonical_demo.py` constants are actively populated in workforce, recruitment, onboarding, recommendation, and intelligence services.
 2. `test_elena_title_identical_across_all_stages`: Asserts Elena's title is strictly `"Senior Distributed Systems Engineer"` across recruitment, onboarding, employee twins, recommendations, and golden path APIs, with zero occurrences of "Staff Distributed Systems".
 3. `test_dashboard_score_derives_from_evaluations_and_zeros_when_absent`: Asserts that `recruitment_funnel.average_candidate_score` equals `92.0` when Elena's evaluation is present, and drops strictly to `0.0` when evaluations are absent (zero fabricated fallback metrics).
+4. `test_elena_preboarding_lifecycle_state_and_funnel_consistency`: Asserts that Elena Rostova's lifecycle state (`preboarding_active`) propagates consistently across candidate-facing applications, preboarding review cards, and dynamic funnel metrics (`offered_total = 1`, `converted_total = 0`).
 
 ---
 
@@ -592,7 +593,7 @@ pip install -r requirements.txt
 # 4. Run code style and PEP 8 linter (0 warnings)
 python -m flake8 app tests --max-line-length=130
 
-# 5. Run full automated backend test suite (94 tests)
+# 5. Run full automated backend test suite (96 tests)
 python -m pytest tests/ -v
 
 # 6. Start the development server on port 8000
